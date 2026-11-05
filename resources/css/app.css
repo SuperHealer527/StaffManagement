@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-brand: #a9542c;
+    --color-brand-dark: #823f22;
+}
+
+@layer base {
+    button, a { @apply transition-colors; }
+    table { @apply w-full border-collapse text-left text-sm; }
+    th { @apply whitespace-nowrap border-b border-[#dfe3e7] bg-[#f8f9fa] px-5 py-3 text-xs font-semibold text-[#68717e]; }
+    td { @apply border-b border-[#edf0f2] px-5 py-4 align-middle; }
+    td small { @apply mt-1 block text-xs text-[#737b87]; }
+}
+
+@layer components {
+    .rail-link { @apply flex w-14 flex-col items-center gap-1 rounded-xl px-1 py-2 text-[#bac0c8] hover:bg-white/10 hover:text-white; }
+    .rail-link span { @apply text-lg; }
+    .rail-link.active { @apply bg-white/10 text-white; }
+    .menu-link { @apply flex items-center justify-between rounded-lg px-4 py-3 font-medium text-[#4c5562] hover:bg-[#f4f1ed] hover:text-[#8a4829]; }
+    .menu-link span { @apply rounded bg-[#f0ece7] px-2 py-0.5 text-[10px] text-[#7f6557]; }
+    .eyebrow { @apply text-xs font-medium text-[#7c8490]; }
+    .page-title { @apply mt-1 text-2xl font-semibold tracking-tight sm:text-[28px]; }
+    .primary-button { @apply inline-flex min-h-10 items-center justify-center rounded-lg bg-[#a9542c] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#823f22]; }
+    .secondary-button { @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-[#d9dde2] bg-white px-4 py-2 text-sm font-semibold text-[#4f5864] hover:bg-[#f7f8f9]; }
+    .danger-button { @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-[#e9c8c2] bg-[#fff8f7] px-4 py-2 text-sm font-semibold text-[#aa4937] hover:bg-[#fbecea]; }
+    .panel { @apply overflow-hidden rounded-2xl border border-[#e1e5e8] bg-white shadow-[0_1px_3px_rgba(32,36,45,.04)]; }
+    .panel-heading { @apply flex items-center justify-between gap-4 border-b border-[#edf0f2] px-5 py-4; }
+    .panel-heading h2 { @apply font-semibold; }
+    .panel-heading p { @apply mt-1 text-xs text-[#7a828e]; }
+    .panel-heading a { @apply text-sm font-semibold text-[#99502d]; }
+    .metric-card { @apply relative min-h-32 overflow-hidden rounded-2xl border border-[#e2e5e8] bg-white p-5 shadow-[0_1px_3px_rgba(32,36,45,.04)]; }
+    .metric-card p { @apply text-sm text-[#69717e]; }
+    .metric-card strong { @apply mt-4 block text-2xl; }
+    .metric-icon { @apply absolute right-4 top-4 grid size-9 place-items-center rounded-xl bg-[#f5eee8] font-bold text-[#9b522f]; }
+    .notice-row { @apply flex gap-4 px-5 py-4 hover:bg-[#fafbfb]; }
+    .notice-row p { @apply mt-1 text-xs text-[#7a828e]; }
+    .status-dot { @apply mt-1.5 size-2.5 shrink-0 rounded-full; }
+    .table-wrap { @apply overflow-x-auto; }
+    .table-link { @apply whitespace-nowrap font-semibold text-[#99502d]; }
+    .schedule-card { @apply flex gap-4 rounded-xl border border-[#e6e9ec] p-4; }
+    .schedule-card time { @apply font-semibold text-[#9a512f]; }
+    .schedule-card p { @apply mt-1 text-xs text-[#747c87]; }
+    .form-label { @apply grid gap-2 text-sm font-semibold text-[#414a56]; }
+    .form-input { @apply min-h-11 w-full rounded-lg border border-[#d6dbe0] bg-white px-3 py-2 text-sm font-normal outline-none focus:border-[#a9542c] focus:ring-2 focus:ring-[#a9542c]/15; }
+    .filter-bar { @apply flex flex-wrap gap-3 border-b border-[#edf0f2] bg-[#fbfcfc] p-4; }
+    .badge { @apply inline-flex w-fit items-center rounded-full bg-[#eef1f3] px-2.5 py-1 text-xs font-semibold text-[#5e6672]; }
+    .badge-orange { @apply bg-[#f8eee7] text-[#96502e]; }
+    .detail-list { @apply divide-y divide-[#edf0f2] rounded-xl border border-[#e4e7ea]; }
+    .detail-list div { @apply grid grid-cols-[90px_1fr] gap-3 px-4 py-3 text-sm; }
+    .detail-list dt { @apply text-[#747c87]; }
+    .detail-list dd { @apply font-medium; }
+    .detail-box { @apply grid gap-1 rounded-xl border border-[#e7eaed] bg-[#fafbfb] p-4; }
+    .detail-box span { @apply text-xs text-[#7a828e]; }
+    .detail-box strong { @apply text-sm; }
+    .record-card { @apply grid gap-2 rounded-xl border border-[#e4e7ea] p-4; }
+    .record-card p, .record-card small { @apply text-xs text-[#737b87]; }
+    .kanban-column { @apply min-h-80 rounded-2xl bg-[#eceff1] p-3; }
+    .kanban-column > div { @apply px-2 py-2 text-sm font-semibold; }
+    .kanban-column article { @apply mt-3 grid gap-2 rounded-xl bg-white p-4 shadow-sm; }
+    .kanban-column article p, .kanban-column article time { @apply text-xs leading-5 text-[#707985]; }
+}
