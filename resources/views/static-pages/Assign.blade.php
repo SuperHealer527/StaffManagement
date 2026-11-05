@@ -29,6 +29,68 @@
           </div>
           <main class="space-005">
             <div class="layout-040">
+              @if (isset($candidates))
+              @php
+                $confirmedAssignments = $event->assignments->where('status', 'confirmed');
+                $confirmedManagers = $confirmedAssignments->filter(fn ($assignment) => in_array($assignment->user->role, ['employee', 'semi_employee'], true));
+                $leader = $confirmedAssignments->firstWhere('is_day_leader', true);
+                $representative = $confirmedAssignments->firstWhere('is_report_representative', true);
+                $shortage = max(0, $event->required_staff - $confirmedAssignments->count());
+                $statusLabels = ['requested' => '依頼中', 'unknown' => '未定', 'accepted' => '承諾', 'declined' => '辞退', 'confirmed' => '確定', 'rejected' => '見送り', 'cancelled' => '取消', 'absent' => '欠勤', 'completed' => '勤務完了'];
+                $statusClasses = ['requested' => 'surface-015', 'unknown' => 'surface-014', 'accepted' => 'surface-013', 'confirmed' => 'surface-012'];
+                $roleLabels = ['employee' => '社員', 'semi_employee' => '準社員', 'staff' => 'スタッフ', 'temporary' => '単発', 'trainer' => 'トレーナー'];
+                $itemLabels = ['lunch' => '昼食', 'dinner' => '夕食', 'indoor_shoes' => '室内履き', 'highclass_shirt' => 'ハイクラスTシャツ'];
+              @endphp
+              <div class="layout-041">
+                <div class="text-007"><a href="{{ route('events.index') }}">イベント</a> / {{ $event->name ?: $event->business_name }}({{ $event->event_date->format('n/j') }}) / アサイン</div>
+              </div>
+              @if (session('status'))<div role="status" class="surface-045">{{ session('status') }}</div>@endif
+              @if ($errors->any())<div role="alert" class="surface-045">{{ $errors->first() }}</div>@endif
+              <section aria-label="イベントの情報" class="layout-083">
+                <div class="space-011">
+                  <div class="layout-042"><h1 class="text-044">{{ $event->name ?: $event->business_name }}</h1><span class="surface-038">{{ ['draft' => '下書き', 'recruiting' => '募集中', 'confirmed' => '確定', 'completed' => '実施済み', 'cancelled' => '中止'][$event->status] ?? $event->status }}</span>@if($event->event_date->isFuture())<span class="surface-039">開催まであと{{ today()->diffInDays($event->event_date) }}日</span>@endif</div>
+                  <div class="text-084">{{ $event->event_date->isoFormat('M/D(ddd)') }} 集合 {{ substr($event->meeting_time, 0, 5) }}〜解散 {{ substr($event->dismissal_time, 0, 5) }} ・ {{ $event->client->name }} / {{ $event->business_name }}</div>
+                  <div class="text-085">集合場所:{{ $event->meeting_place ?: '未定' }} ・ 実施場所:{{ $event->venue ?: '未定' }}</div>
+                  <div class="layout-084"><span class="text-086">持ち物</span>@forelse($event->items ?? [] as $item)<span class="text-045">{{ $itemLabels[$item] ?? $item }}</span>@empty<span class="text-045">なし</span>@endforelse @if(auth()->user()->isEmployee())<a href="{{ route('events.edit', $event) }}" class="text-087">イベントの編集を開く</a>@endif</div>
+                </div>
+                <div class="space-012"><div class="layout-043"><span class="text-007">確定 / 必要人数</span><span class="text-088">{{ $confirmedAssignments->count() }}<span class="text-032"> / {{ $event->required_staff }}人</span></span></div><div role="img" aria-label="必要{{ $event->required_staff }}人のうち{{ $confirmedAssignments->count() }}人確定" class="surface-040"><div class="space-013" style="width: {{ min(100, $event->required_staff ? $confirmedAssignments->count() / $event->required_staff * 100 : 0) }}%"></div></div><div class="text-089">あと{{ $shortage }}人必要</div></div>
+              </section>
+              <section aria-labelledby="h-lead" class="surface-006">
+                <h2 id="h-lead" class="text-020">当日責任者と報告書の代表者</h2><div class="text-033">どちらも「確定」の社員・準社員から選びます。当日責任者はスタッフのホームと出勤確認の緊急連絡先に表示されます。</div>
+                <form method="POST" action="{{ route('events.assignments.leaders', $event) }}" class="layout-085">@csrf @method('PATCH')
+                  <label class="layout-044">当日責任者 <select name="day_leader_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_day_leader)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
+                  <label class="layout-044">報告書の代表者 <select name="report_representative_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_report_representative)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
+                  <label class="control-022"><input name="representative_same_as_leader" value="1" type="checkbox" class="space-006">当日責任者と同じ人にする</label><button type="submit" class="control-024">保存</button>
+                </form>
+              </section>
+              <section aria-label="アサインする人" class="surface-006">
+                <div class="layout-045"><div class="space-003"><h2 class="text-090">アサインする人</h2><div class="text-046">イベントの時間:集合 {{ substr($event->meeting_time, 0, 5) }} ・ 開始 {{ substr($event->start_time, 0, 5) }} ・ 終了 {{ substr($event->end_time, 0, 5) }} ・ 解散 {{ substr($event->dismissal_time, 0, 5) }}。</div></div><div class="layout-086"><span class="text-007">確定</span><span class="text-091">{{ $confirmedAssignments->count() }}<span class="text-042"> / {{ $event->required_staff }}人</span></span><span class="surface-011">あと{{ $shortage }}人</span></div></div>
+                <div class="utility-001"><table class="text-092"><thead><tr class="text-023"><th class="cell-009">スタッフ</th><th class="cell-010">備考(特記)</th><th class="cell-010">ステータス</th><th class="cell-010">謝金(円)</th><th class="cell-010">交通費(円)</th><th class="cell-010">7日前確認</th><th class="cell-010">当日確認</th><th class="cell-031">操作</th></tr></thead><tbody>
+                @forelse($event->assignments as $assignment)
+                  @php $formId = 'assignment-'.$assignment->id; @endphp
+                  <tr><td class="cell-011"><div class="text-093">{{ $assignment->user->name }} @if($assignment->is_day_leader)<span class="surface-042">当日責任者</span>@endif @if($assignment->is_report_representative)<span class="surface-043">代表者</span>@endif</div><div class="text-018">{{ $roleLabels[$assignment->user->role] ?? $assignment->user->role }} ・ {{ $assignment->user->nearest_station ?: '最寄駅未登録' }}@if($assignment->requested_at) ・ {{ $assignment->requested_at->format('n/j') }}に依頼@endif</div></td>
+                  <td class="cell-032"><input form="{{ $formId }}" name="special_notes" value="{{ $assignment->special_notes }}" class="text-100" aria-label="{{ $assignment->user->name }}の備考"></td><td class="cell-005"><span class="{{ $statusClasses[$assignment->status] ?? 'surface-016' }}">{{ $statusLabels[$assignment->status] ?? $assignment->status }}</span></td>
+                  <td class="cell-004">@if(auth()->user()->isEmployee())<input form="{{ $formId }}" name="fee" type="number" min="0" value="{{ $assignment->fee }}" class="text-094">@else<span>{{ number_format($assignment->fee) }}</span>@endif</td><td class="cell-004">@if(auth()->user()->isEmployee())<input form="{{ $formId }}" name="transportation" type="number" min="0" value="{{ $assignment->transportation }}" class="text-095">@else<span>{{ number_format($assignment->transportation) }}</span>@endif</td>
+                  <td class="cell-012">{{ ['not_sent' => '未送信', 'sent' => '送信済み', 'confirmed' => '確認済み', 'not_applicable' => '対象外'][$assignment->seven_day_confirmation] ?? $assignment->seven_day_confirmation }}</td><td class="cell-012">{{ ['not_sent' => '未送信', 'sent' => '送信済み', 'confirmed' => '確認済み'][$assignment->same_day_confirmation] ?? $assignment->same_day_confirmation }}</td>
+                  <td class="cell-013"><form id="{{ $formId }}" method="POST" action="{{ route('assignments.update', $assignment) }}">@csrf @method('PATCH')<select name="status" class="surface-017">@foreach($statusLabels as $status => $label)<option value="{{ $status }}" @selected($assignment->status === $status)>{{ $label }}</option>@endforeach</select><button type="submit" class="control-024">更新</button></form></td></tr>
+                @empty<tr><td colspan="8" class="cell-011">アサインはまだありません。</td></tr>@endforelse
+                </tbody></table></div>
+              </section>
+              @if(auth()->user()->isEmployee())
+              <section aria-labelledby="h-find" class="surface-006">
+                <div class="layout-041"><h2 id="h-find" class="text-020">候補を探して依頼する<span class="surface-044">社員のみ</span></h2><span class="text-097">あと{{ $shortage }}人</span></div>
+                <form method="GET" action="{{ route('events.assignments.index', $event) }}" class="layout-087"><div class="layout-046"><label class="layout-088">名前で探す<input name="keyword" value="{{ request('keyword') }}" type="search" placeholder="名前の一部を入力" class="text-047"></label><label class="layout-088">資格<select name="qualification" class="surface-017"><option value="">指定なし</option>@foreach($qualifications as $qualification)<option @selected(request('qualification') === $qualification)>{{ $qualification }}</option>@endforeach</select></label><label class="layout-088">性別<select name="gender" class="surface-017"><option value="">指定なし</option><option value="male" @selected(request('gender') === 'male')>男性</option><option value="female" @selected(request('gender') === 'female')>女性</option></select></label><label class="layout-088">並び順<select name="sort" class="surface-017"><option value="client_count">この依頼先での勤務回数が多い順</option><option value="year_count" @selected(request('sort') === 'year_count')>今年の勤務回数が少ない順</option><option value="name" @selected(request('sort') === 'name')>名前順</option></select></label></div><div class="layout-089"><label class="control-025"><input name="available" value="1" type="checkbox" @checked(request()->boolean('available')) class="space-006">当日の対応可能登録がある人だけ</label><label class="control-025"><input name="exclude_overlap" value="1" type="checkbox" @checked(request()->boolean('exclude_overlap')) class="space-006">同じ時間帯に予定がない人だけ</label><label class="control-025"><input name="student" value="1" type="checkbox" @checked(request()->boolean('student')) class="space-006">学生</label><label class="control-025"><input name="has_car" value="1" type="checkbox" @checked(request()->boolean('has_car')) class="space-006">車あり</label><button type="submit" class="control-024">検索</button></div></form>
+                <div class="text-098">候補 {{ $candidates->count() }}人</div><div class="layout-047">
+                @forelse($candidates as $candidate)
+                  @php $overlap = $candidate->assignments->first(fn($item) => $item->event && $item->event->id !== $event->id && $item->event->meeting_time < $event->dismissal_time && $item->event->dismissal_time > $event->meeting_time); @endphp
+                  <div class="cell-014"><form method="POST" action="{{ route('events.assignments.store', $event) }}" class="layout-041">@csrf<input type="hidden" name="user_id" value="{{ $candidate->id }}"><div class="space-003"><div class="text-017">{{ $candidate->name }} @if($candidate->is_student)<span class="surface-046">学生</span>@endif</div><div class="text-018">{{ $candidate->has_car ? '車あり' : '車なし' }} ・ この依頼先で{{ $candidate->client_work_count }}回 ・ 今年{{ $candidate->year_work_count }}回 ・ 基本の謝金 {{ number_format($candidate->base_fee) }}円</div><div class="text-099">{{ $candidate->nearest_station ?: '最寄駅未登録' }}</div></div><div class="layout-090"><label class="layout-091">備考<input name="special_notes" type="text" placeholder="あれば(例:リーダー・集合8:00)" class="text-100"></label><label class="layout-091">謝金<input name="fee" type="number" min="0" value="{{ $candidate->base_fee }}" class="text-101">円</label><label class="layout-091">交通費<input name="transportation" type="number" min="0" value="0" class="text-094">円</label><button type="submit" class="control-026">依頼する</button></div></form>@if($overlap)<div role="alert" class="surface-045">同じ時間帯に「{{ $overlap->event->name ?: $overlap->event->business_name }}」のアサインが確定しています。依頼はできますが、重複にご注意ください。</div>@endif</div>
+                @empty<div class="cell-014">条件に一致する候補はいません。</div>@endforelse
+                </div><div class="text-048">「依頼する」を押すと、謝金・交通費と備考つきの依頼が本人に届き、ステータスが「依頼中」になります。</div>
+              </section>
+              <section aria-labelledby="h-swap" class="surface-006"><h2 id="h-swap" class="text-020">当日の交代を追加する<span class="surface-044">社員のみ</span></h2><div class="text-102">依頼を送らずに「確定」として追加します。実施後でも追加できます。</div><form method="POST" action="{{ route('events.assignments.store', $event) }}" class="layout-092">@csrf<input type="hidden" name="confirmed_directly" value="1"><label class="layout-088">備考(任意)<input name="special_notes" type="text" class="text-103"></label><label class="layout-088">スタッフ<select name="user_id" class="text-049" required><option value="">選択してください</option>@foreach($candidates as $candidate)<option value="{{ $candidate->id }}">{{ $candidate->name }}</option>@endforeach</select></label><label class="layout-088">謝金(円)<input name="fee" type="number" min="0" value="0" class="text-104"></label><label class="layout-088">交通費(円)<input name="transportation" type="number" min="0" value="0" class="text-105"></label><button type="submit" class="control-027">確定として追加</button></form></section>
+              @endif
+              <div class="text-106">7日前確認・当日確認は「確定」の人にだけ送られます。イベント日を過ぎても依頼中・未定・承諾の人は自動で見送りになります。</div>
+              @else
               <div class="layout-041">
                 <div class="text-007"><a href="EventList.dc.html">イベント</a> / 秋季健康フェア(10/21) / アサイン</div>
                 <div role="group" aria-label="画面案の表示切り替え" class="layout-082"><span class="text-043">画面案の確認用</span><button type="button" aria-pressed="true" class="control-020">社員として見る</button><button type="button" aria-pressed="false" class="control-021">準社員として見る</button><span class="space-010"></span><button type="button" aria-pressed="true" class="control-020">実施前(10/19)</button><button type="button" aria-pressed="false" class="control-021">実施後(10/22)</button></div>
@@ -149,6 +211,7 @@
                 <div class="layout-092"><label class="layout-088">備考(任意)<input type="text" placeholder="その人だけのこと" class="text-103"></label><label class="layout-088">スタッフ<input type="text" value="中村 翔" class="text-049"></label><label class="layout-088">謝金(円)<input type="number" value="10000" class="text-104"></label><label class="layout-088">交通費(円)<input type="number" value="1020" class="text-105"></label><button type="button" class="control-027">確定として追加</button></div>
               </section>
               <div class="text-106">7日前確認・当日確認の連絡は「確定」の人にだけ送られます。7日前を過ぎてから確定した人の7日前確認は「対象外」(送らない)です。当日確認は、その人の集合時間の4時間前に送られます(早朝でもそのまま)。イベント日を過ぎても依頼中・未定・承諾のままの人は、自動で見送りになります(お知らせは送りません)。</div>
+              @endif
             </div>
           </main>
         </div>

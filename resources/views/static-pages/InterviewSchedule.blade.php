@@ -19,19 +19,20 @@
             <h1 class="text-079">面談の日程を選んでください</h1>
           </header>
           <main class="layout-074">
+            @php $interview = $interview ?? null; @endphp
             <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : '#' }}" class="layout-053" data-interview-form>
               @csrf
               <section class="surface-010">
                 <div class="text-007">担当</div>
-                <div class="text-035">山田 太郎</div>
+                <div class="text-035">{{ $interview?->manager?->name ?? '山田 太郎' }}</div>
                 <div class="text-150">種別</div>
-                <div class="text-151">個別指導(30分〜1時間)</div>
+                <div class="text-151">{{ ['regular'=>'定期面談','individual_guidance'=>'個別指導','evaluation'=>'評価面談','other'=>'その他'][$interview?->type] ?? '個別指導' }}(30分〜1時間)</div>
                 <div class="text-150">場所</div>
-                <div class="text-151">ハイクラス 事務所(対面)</div>
+                <div class="text-151">{{ $interview?->location ?? 'ハイクラス 事務所' }}({{ ['in_person'=>'対面','online'=>'オンライン','phone'=>'電話'][$interview?->method] ?? '対面' }})</div>
               </section>
               @php($candidateTimes = isset($interview) && $interview ? $interview->candidate_times : ['2026-10-28 18:00:00', '2026-10-29 18:00:00', '2026-10-31 10:00:00'])
               <input type="hidden" name="selected_at" value="{{ $candidateTimes[0] ?? '' }}">
-              <fieldset class="layout-153"><legend class="text-152">都合のよい日時</legend><button type="button" data-interview-value="{{ $candidateTimes[0] ?? '' }}" aria-pressed="true" class="control-045"><span>10/28(水) 18:00〜19:00</span></button><button type="button" data-interview-value="{{ $candidateTimes[1] ?? ($candidateTimes[0] ?? '') }}" aria-pressed="false" class="control-046"><span>10/29(木) 18:00〜19:00</span></button><button type="button" data-interview-value="{{ $candidateTimes[2] ?? ($candidateTimes[0] ?? '') }}" aria-pressed="false" class="control-046"><span>10/31(土) 10:00〜11:00</span></button><button type="button" data-interview-value="{{ $candidateTimes[0] ?? '' }}" aria-pressed="false" class="control-046"><span>どれも都合が悪い</span></button></fieldset>
+              <fieldset class="layout-153"><legend class="text-152">都合のよい日時</legend>@foreach($candidateTimes as $candidateTime)<button type="button" data-interview-value="{{ $candidateTime }}" aria-pressed="{{ $loop->first ? 'true':'false' }}" class="{{ $loop->first ? 'control-045':'control-046' }}"><span>{{ \Illuminate\Support\Carbon::parse($candidateTime)->isoFormat('M/D(ddd) H:mm') }}〜</span></button>@endforeach<button type="button" data-interview-value="unavailable" aria-pressed="false" class="control-046"><span>どれも都合が悪い</span></button></fieldset>
               <button type="submit" class="control-013">この内容で送る</button>
               <div class="text-002">このページはLINEのメッセージから開いています。ログインは不要です。</div>
             </form>

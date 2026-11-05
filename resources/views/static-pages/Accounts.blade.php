@@ -37,7 +37,7 @@
                 <button type="button" data-create-account class="control-014">+ アカウントを作成して招待</button></div>
               <section aria-labelledby="ac-list" class="surface-006">
                 <div class="layout-041">
-                  <h2 id="ac-list" class="text-020">アカウント一覧(<span>10</span>件)</h2>
+                  <h2 id="ac-list" class="text-020">アカウント一覧(<span>{{ $staffMembers->count() }}</span>件)</h2>
                   <div role="group" aria-label="状態で絞り込み" class="layout-024"><button type="button" aria-pressed="true" class="control-009"><span>すべて</span></button><button type="button" aria-pressed="false" class="control-008"><span>利用中</span></button><button type="button" aria-pressed="false" class="control-008"><span>招待中</span></button><button type="button" aria-pressed="false" class="control-008"><span>停止中</span></button><button type="button" aria-pressed="false" class="control-008"><span>ログインなし</span></button></div>
                 </div>
                 <div class="utility-001">
@@ -46,21 +46,42 @@
                       <tr class="text-023"><th class="cell-001">名前</th><th class="cell-002">メールアドレス・連絡先</th><th class="cell-010">区分</th><th class="cell-024">状態</th><th class="cell-024">LINE連携</th><th class="cell-024">最終ログイン</th><th class="cell-026">操作</th></tr>
                     </thead>
                     <tbody>
-                      <tr class="utility-004"><td class="cell-027"><span>山田 太郎</span></td><td class="cell-028"><span>yamada@highclass-inc.com</span></td><td class="cell-004"><select aria-label="山田 太郎の区分" disabled="" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>今日 23:40</span></td><td class="cell-013"></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>佐々木 恵</span></td><td class="cell-028"><span>sasaki@highclass-inc.com</span></td><td class="cell-004"><select aria-label="佐々木 恵の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>今日 18:12</span></td><td class="cell-013"><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>田村 優子</span></td><td class="cell-028"><span>tamura@highclass-inc.com</span></td><td class="cell-004"><select aria-label="田村 優子の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>今日 09:02</span></td><td class="cell-013"><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>鈴木 一郎</span></td><td class="cell-028"><span>suzuki@example.com</span></td><td class="cell-004"><select aria-label="鈴木 一郎の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>昨日 21:05</span></td><td class="cell-013"><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>佐藤 花子</span></td><td class="cell-028"><span>hanako@example.com</span></td><td class="cell-004"><select aria-label="佐藤 花子の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>今日 07:31</span></td><td class="cell-013"><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>西田 涼</span></td><td class="cell-028"><span>nishida@example.com</span></td><td class="cell-004"><select aria-label="西田 涼の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-013"><span>招待中</span></span></td><td class="cell-028"><span class="surface-011"><span>未連携</span></span></td><td class="cell-029"><span>—</span></td><td class="cell-013"><button type="button" class="control-016">招待を再送</button><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-008"><td class="cell-027"><span>森 健二</span></td><td class="cell-028"><span>mori@example.com</span></td><td class="cell-004"><select aria-label="森 健二の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-016"><span>停止中</span></span></td><td class="cell-028"><span class="surface-011"><span>未連携</span></span></td><td class="cell-029"><span>2026/06/30</span></td><td class="cell-013"><button type="button" class="control-017">再開</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>前田 由紀</span></td><td class="cell-028"><span>maeda@example.com</span></td><td class="cell-004"><select aria-label="前田 由紀の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-012"><span>利用中</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>昨日 19:22</span></td><td class="cell-013"><button type="button" class="control-015">ログイン停止</button></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>小川 拓也</span></td><td class="cell-028"><span>ogawa@example.com</span></td><td class="cell-004"><select aria-label="小川 拓也の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-015"><span>ログインなし</span></span></td><td class="cell-028"><span class="surface-012"><span>連携済み</span></span></td><td class="cell-029"><span>—</span></td><td class="cell-013"></td></tr>
-                      <tr class="utility-004"><td class="cell-027"><span>岡本 直人</span></td><td class="cell-028"><span>okamoto@example.com</span></td><td class="cell-004"><select aria-label="岡本 直人の区分" class="surface-035"><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></td><td class="cell-028"><span class="surface-015"><span>ログインなし</span></span></td><td class="cell-028"><span class="surface-011"><span>未連携</span></span></td><td class="cell-029"><span>—</span></td><td class="cell-013"></td></tr>
+                      @php
+                        $roleLabels = ['employee' => '社員', 'semi_employee' => '準社員', 'staff' => 'スタッフ', 'temporary' => 'その他(単発)', 'trainer' => 'その他(トレーナー)'];
+                        $statusLabels = ['active' => '利用中', 'invited' => '招待中', 'suspended' => '停止中', 'no_login' => 'ログインなし'];
+                        $statusClasses = ['active' => 'surface-012', 'invited' => 'surface-013', 'suspended' => 'surface-016', 'no_login' => 'surface-015'];
+                      @endphp
+                      @forelse ($staffMembers as $member)
+                        <tr class="{{ $member->account_status === 'suspended' ? 'utility-008' : 'utility-004' }}" data-account-row data-account-status="{{ $member->account_status }}">
+                          <td class="cell-027"><span>{{ $member->name }}</span></td>
+                          <td class="cell-028"><span>{{ $member->email }}</span></td>
+                          <td class="cell-004"><select aria-label="{{ $member->name }}の区分" data-account-role data-user-id="{{ $member->id }}" class="surface-035" @disabled($member->is(auth()->user()))>@foreach ($roleLabels as $value => $label)<option value="{{ $value }}" @selected($member->role === $value)>{{ $label }}</option>@endforeach</select></td>
+                          <td class="cell-028"><span class="{{ $statusClasses[$member->account_status] ?? 'surface-011' }}"><span>{{ $statusLabels[$member->account_status] ?? $member->account_status }}</span></span></td>
+                          <td class="cell-028"><span class="{{ $member->line_linked_at ? 'surface-012' : 'surface-011' }}"><span>{{ $member->line_linked_at ? '連携済み' : '未連携' }}</span></span></td>
+                          <td class="cell-029"><span>{{ $member->last_login_at?->timezone('Asia/Tokyo')->format('Y/m/d H:i') ?? '—' }}</span></td>
+                          <td class="cell-013">
+                            @if (! $member->is(auth()->user()) && $member->account_status === 'invited')<button type="button" data-account-state="invited" data-user-id="{{ $member->id }}" class="control-016">招待を再送</button>@endif
+                            @if (! $member->is(auth()->user()) && in_array($member->account_status, ['active', 'invited', 'no_login'], true))<button type="button" data-account-state="suspended" data-user-id="{{ $member->id }}" class="control-015">{{ $member->role === 'temporary' ? '利用停止' : 'ログイン停止' }}</button>@endif
+                            @if (! $member->is(auth()->user()) && $member->account_status === 'suspended')<button type="button" data-account-state="{{ $member->role === 'temporary' ? 'no_login' : 'active' }}" data-user-id="{{ $member->id }}" class="control-017">再開</button>@endif
+                          </td>
+                        </tr>
+                      @empty
+                        <tr><td colspan="7" class="cell-028">アカウントはまだありません。</td></tr>
+                      @endforelse
                     </tbody>
                   </table>
                 </div>
                 <div class="text-082">ログインを停止しても、これまでの勤務・支払・報告書の記録は残ります。退職した人は「ログイン停止」にしてください。自分自身の区分と停止は変更できません。「その他(単発)」の人をスタッフ・その他(トレーナー)など、ログインする区分に変えると、その時点で招待メールが届きます(メールアドレスが必要です)。LINE連携が「未連携」の人には、マイプロフィールの「LINEと連携する」から連携するよう声をかけてください。勤務・支払・報告書の記録はそのまま引き継がれます。</div>
               </section>
+              <dialog id="account-create-dialog" class="surface-006">
+                <form method="dialog" data-account-create-form class="layout-158">
+                  <h2 class="text-020">アカウントを作成して招待</h2>
+                  <div class="layout-055"><label class="text-042" for="account-name">名前</label><input id="account-name" name="name" required maxlength="255" class="text-076"></div>
+                  <div class="layout-055"><label class="text-042" for="account-email">メールアドレス</label><input id="account-email" name="email" type="email" required maxlength="255" class="text-076"></div>
+                  <div class="layout-055"><label class="text-042" for="account-role">区分</label><select id="account-role" name="role" required class="text-076"><option value="employee">社員</option><option value="semi_employee">準社員</option><option value="staff" selected>スタッフ</option><option value="temporary">その他(単発)</option><option value="trainer">その他(トレーナー)</option></select></div>
+                  <div class="layout-024"><button type="button" data-close-account-dialog class="control-015">キャンセル</button><button type="submit" class="control-014">作成して招待</button></div>
+                </form>
+              </dialog>
             </div>
           </main>
         </div>
@@ -68,6 +89,5 @@
     </div>
     
     
-    <script type="application/json" id="account-directory">@json($staffMembers->mapWithKeys(fn ($member) => [$member->name => $member->id]))</script>
   </body>
 </html>

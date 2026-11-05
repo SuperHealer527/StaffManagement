@@ -30,6 +30,11 @@ class Client extends Model
         return $this->belongsTo(User::class, 'sales_owner_id');
     }
 
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
     protected function casts(): array
     {
         return ['next_action_date' => 'date', 'proposal_status_changed_at' => 'datetime'];

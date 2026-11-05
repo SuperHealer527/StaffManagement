@@ -45,56 +45,80 @@
                 <section aria-labelledby="ce-basic" class="layout-100">
                   <h2 id="ce-basic" class="text-020">基本情報</h2>
                   <div class="layout-101">
-                    <div class="layout-051"><label for="ce-name" class="text-042">依頼先名<span class="text-050">必須</span></label><input id="ce-name" name="name" type="text" value="サンプル商事 株式会社" class="text-051"></div>
-                    <div class="layout-051"><label for="ce-kind" class="text-042">種別</label><select id="ce-kind" name="type" class="surface-026"><option value="corporation">法人</option><option value="government">行政</option><option value="individual">個人</option><option value="organization">団体</option><option value="other">その他</option></select></div>
+                    <div class="layout-051"><label for="ce-name" class="text-042">依頼先名<span class="text-050">必須</span></label><input id="ce-name" name="name" type="text" value="{{ old('name', $client?->name) }}" required maxlength="255" class="text-051"></div>
+                    <div class="layout-051"><label for="ce-kind" class="text-042">種別</label><select id="ce-kind" name="type" class="surface-026">@foreach (['corporation' => '法人', 'government' => '行政', 'individual' => '個人', 'organization' => '団体', 'other' => 'その他'] as $value => $label)<option value="{{ $value }}" @selected(old('type', $client?->type ?? 'corporation') === $value)>{{ $label }}</option>@endforeach</select></div>
                   </div>
-                  <div class="layout-051"><label for="ce-dept" class="text-042">部署名</label><input id="ce-dept" name="department" type="text" value="地域連携部" class="text-051"></div>
+                  <div class="layout-051"><label for="ce-dept" class="text-042">部署名</label><input id="ce-dept" name="department" type="text" value="{{ old('department', $client?->department) }}" maxlength="255" class="text-051"></div>
                   <div class="layout-050">
-                    <div class="layout-051"><label for="ce-tel" class="text-042">電話番号</label><input id="ce-tel" name="phone" type="tel" value="03-XXXX-XXXX" class="text-051"></div>
-                    <div class="layout-051"><label for="ce-zip" class="text-042">郵便番号</label><input id="ce-zip" name="postal_code" type="text" inputmode="numeric" value="100-0000" class="text-051"></div>
+                    <div class="layout-051"><label for="ce-tel" class="text-042">電話番号</label><input id="ce-tel" name="phone" type="tel" value="{{ old('phone', $client?->phone) }}" maxlength="30" class="text-051"></div>
+                    <div class="layout-051"><label for="ce-zip" class="text-042">郵便番号</label><input id="ce-zip" name="postal_code" type="text" inputmode="numeric" value="{{ old('postal_code', $client?->postal_code) }}" maxlength="12" class="text-051"></div>
                   </div>
-                  <div class="layout-051"><label for="ce-addr" class="text-042">住所</label><input id="ce-addr" name="address" type="text" value="東京都千代田区〇〇 1-2-3 サンプルビル 5階" class="text-051"></div>
+                  <div class="layout-051"><label for="ce-addr" class="text-042">住所</label><input id="ce-addr" name="address" type="text" value="{{ old('address', $client?->address) }}" maxlength="1000" class="text-051"></div>
                 </section>
-                <section aria-labelledby="ce-note" class="layout-102"><label id="ce-note" for="ce-note-text" class="text-035">特記事項</label><textarea id="ce-note-text" name="notes" rows="12" class="text-110">請求書は月末締め。 報告書は依頼先への報告用文章をメールで送付する。 イベント当日は正面入口ではなく通用口から入館。</textarea></section>
+                <section aria-labelledby="ce-note" class="layout-102"><label id="ce-note" for="ce-note-text" class="text-035">特記事項</label><textarea id="ce-note-text" name="notes" rows="12" maxlength="5000" class="text-110">{{ old('notes', $client?->notes) }}</textarea></section>
+                @if ($errors->any())<div role="alert" class="text-050">{{ $errors->first() }}</div>@endif
+                @if (session('status'))<div role="status" class="text-060">{{ session('status') }}</div>@endif
               </div>
               <section aria-labelledby="ce-person" class="surface-022">
                 <div class="layout-021">
                   <h2 id="ce-person" class="text-020">担当者</h2>
-                  <button type="button" class="control-028">+ 担当者を追加</button></div>
+                  <button type="button" data-add-contact class="control-028">+ 担当者を追加</button></div>
                 <div class="utility-001">
                   <table class="text-111">
                     <thead>
                       <tr class="text-065"><th class="cell-035">役職</th><th class="cell-036">担当者名</th><th class="cell-036">携帯電話</th><th class="cell-036">メールアドレス</th><th class="cell-037">退職</th><th class="cell-036"><span class="space-004">操作</span></th></tr>
                     </thead>
-                    <tbody>
-                      <tr class="utility-004"><td class="cell-038"><input type="text" aria-label="役職" placeholder="例:課長" value="課長" class="text-112"></td><td class="cell-039"><input type="text" aria-label="担当者名" value="青木 一郎" class="text-112"></td><td class="cell-039"><input type="tel" aria-label="携帯電話" value="090-XXXX-XXXX" class="text-112"></td><td class="cell-039"><input type="email" aria-label="メールアドレス" value="aoki@example.co.jp" class="text-112"></td><td class="cell-040"><input type="checkbox" aria-label="青木 一郎は退職" class="space-006"></td><td class="cell-041"><button type="button" aria-label="この担当者を削除" class="control-029">削除</button></td></tr>
-                      <tr class="utility-004"><td class="cell-038"><input type="text" aria-label="役職" placeholder="例:課長" value="主任" class="text-112"></td><td class="cell-039"><input type="text" aria-label="担当者名" value="石井 美保" class="text-112"></td><td class="cell-039"><input type="tel" aria-label="携帯電話" value="080-XXXX-XXXX" class="text-112"></td><td class="cell-039"><input type="email" aria-label="メールアドレス" value="ishii@example.co.jp" class="text-112"></td><td class="cell-040"><input type="checkbox" aria-label="石井 美保は退職" class="space-006"></td><td class="cell-041"><button type="button" aria-label="この担当者を削除" class="control-029">削除</button></td></tr>
-                      <tr class="utility-009"><td class="cell-038"><input type="text" aria-label="役職" placeholder="例:課長" value="係長" class="text-112"></td><td class="cell-039"><input type="text" aria-label="担当者名" value="森 健二" class="text-112"></td><td class="cell-039"><input type="tel" aria-label="携帯電話" value="090-XXXX-XXXX" class="text-112"></td><td class="cell-039"><input type="email" aria-label="メールアドレス" value="mori@example.co.jp" class="text-112"></td><td class="cell-040"><input type="checkbox" aria-label="森 健二は退職" checked="" class="space-006"></td><td class="cell-041"><button type="button" aria-label="この担当者を削除" class="control-029">削除</button></td></tr>
+                    <tbody data-contact-rows>
+                      @foreach ($client?->contacts ?? [] as $contact)
+                        <tr class="{{ $contact->is_retired ? 'utility-009' : 'utility-004' }}" data-contact-row><input type="hidden" name="contacts[{{ $loop->index }}][id]" value="{{ $contact->id }}"><td class="cell-038"><input name="contacts[{{ $loop->index }}][position]" type="text" aria-label="役職" placeholder="例:課長" value="{{ $contact->position }}" class="text-112"></td><td class="cell-039"><input name="contacts[{{ $loop->index }}][name]" type="text" aria-label="担当者名" value="{{ $contact->name }}" required class="text-112"></td><td class="cell-039"><input name="contacts[{{ $loop->index }}][mobile]" type="tel" aria-label="携帯電話" value="{{ $contact->mobile }}" class="text-112"></td><td class="cell-039"><input name="contacts[{{ $loop->index }}][email]" type="email" aria-label="メールアドレス" value="{{ $contact->email }}" class="text-112"></td><td class="cell-040"><input type="hidden" name="contacts[{{ $loop->index }}][is_retired]" value="0"><input name="contacts[{{ $loop->index }}][is_retired]" value="1" type="checkbox" aria-label="{{ $contact->name }}は退職" @checked($contact->is_retired) class="space-006"></td><td class="cell-041"><button type="button" data-remove-contact aria-label="この担当者を削除" class="control-029">削除</button></td></tr>
+                      @endforeach
                     </tbody>
                   </table>
+                  <template id="contact-row-template"><tr class="utility-004" data-contact-row><td class="cell-038"><input name="contacts[__INDEX__][position]" type="text" aria-label="役職" placeholder="例:課長" class="text-112"></td><td class="cell-039"><input name="contacts[__INDEX__][name]" type="text" aria-label="担当者名" required class="text-112"></td><td class="cell-039"><input name="contacts[__INDEX__][mobile]" type="tel" aria-label="携帯電話" class="text-112"></td><td class="cell-039"><input name="contacts[__INDEX__][email]" type="email" aria-label="メールアドレス" class="text-112"></td><td class="cell-040"><input type="hidden" name="contacts[__INDEX__][is_retired]" value="0"><input name="contacts[__INDEX__][is_retired]" value="1" type="checkbox" aria-label="退職" class="space-006"></td><td class="cell-041"><button type="button" data-remove-contact aria-label="この担当者を削除" class="control-029">削除</button></td></tr></template>
                 </div>
               </section>
               <section aria-labelledby="ce-prop" class="layout-049">
                 <h2 id="ce-prop" class="text-020">提案状況</h2>
                 <div class="layout-050">
-                  <div class="layout-051"><label for="ce-pstat" class="text-042">状況</label><select id="ce-pstat" class="surface-026"><option>未接触</option><option>アプローチ中</option><option>提案中</option><option>受注</option><option>失注</option><option>保留</option></select></div>
-                  <div class="layout-051"><label for="ce-next" class="text-042">次回アクション日</label><input id="ce-next" type="date" value="2026-10-28" class="text-051"></div>
-                  <div class="layout-051"><label for="ce-owner" class="text-042">社内の担当</label><select id="ce-owner" class="surface-026"><option>山田 太郎</option><option>田村 優子</option><option>佐々木 恵</option></select></div>
+                  <div class="layout-051"><label for="ce-pstat" class="text-042">状況</label><select id="ce-pstat" name="proposal_status" class="surface-026">@foreach (['uncontacted' => '未接触', 'approaching' => 'アプローチ中', 'proposing' => '提案中', 'won' => '受注', 'lost' => '失注', 'on_hold' => '保留'] as $value => $label)<option value="{{ $value }}" @selected(old('proposal_status', $client?->proposal_status ?? 'uncontacted') === $value)>{{ $label }}</option>@endforeach</select></div>
+                  <div class="layout-051"><label for="ce-next" class="text-042">次回アクション日</label><input id="ce-next" name="next_action_date" type="date" value="{{ old('next_action_date', $client?->next_action_date?->format('Y-m-d')) }}" class="text-051"></div>
+                  <div class="layout-051"><label for="ce-owner" class="text-042">社内の担当</label><select id="ce-owner" name="sales_owner_id" class="surface-026"><option value="">未設定</option>@foreach ($employees ?? [] as $employee)<option value="{{ $employee->id }}" @selected((string) old('sales_owner_id', $client?->sales_owner_id) === (string) $employee->id)>{{ $employee->name }}</option>@endforeach</select></div>
                   <div class="layout-051">
                     <div class="text-042">状況を変えた日</div>
-                    <div class="layout-103">2026/10/15(状況を変えると自動で記録)</div>
+                    <div class="layout-103">{{ $client?->proposal_status_changed_at?->timezone('Asia/Tokyo')->format('Y/m/d') ?? '—' }}(状況を変えると自動で記録)</div>
                   </div>
                 </div>
-                <div class="layout-051"><label for="ce-pmemo" class="text-042">提案内容・次回アクション</label><textarea id="ce-pmemo" rows="4" class="text-113">来年度の健康づくり事業(体力測定会 年4回)の運営スタッフ派遣を提案中。 10/28までに見積書を送付し、11月上旬に打合せの日程を調整する。</textarea></div>
+                <div class="layout-051"><label for="ce-pmemo" class="text-042">提案内容・次回アクション</label><textarea id="ce-pmemo" name="proposal_notes" rows="4" maxlength="5000" class="text-113">{{ old('proposal_notes', $client?->proposal_notes) }}</textarea></div>
               </section>
-              <div class="layout-104"><a href="Clients.dc.html" class="text-057">一覧に戻る</a><button type="submit" class="control-003">保存する</button></div>
+              <div class="layout-104"><a href="{{ route('clients.index') }}" class="text-057">一覧に戻る</a><button type="submit" class="control-003">保存する</button></div>
               </form>
               <section aria-labelledby="ce-meet" class="surface-022">
                 <div class="layout-021">
-                  <h2 id="ce-meet" class="text-020">打合せ・イベント履歴(<span>8</span>件)</h2>
-                  <button type="button" class="control-028">+ 打合せを登録</button></div>
+                  <h2 id="ce-meet" class="text-020">打合せ・イベント履歴(<span>{{ ($client?->meetings->count() ?? 0) + ($client?->events->count() ?? 0) }}</span>件)</h2>
+                  @if ($client)<button type="button" data-add-meeting class="control-028">+ 打合せを登録</button>@endif</div>
                 <div class="surface-048">営業メールの宛先(CCまたはBCC)に <strong>log@example.co.jp</strong> を入れると、この依頼先の履歴にメールとして自動で登録されます。この依頼先のイベントも自動で履歴に並びます。</div>
                 <div class="layout-047">
+                  @if ($client)
+                    @php
+                      $meetingTypeLabels = ['sales' => '営業', 'preparation' => '事前準備', 'consultation' => '相談', 'follow_up' => '事後フォロー', 'other' => 'その他'];
+                      $meetingMethodLabels = ['visit' => '訪問', 'phone' => '電話', 'online' => 'オンライン', 'email' => 'メール', 'other' => 'その他'];
+                      $eventStatusLabels = ['draft' => '下書き', 'recruiting' => '募集中', 'confirmed' => '確定', 'completed' => '実施済み', 'cancelled' => '中止'];
+                      $history = $client->meetings->map(fn ($meeting) => ['date' => $meeting->meeting_date, 'kind' => 'meeting', 'record' => $meeting])
+                        ->concat($client->events->map(fn ($eventRecord) => ['date' => $eventRecord->event_date, 'kind' => 'event', 'record' => $eventRecord]))
+                        ->sortByDesc('date');
+                    @endphp
+                    @forelse ($history as $historyItem)
+                      @if ($historyItem['kind'] === 'event')
+                        @php $historyEvent = $historyItem['record']; @endphp
+                        <div class="cell-014"><div class="layout-063"><div class="layout-105"><span class="text-114"><span>{{ $historyEvent->event_date->format('Y/m/d') }}</span></span><span class="surface-049"><span>当日</span></span><span class="surface-050"><span>イベント</span></span><span><span>自動登録</span></span></div><a href="{{ route('screens.show', 'event-detail') }}" class="text-115">イベントを開く</a></div><div class="text-116"><span>{{ $historyEvent->name ?: $historyEvent->business_name }}({{ $historyEvent->business_name }})・必要{{ $historyEvent->required_staff }}人・{{ $eventStatusLabels[$historyEvent->status] ?? $historyEvent->status }}</span></div></div>
+                      @else
+                        @php $historyMeeting = $historyItem['record']; @endphp
+                        <div class="cell-014"><div class="layout-063"><div class="layout-105"><span class="text-114"><span>{{ $historyMeeting->meeting_date->format('Y/m/d') }}</span></span><span class="surface-051"><span>{{ $meetingTypeLabels[$historyMeeting->type] ?? $historyMeeting->type }}</span></span><span class="surface-050"><span>{{ $meetingMethodLabels[$historyMeeting->method] ?? $historyMeeting->method }}</span></span><span><span>先方:{{ $historyMeeting->participants ?: '—' }} 記録:{{ $historyMeeting->recorder->name }}</span></span></div><div class="layout-106"><button type="button" data-edit-meeting data-meeting="{{ base64_encode(json_encode($historyMeeting->only(['id', 'type', 'meeting_date', 'method', 'participants', 'content']))) }}" class="control-030">編集</button><form method="POST" action="{{ route('clients.meetings.destroy', [$client, $historyMeeting]) }}" data-confirm-delete><input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE"><button type="submit" class="control-031">削除</button></form></div></div><div class="text-116"><span>{{ $historyMeeting->content }}</span></div></div>
+                      @endif
+                    @empty
+                      <div class="cell-014"><div class="text-116"><span>打合せ・イベント履歴はまだありません。</span></div></div>
+                    @endforelse
+                  @else
                   <div class="cell-014">
                     <div class="layout-063">
                       <div class="layout-105"><span class="text-114"><span>2026/10/21</span></span><span class="surface-049"><span>当日</span></span><span class="surface-050"><span>イベント</span></span><span><span>自動登録</span></span></div>
@@ -151,8 +175,24 @@
                       <a href="#" class="text-115">イベントを開く</a></div>
                     <div class="text-116"><span>夏祭り 運営補助(夏祭り事業)・8人・実施済み</span></div>
                   </div>
+                  @endif
                 </div>
               </section>
+              @if ($client)
+              <dialog id="meeting-dialog" class="surface-006">
+                <form method="POST" action="{{ route('clients.meetings.store', $client) }}" data-meeting-form data-client-id="{{ $client->id }}" class="layout-158">
+                  @csrf
+                  <input type="hidden" name="_method" value="POST" data-meeting-method>
+                  <h2 class="text-020" data-meeting-dialog-title>打合せを登録</h2>
+                  <div class="layout-055"><label class="text-042" for="meeting-date">日付</label><input id="meeting-date" name="meeting_date" type="date" required class="text-076"></div>
+                  <div class="layout-055"><label class="text-042" for="meeting-type">種別</label><select id="meeting-type" name="type" required class="text-076">@foreach ($meetingTypeLabels as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></div>
+                  <div class="layout-055"><label class="text-042" for="meeting-method">方法</label><select id="meeting-method" name="method" required class="text-076">@foreach ($meetingMethodLabels as $value => $label)<option value="{{ $value }}">{{ $label }}</option>@endforeach</select></div>
+                  <div class="layout-055"><label class="text-042" for="meeting-participants">先方参加者</label><input id="meeting-participants" name="participants" maxlength="1000" class="text-076"></div>
+                  <div class="layout-055"><label class="text-042" for="meeting-content">内容</label><textarea id="meeting-content" name="content" required maxlength="10000" rows="6" class="text-076"></textarea></div>
+                  <div class="layout-024"><button type="button" data-close-meeting class="control-015">キャンセル</button><button type="submit" class="control-014">保存する</button></div>
+                </form>
+              </dialog>
+              @endif
             </div>
           </main>
         </div>

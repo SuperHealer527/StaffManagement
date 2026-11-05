@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreAssignmentRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return $this->user()?->isEmployee() ?? false;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'special_notes' => ['nullable', 'string', 'max:2000'],
+            'fee' => ['required', 'integer', 'min:0', 'max:1000000'],
+            'transportation' => ['required', 'integer', 'min:0', 'max:1000000'],
+            'confirmed_directly' => ['nullable', 'boolean'],
+        ];
+    }
+}

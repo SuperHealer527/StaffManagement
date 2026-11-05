@@ -19,13 +19,14 @@
             <h1 class="text-079">お仕事の連絡をLINEで受け取る</h1>
           </header>
           <main class="layout-074">
-            <div class="text-153">鈴木 次郎 さん、ハイクラスです。お仕事のご依頼・確定・当日の確認などは、公式LINEと連携するとLINEでお届けします。連携しない場合は、これまでどおりメールでお届けします。</div>
+            <div class="text-153">{{ $user?->name ?? '鈴木 次郎' }} さん、ハイクラスです。お仕事のご依頼・確定・当日の確認などは、公式LINEと連携するとLINEでお届けします。連携しない場合は、これまでどおりメールでお届けします。</div>
+            @if($errors->any())<div role="alert" class="text-080">{{ $errors->first() }}</div>@endif
             <ol class="layout-154">
               <li class="layout-155"><span class="layout-156"><span>1</span></span><span class="text-017"><span>公式LINEを友だち追加して連携</span></span></li>
               <li class="layout-155"><span class="layout-157"><span>2</span></span><span class="text-154"><span>LINEで届く依頼に回答</span></span></li>
               <li class="layout-155"><span class="layout-157"><span>3</span></span><span class="text-154"><span>確定したら、振込先と住所を入力</span></span></li>
             </ol>
-            <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : '#' }}">@csrf<button type="submit" class="control-047">LINEで友だち追加して連携する</button></form>
+            <form method="POST" action="{{ isset($actionToken) ? route('line.connect.public', request()->route('token')) : '#' }}">@csrf<button type="submit" class="control-047">LINEで友だち追加して連携する</button></form>
             <div class="text-080">このページは社員が登録したメールアドレスあてに送ったものです。ログインは不要です。リンクは本人専用で、連携が済むと使えなくなります。LINEをお使いでない場合は、このまま閉じてください(ご連絡はメールで届きます)。リンクの有効期限は送信から24時間です。</div>
           </main>
         </div>

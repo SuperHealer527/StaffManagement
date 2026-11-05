@@ -29,6 +29,24 @@
           </div>
           <main class="space-005">
             <div class="layout-040">
+              @if(isset($reportEvents))
+              <div class="layout-013"><div><h1 class="text-044">報告書</h1><div class="text-060">報告書が必要なイベントだけを表示しています</div></div><form method="GET" action="{{ route('reports.index') }}" class="layout-046"><div class="layout-051"><label for="rv-status" class="text-002">提出状況</label><select id="rv-status" name="status" class="surface-017"><option value="">すべて</option><option value="pending" @selected(request('status') === 'pending')>未提出</option><option value="submitted" @selected(request('status') === 'submitted')>提出済み</option></select></div><div class="layout-051"><label for="rv-q1" class="text-002">終了の状況</label><select id="rv-q1" name="completion" class="surface-017"><option value="">すべて</option><option value="attention" @selected(request('completion') === 'attention')>報告事項あり・トラブル等あり</option></select></div><button type="submit" class="control-024">絞り込む</button></form></div>
+              <div class="layout-066">
+                <section aria-labelledby="rv-list" class="surface-098"><h2 id="rv-list" class="text-202">イベント一覧</h2><div class="layout-194">
+                  @forelse($reportEvents as $reportEvent)
+                  @php $submission = $reportEvent->reportSubmissions->whereNotNull('submitted_at')->sortByDesc('submitted_at')->first(); $representative = $reportEvent->assignments->firstWhere('is_report_representative', true)?->user; $completion = data_get($submission?->answers, 'completion'); @endphp
+                  <a href="{{ route('reports.index', array_filter(['event_id' => $reportEvent->id, 'status' => request('status'), 'completion' => request('completion')])) }}" class="{{ $selectedEvent?->id === $reportEvent->id ? 'control-066' : 'control-065' }}"><div class="layout-067"><span class="text-002">{{ $reportEvent->event_date->isoFormat('M/D(ddd)') }}</span><span class="{{ $submission ? 'surface-100' : 'surface-099' }}">{{ $submission ? '提出済み' : '未提出' }}</span></div><div class="text-203">{{ $reportEvent->name ?: $reportEvent->business_name }}</div><div class="text-018">代表者:{{ $representative?->name ?? '未設定' }}@if(in_array($completion, ['issue', 'incident'], true)) ・ {{ $completion === 'issue' ? '報告事項あり' : 'トラブル等あり' }}@endif</div></a>
+                  @empty<div class="control-065">条件に一致する報告対象イベントはありません。</div>@endforelse
+                </div></section>
+                <section aria-labelledby="rv-detail" class="surface-101">
+                  @if($selectedEvent)
+                  @php $selectedSubmission = $selectedEvent->reportSubmissions->whereNotNull('submitted_at')->sortByDesc('submitted_at')->first(); $selectedRepresentative = $selectedEvent->assignments->firstWhere('is_report_representative', true)?->user; $completionLabels = ['completed' => '問題なく終了した', 'issue' => '問題なく終了したが、報告事項あり', 'incident' => 'トラブル等あり']; @endphp
+                  <div class="text-002">{{ $selectedEvent->event_date->isoFormat('M/D(ddd)') }} ・ {{ $selectedEvent->client->name }} / {{ $selectedEvent->business_name }}</div><h2 id="rv-detail" class="text-204">{{ $selectedEvent->name ?: $selectedEvent->business_name }}</h2><div class="text-046">代表者:{{ $selectedRepresentative?->name ?? '未設定' }} @if($selectedSubmission)・ {{ $selectedSubmission->submitted_at->format('n/j H:i') }} 提出@endif</div>
+                  @if($selectedSubmission)<div class="layout-195"><div class="space-022"><div class="text-002">設問1 本日の事業は、無事終了しましたか?</div><div class="utility-020"><span class="surface-102">{{ $completionLabels[data_get($selectedSubmission->answers, 'completion')] ?? '未回答' }}</span></div></div>@foreach($selectedEvent->reportQuestions as $question)<div class="space-022"><div class="layout-067"><div class="text-002">設問{{ $loop->iteration + 1 }} {{ $question->question }}</div><button type="button" class="control-067" data-copy-text="{{ data_get($selectedSubmission->answers, (string) $question->id) }}">コピー</button></div><p class="text-205">{{ data_get($selectedSubmission->answers, (string) $question->id, '未回答') }}</p></div>@endforeach</div>@else<div class="layout-195"><div class="space-022">報告書はまだ提出されていません。</div></div>@endif
+                  @else<h2 id="rv-detail" class="text-204">報告対象イベントはありません</h2>@endif
+                </section>
+              </div>
+              @else
               <div class="layout-013">
                 <div>
                   <h1 class="text-044">報告書</h1>
@@ -82,6 +100,7 @@
                   </div>
                 </section>
               </div>
+              @endif
             </div>
           </main>
         </div>

@@ -28,14 +28,18 @@ class PublicActionTest extends TestCase
         $this->get(route('public-actions.show', $plainToken))
             ->assertOk()
             ->assertSee('お仕事の依頼')
-            ->assertSee('秋季健康フェア')
+            ->assertSee($assignment->event->name)
             ->assertSee('このお仕事を引き受けられますか?');
 
         $this->post(route('public-actions.update', $plainToken), ['response' => 'accepted'])
             ->assertRedirect(route('public-actions.complete', $plainToken));
 
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
-        $this->assertNotNull(SecureActionToken::query()->firstOrFail()->used_at);
+        $this->assertNull(SecureActionToken::query()->firstOrFail()->used_at);
+
+        $this->post(route('public-actions.update', $plainToken), ['response' => 'unknown'])
+            ->assertRedirect(route('public-actions.complete', $plainToken));
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'unknown']);
     }
 
     public function test_expired_public_action_link_is_rejected(): void
@@ -51,6 +55,23 @@ class PublicActionTest extends TestCase
         ]);
 
         $this->get(route('public-actions.show', 'expired-token'))->assertStatus(410);
+    }
+
+    public function test_public_action_link_expires_thirty_minutes_after_it_is_opened(): void
+    {
+        $assignment = Assignment::factory()->create(['status' => 'requested']);
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'assignment_response',
+            'token_hash' => hash('sha256', 'opened-token'),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        $this->get(route('public-actions.show', 'opened-token'))->assertOk();
+        $this->travel(31)->minutes();
+        $this->get(route('public-actions.show', 'opened-token'))->assertGone();
     }
 
     public function test_first_password_link_activates_the_invited_account(): void
@@ -69,8 +90,9 @@ class PublicActionTest extends TestCase
         $this->post(route('public-actions.update', $plainToken), [
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
-        ])->assertRedirect(route('public-actions.complete', $plainToken));
+        ])->assertRedirect(route('screens.show', 'profile'));
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'account_status' => 'active']);
+        $this->assertAuthenticatedAs($user);
     }
 }

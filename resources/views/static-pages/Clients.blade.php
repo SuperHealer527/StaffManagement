@@ -34,34 +34,28 @@
                   <h1 class="text-044">依頼先</h1>
                   <div class="text-060">派遣の依頼先・営業先の一覧です。詳細(提案状況・打合せ履歴など)は社員だけが開けます。</div>
                 </div>
-                <a href="ClientEdit.dc.html" class="surface-021">+ 依頼先を登録</a></div>
+                @if (auth()->user()->isEmployee())<a href="{{ route('clients.create') }}" class="surface-021">+ 依頼先を登録</a>@endif</div>
               <section aria-labelledby="cl-list" class="surface-006">
-                <div role="group" aria-label="種別で絞り込み" class="layout-069"><button type="button" aria-pressed="true" class="control-006"><span>すべて</span></button><button type="button" aria-pressed="false" class="control-007"><span>法人</span></button><button type="button" aria-pressed="false" class="control-007"><span>行政</span></button><button type="button" aria-pressed="false" class="control-007"><span>個人</span></button><button type="button" aria-pressed="false" class="control-007"><span>団体</span></button><button type="button" aria-pressed="false" class="control-007"><span>その他</span></button></div>
+                <form method="GET" action="{{ route('clients.index') }}" data-auto-filter-form>
+                @php $typeLabels = ['' => 'すべて', 'corporation' => '法人', 'government' => '行政', 'individual' => '個人', 'organization' => '団体', 'other' => 'その他']; @endphp
+                <div role="group" aria-label="種別で絞り込み" class="layout-069">@foreach ($typeLabels as $value => $label)<button type="submit" name="type" value="{{ $value }}" aria-pressed="{{ request('type', '') === $value ? 'true' : 'false' }}" class="{{ request('type', '') === $value ? 'control-006' : 'control-007' }}"><span>{{ $label }}</span></button>@endforeach</div>
                 <div class="layout-041">
-                  <h2 id="cl-list" class="text-020">依頼先一覧(<span>5</span>件)</h2>
-                  <div class="layout-070"><input type="text" aria-label="依頼先名・担当者名で探す" placeholder="依頼先名・担当者名で探す" class="text-119"><label class="layout-107">提案状況<span class="surface-056">社員のみ</span><select aria-label="提案状況で絞り込み" class="surface-017"><option>すべて</option><option>未接触</option><option>アプローチ中</option><option>提案中</option><option>受注</option><option>失注</option><option>保留</option></select></label><select aria-label="並び順" class="surface-017"><option>最終更新日が新しい順</option><option>依頼先名順</option></select></div>
+                  <h2 id="cl-list" class="text-020">依頼先一覧(<span>{{ method_exists($clients, 'total') ? $clients->total() : $clients->count() }}</span>件)</h2>
+                  <div class="layout-070"><input type="search" name="q" value="{{ request('q') }}" aria-label="依頼先名・担当者名で探す" placeholder="依頼先名・担当者名で探す" class="text-119">@if (auth()->user()->isEmployee())<label class="layout-107">提案状況<span class="surface-056">社員のみ</span><select name="proposal_status" aria-label="提案状況で絞り込み" class="surface-017"><option value="">すべて</option>@foreach (['uncontacted' => '未接触', 'approaching' => 'アプローチ中', 'proposing' => '提案中', 'won' => '受注', 'lost' => '失注', 'on_hold' => '保留'] as $value => $label)<option value="{{ $value }}" @selected(request('proposal_status') === $value)>{{ $label }}</option>@endforeach</select></label>@endif<select name="sort" aria-label="並び順" class="surface-017"><option value="updated">最終更新日が新しい順</option><option value="name" @selected(request('sort') === 'name')>依頼先名順</option></select></div>
                 </div>
+                </form>
                 <div class="utility-001">
                   <table class="text-069">
                     <thead>
                       <tr class="text-023"><th class="cell-042">種別</th><th class="cell-002">依頼先名</th><th class="cell-002">電話番号</th><th class="cell-002">担当者</th><th class="cell-002">携帯電話</th><th class="cell-002">最終更新日</th><th class="cell-043"><span class="space-004">操作</span></th></tr>
                     </thead>
                     <tbody>
-                      <tr><td class="cell-044"><span class="surface-028"><span>法人</span></span></td><td class="cell-018"><span class="text-067"><span>サンプル商事 株式会社</span></span>
-                        <div class="text-018"><span>地域連携部</span></div>
-                        </td><td class="cell-045"><span>03-XXXX-XXXX</span></td><td class="cell-018"><span>青木 様</span></td><td class="cell-045"><span>090-XXXX-XXXX</span></td><td class="cell-046"><span>2026/10/15</span></td><td class="cell-019"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
-                      <tr><td class="cell-044"><span class="surface-028"><span>団体</span></span></td><td class="cell-018"><span class="text-067"><span>サンプル町会</span></span>
-                        <div class="text-018"><span></span></div>
-                        </td><td class="cell-045"><span>03-XXXX-XXXX</span></td><td class="cell-018"><span>大野 様</span></td><td class="cell-045"><span>080-XXXX-XXXX</span></td><td class="cell-046"><span>2026/10/12</span></td><td class="cell-019"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
-                      <tr><td class="cell-044"><span class="surface-028"><span>行政</span></span></td><td class="cell-018"><span class="text-067"><span>サンプル市</span></span>
-                        <div class="text-018"><span>環境課</span></div>
-                        </td><td class="cell-045"><span>0XX-XXX-XXXX</span></td><td class="cell-018"><span>川村 様</span></td><td class="cell-045"><span>—</span></td><td class="cell-046"><span>2026/09/30</span></td><td class="cell-019"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
-                      <tr><td class="cell-044"><span class="surface-028"><span>団体</span></span></td><td class="cell-018"><span class="text-067"><span>サンプル商店会</span></span>
-                        <div class="text-018"><span></span></div>
-                        </td><td class="cell-045"><span>03-XXXX-XXXX</span></td><td class="cell-018"><span>佐野 様</span></td><td class="cell-045"><span>090-XXXX-XXXX</span></td><td class="cell-046"><span>2026/09/02</span></td><td class="cell-019"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
-                      <tr><td class="cell-044"><span class="surface-028"><span>個人</span></span></td><td class="cell-018"><span class="text-067"><span>田中 一郎</span></span>
-                        <div class="text-018"><span></span></div>
-                        </td><td class="cell-045"><span>—</span></td><td class="cell-018"><span>田中 様</span></td><td class="cell-045"><span>090-XXXX-XXXX</span></td><td class="cell-046"><span>2026/08/18</span></td><td class="cell-019"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
+                      @forelse ($clients as $listedClient)
+                        @php $contact = $listedClient->contacts->firstWhere('is_retired', false); @endphp
+                        <tr><td class="cell-044"><span class="surface-028"><span>{{ $typeLabels[$listedClient->type] ?? $listedClient->type }}</span></span></td><td class="cell-018"><span class="text-067"><span>{{ $listedClient->name }}</span></span><div class="text-018"><span>{{ $listedClient->department }}</span></div></td><td class="cell-045"><span>{{ $listedClient->phone ?: '—' }}</span></td><td class="cell-018"><span>{{ $contact ? $contact->name.' 様' : '—' }}</span></td><td class="cell-045"><span>{{ $contact?->mobile ?: '—' }}</span></td><td class="cell-046"><span>{{ $listedClient->updated_at->timezone('Asia/Tokyo')->format('Y/m/d') }}</span></td><td class="cell-019">@if (auth()->user()->isEmployee())<a href="{{ route('clients.edit', $listedClient) }}" class="text-070">詳細を見る</a>@endif</td></tr>
+                      @empty
+                        <tr><td colspan="7" class="cell-018">条件に一致する依頼先はありません。</td></tr>
+                      @endforelse
                     </tbody>
                   </table>
                 </div>

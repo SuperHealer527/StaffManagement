@@ -111,8 +111,8 @@ class DatabaseSeeder extends Seeder
                 'required_staff' => $requiredStaff,
                 'meeting_place' => 'サンプル公民館 1階ロビー',
                 'venue' => 'サンプル公民館 2階 大ホール',
-                'items' => ['昼食', '室内履き', 'ハイクラスTシャツ', '筆記用具'],
-                'emergency_contacts' => ['ハイクラスLINE', '山田 太郎'],
+                'items' => ['lunch', 'indoor_shoes', 'highclass_shirt', 'other:筆記用具'],
+                'emergency_contacts' => ['line' => true, 'employee_id' => $admin->id, 'leader' => true],
                 'notes' => '公共交通機関でお越しください。',
                 'status' => $status,
                 'report_required' => true,
@@ -149,13 +149,14 @@ class DatabaseSeeder extends Seeder
         $staff = User::query()->where('name', '佐藤 花子')->firstOrFail();
         $this->seedRelatedData($now, $admin, $staff, $event);
         $this->seedActionTokens($now, $staff, $event);
+        $this->call(InboundEmailSeeder::class);
     }
 
     private function seedRelatedData(Carbon $now, User $admin, User $staff, Event $event): void
     {
         DB::table('qualifications')->updateOrInsert(['user_id' => $staff->id, 'name' => '普通自動車免許'], ['expires_at' => '2029-10-23', 'created_at' => $now, 'updated_at' => $now]);
         DB::table('qualifications')->updateOrInsert(['user_id' => $staff->id, 'name' => '防災士'], ['expires_at' => '2026-11-17', 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('invoice_items')->updateOrInsert(['event_id' => $event->id, 'type' => 'work_fee'], ['memo' => '運営スタッフ費', 'amount' => 90000, 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('invoice_items')->updateOrInsert(['event_id' => $event->id, 'type' => 'work'], ['memo' => '運営スタッフ費', 'amount' => 90000, 'created_at' => $now, 'updated_at' => $now]);
         DB::table('expenses')->updateOrInsert(['event_id' => $event->id, 'type' => 'supplies'], ['memo' => '消耗品', 'amount' => 4000, 'created_at' => $now, 'updated_at' => $now]);
 
         $phoneLogs = [
@@ -175,7 +176,7 @@ class DatabaseSeeder extends Seeder
         foreach (['サンプル商事', 'サンプル観光協会', 'サンプル市'] as $index => $clientName) {
             DB::table('meetings')->updateOrInsert(
                 ['client_id' => Client::query()->where('name', $clientName)->value('id'), 'meeting_date' => '2026-10-'.(16 + $index)],
-                ['recorded_by' => $admin->id, 'type' => $index === 0 ? 'meeting' : 'sales', 'method' => $index === 0 ? '訪問' : '電話', 'participants' => '森 様 ほか', 'content' => '来年度の事業について実施時期と概算費用を確認しました。', 'created_at' => $now, 'updated_at' => $now],
+                ['recorded_by' => $admin->id, 'type' => $index === 0 ? 'consultation' : 'sales', 'method' => $index === 0 ? 'visit' : 'phone', 'participants' => '森 様 ほか', 'content' => '来年度の事業について実施時期と概算費用を確認しました。', 'created_at' => $now, 'updated_at' => $now],
             );
         }
 

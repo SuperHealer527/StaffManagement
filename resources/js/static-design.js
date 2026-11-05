@@ -1,38 +1,38 @@
 const routeMap = {
     'Main.dc.html': '/dashboard',
-    'Staff.dc.html': '/screens/staff-home',
+    'Staff.dc.html': '/my/home',
     'SubMain.dc.html': '/screens/semi-home',
-    'Assign.dc.html': '/screens/assignments',
-    'EventEdit.dc.html': '/screens/event-form',
+    'Assign.dc.html': '/assignments',
+    'EventEdit.dc.html': '/events/create',
     'Duplicate.dc.html': '/screens/event-copy',
     'EventDetail.dc.html': '/screens/event-detail',
     'Respond.dc.html': '/screens/assignment-response',
     'AttendanceComplete.dc.html': '/screens/attendance-confirmed',
     'Report.dc.html': '/screens/report-submit',
-    'PayManage.dc.html': '/screens/payments',
-    'Profit.dc.html': '/screens/profit-loss',
-    'Payslip.dc.html': '/screens/payment-statement',
-    'Profile.dc.html': '/screens/profile',
-    'ReportView.dc.html': '/screens/reports',
-    'Clients.dc.html': '/screens/clients',
+    'PayManage.dc.html': '/finance/payments',
+    'Profit.dc.html': '/finance/profit',
+    'Payslip.dc.html': '/my/payments',
+    'Profile.dc.html': '/profile',
+    'ReportView.dc.html': '/reports',
+    'Clients.dc.html': '/clients',
     'ClientEdit.dc.html': '/screens/client-detail',
-    'EventList.dc.html': '/screens/events',
-    'StaffList.dc.html': '/screens/staff',
+    'EventList.dc.html': '/events',
+    'StaffList.dc.html': '/staff',
     'StaffDetail.dc.html': '/screens/staff-detail',
-    'Shortage.dc.html': '/screens/shortages',
+    'Shortage.dc.html': '/shortages',
     'Accounts.dc.html': '/screens/accounts',
-    'SendLog.dc.html': '/screens/notifications',
-    'MyRequests.dc.html': '/screens/my-requests',
+    'SendLog.dc.html': '/notifications',
+    'MyRequests.dc.html': '/my/requests',
     'Login.dc.html': '/login',
     'SetPassword.dc.html': '/screens/first-password',
     'AreaSwitch.dc.html': '/screens/mobile-areas',
-    'SalesHome.dc.html': '/screens/sales-home',
-    'SalesBoard.dc.html': '/screens/proposal-board',
-    'Meetings.dc.html': '/screens/meeting-history',
-    'Coaching.dc.html': '/screens/interviews',
+    'SalesHome.dc.html': '/sales',
+    'SalesBoard.dc.html': '/sales/proposals',
+    'Meetings.dc.html': '/meetings',
+    'Coaching.dc.html': '/interviews',
     'InterviewSchedule.dc.html': '/screens/interview-select',
-    'PhoneLog.dc.html': '/screens/phone-log',
-    'LineConnect.dc.html': '/screens/line-connect',
+    'PhoneLog.dc.html': '/phone-logs',
+    'LineConnect.dc.html': '/profile',
     'PaymentDetails.dc.html': '/screens/temporary-bank',
 };
 
@@ -42,6 +42,14 @@ document.querySelectorAll('a[href]').forEach((link) => {
     if (routeMap[href]) {
         link.setAttribute('href', routeMap[href]);
     }
+});
+
+const areaDestinations = { '事業': '/dashboard', '営業': '/sales', '会計': '/finance/payments', 'メニュー': '/profile' };
+document.querySelectorAll('.page--areaswitch [aria-label="エリア切り替え"] button').forEach((button) => {
+    button.addEventListener('click', () => {
+        const destination = areaDestinations[button.textContent.trim()];
+        if (destination) window.location.assign(destination);
+    });
 });
 
 document.querySelectorAll('[data-filter-group]').forEach((group) => {
@@ -56,6 +64,10 @@ document.querySelectorAll('[data-filter-group]').forEach((group) => {
             candidate.classList.toggle('is-selected', candidate === button);
         });
     });
+});
+
+document.querySelectorAll('[data-auto-filter-form] select, [data-auto-filter-form] input[type="checkbox"], [data-auto-filter-form] input[type="date"]').forEach((control) => {
+    control.addEventListener('change', () => control.form?.requestSubmit());
 });
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
@@ -204,68 +216,256 @@ document.querySelectorAll('[data-phone-log-form]').forEach((form) => {
     });
 });
 
-document.querySelectorAll('[data-create-account]').forEach((button) => {
-    button.addEventListener('click', async () => {
-        const name = window.prompt('招待する方のお名前を入力してください。');
-        if (! name) return;
-        const email = window.prompt('メールアドレスを入力してください。');
-        if (! email) return;
+const accountDialog = document.querySelector('#account-create-dialog');
+document.querySelector('[data-create-account]')?.addEventListener('click', () => accountDialog?.showModal());
+document.querySelector('[data-close-account-dialog]')?.addEventListener('click', () => accountDialog?.close());
+document.querySelector('[data-account-create-form]')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
 
+    try {
+        await sendAction('account-create', Object.fromEntries(new FormData(form)));
+        accountDialog?.close();
+        window.location.reload();
+    } catch (error) {
+        showMessage(error.message, true);
+    } finally {
+        submitButton.disabled = false;
+    }
+});
+
+document.querySelectorAll('[data-account-role]').forEach((select) => {
+    select.addEventListener('change', async () => {
+        select.disabled = true;
         try {
-            await sendAction('account-create', { name, email, role: 'staff' });
+            await sendAction('account-role', { user_id: Number(select.dataset.userId), role: select.value });
             window.location.reload();
         } catch (error) {
             showMessage(error.message, true);
+            window.location.reload();
         }
     });
 });
 
-const accountDirectoryElement = document.querySelector('#account-directory');
-if (accountDirectoryElement) {
-    const accountDirectory = JSON.parse(accountDirectoryElement.textContent);
-    const roleValues = {
-        '社員': 'employee', '準社員': 'semi_employee', 'スタッフ': 'staff',
-        'その他(単発)': 'temporary', 'その他(トレーナー)': 'trainer',
-    };
+document.querySelectorAll('[data-account-state]').forEach((button) => {
+    button.addEventListener('click', async () => {
+        if (button.dataset.accountState === 'suspended' && ! window.confirm('このアカウントのログインを停止しますか？')) return;
 
-    document.querySelectorAll('.page--accounts tbody tr').forEach((row) => {
-        const name = row.querySelector('td:first-child')?.textContent.trim();
-        const userId = accountDirectory[name];
-        if (! userId) return;
-
-        row.querySelector('select')?.addEventListener('change', async (event) => {
-            try {
-                await sendAction('account-role', { user_id: userId, role: roleValues[event.target.value] });
-            } catch (error) {
-                showMessage(error.message, true);
-            }
-        });
-
-        row.querySelectorAll('button').forEach((button) => {
-            button.addEventListener('click', async () => {
-                const label = button.textContent.trim();
-                const accountStatus = label === '再開' ? 'active' : (label === '招待を再送' ? 'invited' : 'suspended');
-                try {
-                    await sendAction('account-status', { user_id: userId, account_status: accountStatus });
-                    if (label !== '招待を再送') button.textContent = accountStatus === 'active' ? 'ログイン停止' : '再開';
-                } catch (error) {
-                    showMessage(error.message, true);
-                }
+        button.disabled = true;
+        try {
+            await sendAction('account-status', {
+                user_id: Number(button.dataset.userId),
+                account_status: button.dataset.accountState,
             });
+            window.location.reload();
+        } catch (error) {
+            showMessage(error.message, true);
+            button.disabled = false;
+        }
+    });
+});
+
+const accountStatusFilters = { '利用中': 'active', '招待中': 'invited', '停止中': 'suspended', 'ログインなし': 'no_login' };
+document.querySelectorAll('.page--accounts [aria-label="状態で絞り込み"] button').forEach((button) => {
+    button.addEventListener('click', () => {
+        const selectedStatus = accountStatusFilters[button.textContent.trim()];
+        document.querySelectorAll('[data-account-row]').forEach((row) => {
+            row.hidden = selectedStatus !== undefined && row.dataset.accountStatus !== selectedStatus;
         });
     });
+});
 
-    document.querySelectorAll('.page--accounts [aria-label="状態で絞り込み"] button').forEach((button) => {
-        button.addEventListener('click', () => {
-            const filter = button.textContent.trim();
-            document.querySelectorAll('.page--accounts tbody tr').forEach((row) => {
-                row.hidden = filter !== 'すべて' && ! row.children[3]?.textContent.includes(filter);
-            });
-        });
+let nextContactIndex = document.querySelectorAll('[data-contact-row]').length;
+document.querySelector('[data-add-contact]')?.addEventListener('click', () => {
+    const template = document.querySelector('#contact-row-template');
+    const rows = document.querySelector('[data-contact-rows]');
+    if (! template || ! rows) return;
+
+    const html = template.innerHTML.replaceAll('__INDEX__', String(nextContactIndex));
+    nextContactIndex += 1;
+    rows.insertAdjacentHTML('beforeend', html);
+});
+
+document.addEventListener('click', (event) => {
+    const removeButton = event.target.closest('[data-remove-contact]');
+    if (! removeButton || ! window.confirm('この担当者を削除しますか？')) return;
+    removeButton.closest('[data-contact-row]')?.remove();
+});
+
+const meetingDialog = document.querySelector('#meeting-dialog');
+const meetingForm = document.querySelector('[data-meeting-form]');
+document.querySelector('[data-add-meeting]')?.addEventListener('click', () => {
+    meetingForm?.reset();
+    meetingForm.action = `/clients/${meetingForm.dataset.clientId}/meetings`;
+    meetingForm.querySelector('[data-meeting-method]').value = 'POST';
+    meetingForm.querySelector('[data-meeting-dialog-title]').textContent = '打合せを登録';
+    meetingDialog?.showModal();
+});
+document.querySelectorAll('[data-edit-meeting]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const meeting = JSON.parse(window.atob(button.dataset.meeting));
+        meetingForm.action = `/clients/${meetingForm.dataset.clientId}/meetings/${meeting.id}`;
+        meetingForm.querySelector('[data-meeting-method]').value = 'PATCH';
+        meetingForm.querySelector('[data-meeting-dialog-title]').textContent = '打合せを編集';
+        meetingForm.elements.meeting_date.value = String(meeting.meeting_date).slice(0, 10);
+        meetingForm.elements.type.value = meeting.type;
+        meetingForm.elements.method.value = meeting.method;
+        meetingForm.elements.participants.value = meeting.participants || '';
+        meetingForm.elements.content.value = meeting.content;
+        meetingDialog?.showModal();
     });
+});
+document.querySelector('[data-close-meeting]')?.addEventListener('click', () => meetingDialog?.close());
+document.querySelectorAll('[data-confirm-delete]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+        if (! window.confirm('この記録を削除しますか？')) event.preventDefault();
+    });
+});
+
+document.querySelector('[data-cancel-event-url]')?.addEventListener('click', async (event) => {
+    if (! window.confirm('このイベントを中止しますか？依頼・承諾・確定済みのアサインもキャンセルされます。')) return;
+    const button = event.currentTarget;
+    button.disabled = true;
+    try {
+        const response = await fetch(button.dataset.cancelEventUrl, {
+            method: 'POST',
+            headers: { 'Accept': 'text/html', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({ confirmation: '1' }),
+        });
+        if (! response.ok) throw new Error('イベントを中止できませんでした。');
+        window.location.assign(response.url);
+    } catch (error) {
+        showMessage(error.message, true);
+        button.disabled = false;
+    }
+});
+
+let nextQuestionIndex = document.querySelectorAll('[data-question-row]').length;
+document.querySelectorAll('[data-add-question]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const template = document.querySelector(`#question-template-${button.dataset.addQuestion}`);
+        const rows = document.querySelector('[data-question-rows]');
+        if (! template || ! rows) return;
+        rows.insertAdjacentHTML('beforeend', template.innerHTML.replaceAll('__INDEX__', String(nextQuestionIndex)));
+        nextQuestionIndex += 1;
+        document.querySelector('[data-question-count]').textContent = document.querySelectorAll('[data-question-row]').length;
+    });
+});
+
+document.addEventListener('click', (event) => {
+    const removeQuestion = event.target.closest('[data-remove-question]');
+    if (removeQuestion) {
+        removeQuestion.closest('[data-question-row]')?.remove();
+        document.querySelector('[data-question-count]').textContent = document.querySelectorAll('[data-question-row]').length;
+        return;
+    }
+
+    const addOption = event.target.closest('[data-add-option]');
+    if (addOption) {
+        const optionRows = addOption.closest('[data-option-rows]');
+        const firstOption = optionRows?.querySelector('input');
+        if (! firstOption) return;
+        const input = firstOption.cloneNode();
+        input.value = '';
+        optionRows.insertBefore(input, addOption);
+    }
+});
+
+let nextInvoiceIndex = document.querySelectorAll('[data-invoice-rows] [data-money-row]').length;
+let nextExpenseIndex = document.querySelectorAll('[data-expense-rows] [data-money-row]').length;
+function appendMoneyRow(templateSelector, rowsSelector, index) {
+    const template = document.querySelector(templateSelector);
+    const rows = document.querySelector(rowsSelector);
+    if (! template || ! rows) return;
+    rows.insertAdjacentHTML('beforeend', template.innerHTML.replaceAll('__INDEX__', String(index)));
+    updateMoneyTotals();
+}
+document.querySelector('[data-add-invoice]')?.addEventListener('click', () => appendMoneyRow('#invoice-row-template', '[data-invoice-rows]', nextInvoiceIndex++));
+document.querySelector('[data-add-expense]')?.addEventListener('click', () => appendMoneyRow('#expense-row-template', '[data-expense-rows]', nextExpenseIndex++));
+document.addEventListener('click', (event) => {
+    const removeMoneyRow = event.target.closest('[data-remove-money-row]');
+    if (! removeMoneyRow) return;
+    removeMoneyRow.closest('[data-money-row]')?.remove();
+    updateMoneyTotals();
+});
+
+function sumMoneyRows(selector) {
+    return [...document.querySelectorAll(`${selector} [data-money-amount]`)]
+        .reduce((total, input) => total + (Number(input.value) || 0), 0);
 }
 
-document.querySelectorAll('button[type="button"]:not([data-ui-action]):not([data-create-account])').forEach((button) => {
+function formatYen(amount) {
+    return `¥${amount.toLocaleString('ja-JP')}`;
+}
+
+function updateMoneyTotals() {
+    const invoiceTotal = sumMoneyRows('[data-invoice-rows]');
+    const expenseTotal = sumMoneyRows('[data-expense-rows]');
+    const costElement = document.querySelector('[data-profit-cost]');
+    const baseCost = Number(costElement?.dataset.baseCost || 0);
+    const totalCost = baseCost + expenseTotal;
+    const profit = invoiceTotal - totalCost;
+    const margin = invoiceTotal > 0 ? (profit / invoiceTotal) * 100 : 0;
+    if (document.querySelector('[data-invoice-total]')) document.querySelector('[data-invoice-total]').textContent = formatYen(invoiceTotal);
+    if (document.querySelector('[data-expense-total]')) document.querySelector('[data-expense-total]').textContent = formatYen(expenseTotal);
+    if (document.querySelector('[data-profit-invoice]')) document.querySelector('[data-profit-invoice]').textContent = formatYen(invoiceTotal);
+    if (costElement) costElement.textContent = formatYen(totalCost);
+    if (document.querySelector('[data-profit-expense]')) document.querySelector('[data-profit-expense]').textContent = formatYen(expenseTotal);
+    if (document.querySelector('[data-profit-value]')) document.querySelector('[data-profit-value]').textContent = formatYen(profit);
+    if (document.querySelector('[data-profit-margin]')) document.querySelector('[data-profit-margin]').textContent = `${margin.toFixed(1)}%`;
+}
+document.addEventListener('input', (event) => {
+    if (event.target.matches('[data-money-amount]')) updateMoneyTotals();
+});
+
+const duplicateDates = new Set();
+function renderDuplicateDates() {
+    const container = document.querySelector('[data-duplicate-dates]');
+    if (! container) return;
+    container.replaceChildren();
+    [...duplicateDates].sort().forEach((dateValue) => {
+        const date = new Date(`${dateValue}T00:00:00`);
+        const chip = document.createElement('span');
+        chip.className = 'surface-062';
+        chip.innerHTML = `<span>${date.toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', weekday: 'short' })}</span><input type="hidden" name="dates[]" value="${dateValue}"><button type="button" class="control-032" data-remove-duplicate-date="${dateValue}" aria-label="日付を外す">×</button>`;
+        container.append(chip);
+    });
+    const count = document.querySelector('[data-duplicate-count]');
+    if (count) count.textContent = duplicateDates.size;
+}
+
+document.querySelector('[data-add-duplicate-date]')?.addEventListener('click', () => {
+    const input = document.querySelector('#dup-date');
+    if (! input?.value) return;
+    duplicateDates.add(input.value);
+    renderDuplicateDates();
+});
+document.querySelector('[data-add-weekly-dates]')?.addEventListener('click', () => {
+    const input = document.querySelector('#dup-date');
+    if (! input?.value) return;
+    const firstDate = new Date(`${input.value}T00:00:00`);
+    for (let week = 0; week < 4; week += 1) {
+        const date = new Date(firstDate);
+        date.setDate(date.getDate() + (week * 7));
+        duplicateDates.add(date.toISOString().slice(0, 10));
+    }
+    renderDuplicateDates();
+});
+document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-remove-duplicate-date]');
+    if (! button) return;
+    duplicateDates.delete(button.dataset.removeDuplicateDate);
+    renderDuplicateDates();
+});
+document.querySelector('[data-duplicate-form]')?.addEventListener('submit', (event) => {
+    if (duplicateDates.size > 0) return;
+    event.preventDefault();
+    showMessage('作成する日付を1件以上追加してください。', true);
+});
+
+document.querySelectorAll('button[type="button"]:not([data-ui-action]):not([data-create-account]):not([data-account-state]):not([data-close-account-dialog]):not([data-add-contact]):not([data-remove-contact]):not([data-add-meeting]):not([data-edit-meeting]):not([data-close-meeting]):not([data-cancel-event-url]):not([data-add-question]):not([data-remove-question]):not([data-add-option]):not([data-add-invoice]):not([data-add-expense]):not([data-remove-money-row]):not([data-add-duplicate-date]):not([data-add-weekly-dates]):not([data-remove-duplicate-date])').forEach((button) => {
     const label = button.textContent.trim();
 
     if (label.startsWith('+') && ! label.includes('アカウント')) {

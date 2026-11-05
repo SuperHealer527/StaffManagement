@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use App\Models\Meeting;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,13 @@ class MeetingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'client_id' => Client::factory(),
+            'recorded_by' => User::factory(),
+            'type' => fake()->randomElement(['sales', 'preparation', 'consultation', 'follow_up', 'other']),
+            'meeting_date' => fake()->dateTimeBetween('-1 year', '+1 month'),
+            'method' => fake()->randomElement(['visit', 'phone', 'online', 'email', 'other']),
+            'participants' => fake()->name(),
+            'content' => fake()->paragraph(),
         ];
     }
 }

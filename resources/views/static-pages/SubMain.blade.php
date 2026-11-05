@@ -32,9 +32,12 @@
               <div class="layout-013">
                 <div>
                   <h1 class="text-005">ホーム</h1>
-                  <div class="text-006">2026年10月19日(月)</div>
+                  <div class="text-006">{{ isset($dashboard) ? now('Asia/Tokyo')->isoFormat('YYYY年M月D日(ddd)') : '2026年10月19日(月)' }}</div>
                 </div>
               </div>
+              @isset($dashboard)
+              @include('static-pages.partials.dashboard-content')
+              @else
               <section aria-label="主な数字" class="layout-039">
                 <div class="surface-002">
                   <div class="text-007">2週間以内のイベント<span class="text-008">今日から14日</span></div>
@@ -194,6 +197,7 @@
                   </section>
                 </div>
               </div>
+              @endisset
             </div>
           </main>
         </div>

@@ -35,10 +35,54 @@
               </div>
               <section aria-label="送れなかった連絡" class="layout-207">
                 <div>
-                  <div class="text-215">送れなかった連絡が <span>2</span>件 あります</div>
+                  <div class="text-215">送れなかった連絡が <span>{{ $failedCount ?? 2 }}</span>件 あります</div>
                   <div class="text-216">宛先(メールアドレス・LINE連携)を確かめてから再送してください。件数は社員のホームにも出ます。</div>
                 </div>
-                <button type="button" class="control-069">送れなかったものだけ見る</button></section>
+                @isset($notificationLogsPage)<a href="{{ route('notifications.index', ['status' => 'failed', 'period' => 'all']) }}" class="control-069">送れなかったものだけ見る</a>@else<button type="button" class="control-069">送れなかったものだけ見る</button>@endisset</section>
+              @isset($notificationLogsPage)
+              @php
+                $typeLabels = [
+                  'assignment_request' => 'お仕事のご依頼', 'assignment_confirmed' => '確定のお知らせ',
+                  'attendance_7_day' => '1週間前の出勤確認', 'attendance_5_day' => '5日前の出勤確認',
+                  'attendance_3_day' => '3日前の出勤確認', 'attendance_same_day' => '当日の出勤確認',
+                  'report_request' => '報告書のご提出', 'event_cancelled' => '取消のお知らせ',
+                  'assignment_declined' => '見送りのお知らせ', 'account_invitation' => 'アプリへのご招待',
+                  'payment_notice' => '支払明細のお知らせ', 'line_connect' => 'LINE連携のご案内',
+                  'temporary_profile' => '振込先と住所の入力のお願い', 'interview_invitation' => '面談の日程のご案内',
+                  'interview_reminder' => '面談の前日のお知らせ', 'password_reset' => 'パスワードの再設定',
+                ];
+                $roleLabels = ['employee' => '社員', 'semi_employee' => '準社員', 'staff' => 'スタッフ', 'temporary' => 'その他(単発)', 'trainer' => 'その他(トレーナー)'];
+              @endphp
+              <form method="get" action="{{ route('notifications.index') }}" aria-label="絞り込み" class="layout-208">
+                <label class="layout-052">期間 <select name="period" class="surface-121"><option value="today" @selected(request('period') === 'today')>今日</option><option value="seven_days" @selected(request('period', 'seven_days') === 'seven_days')>直近7日</option><option value="month" @selected(request('period') === 'month')>今月</option><option value="all" @selected(request('period') === 'all')>すべて</option></select></label>
+                <label class="layout-052">結果 <select name="status" class="surface-121"><option value="">すべて</option><option value="sent" @selected(request('status') === 'sent')>送信済み</option><option value="failed" @selected(request('status') === 'failed')>送れなかった</option><option value="pending" @selected(request('status') === 'pending')>送信中</option></select></label>
+                <label class="layout-052">連絡の種類 <select name="type" class="surface-122"><option value="">すべて</option>@foreach($notificationTypes as $type)<option value="{{ $type }}" @selected(request('type') === $type)>{{ $typeLabels[$type] ?? $type }}</option>@endforeach</select></label>
+                <label class="layout-052">送り方 <select name="channel" class="surface-123"><option value="">すべて</option><option value="line" @selected(request('channel') === 'line')>LINE</option><option value="email" @selected(request('channel') === 'email')>メール</option></select></label>
+                <label class="layout-210">相手 <input name="keyword" value="{{ request('keyword') }}" type="search" placeholder="名前で探す" class="surface-124"></label>
+                <button class="control-071">絞り込む</button>
+              </form>
+              <section aria-label="送信履歴の一覧" class="surface-125">
+                <div class="layout-211"><div class="text-007"><span>{{ $notificationLogsPage->total() }}件(うち送れなかった {{ $failedCount }}件)</span></div></div>
+                @if(session('status'))<div role="status" class="surface-129">{{ session('status') }}</div>@endif
+                @if(session('error'))<div role="alert" class="surface-127">{{ session('error') }}</div>@endif
+                <table class="text-217">
+                  <thead><tr class="text-023"><th class="cell-080">日時</th><th class="cell-081">連絡の種類</th><th class="cell-081">相手</th><th class="cell-081">送り方</th><th class="cell-081">結果</th><th class="cell-082">操作</th></tr></thead>
+                  <tbody>
+                    @forelse($notificationLogsPage as $log)
+                    <tr class="{{ $log->status === 'failed' ? 'utility-022' : 'utility-004' }}">
+                      <td class="cell-083">{{ $log->created_at->timezone('Asia/Tokyo')->isoFormat('M/D(ddd) H:mm') }}</td>
+                      <td class="cell-022"><div class="text-024">{{ $typeLabels[$log->type] ?? $log->type }}</div><div class="text-018">{{ $log->subject }}</div></td>
+                      <td class="cell-021"><div>{{ $log->user?->name ?? '削除済み' }}</div><div class="text-018">{{ $roleLabels[$log->user?->role] ?? '' }}</div></td>
+                      <td class="cell-021"><span class="{{ $log->channel === 'line' ? 'surface-128' : 'surface-126' }}">{{ $log->channel === 'line' ? 'LINE' : 'メール' }}</span></td>
+                      <td class="cell-084"><span class="{{ $log->status === 'sent' ? 'surface-129' : 'surface-127' }}">{{ ['sent' => '送信済み', 'failed' => '送れなかった', 'pending' => '送信中'][$log->status] ?? $log->status }}</span>@if($log->error_message)<div class="text-218">{{ $log->error_message }}</div>@endif</td>
+                      <td class="cell-023">@if($log->user)<a href="{{ route('staff.show', $log->user) }}" class="text-219">連絡先を直す</a>@endif @if($log->status === 'failed')<form method="post" action="{{ route('notifications.retry', $log) }}" style="display:inline">@csrf<button class="control-072">再送する</button></form>@endif</td>
+                    </tr>
+                    @empty<tr><td colspan="6" class="cell-083">条件に一致する送信履歴はありません。</td></tr>@endforelse
+                  </tbody>
+                </table>
+                {{ $notificationLogsPage->links() }}
+              </section>
+              @else
               <section aria-label="絞り込み" class="layout-208">
                 <div role="group" aria-label="期間" class="layout-051"><span class="text-042">期間</span>
                   <div class="layout-209"><button type="button" aria-pressed="false" class="control-070"><span>今日</span></button><button type="button" aria-pressed="true" class="control-071"><span>直近7日</span></button><button type="button" aria-pressed="false" class="control-070"><span>今月</span></button><button type="button" aria-pressed="false" class="control-070"><span>日付指定</span></button></div>
@@ -165,6 +209,7 @@
                   </tbody>
                 </table>
               </section>
+              @endisset
               <div class="text-220">「送信済み」は、こちらから送れたことを表します(相手が読んだかどうかまでは分かりません)。「送れなかった」は、メールが戻ってきたときや、LINEで送れなかったときに付きます。送り方は本人の通知方法に従います(LINE連携済みでLINEを選んだ人はLINE、ほかはメール。その他(単発)の人も同じで、LINE連携していなければメール。最初のLINE連携のご案内はメール)。</div>
             </div>
           </main>

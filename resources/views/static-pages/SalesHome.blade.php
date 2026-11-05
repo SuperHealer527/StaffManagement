@@ -34,29 +34,29 @@
                   <h1 class="text-044">営業ホーム</h1>
                   <div class="text-060">これから仕事を取りに行く依頼先の動きをまとめて見ます。社員だけが開けます。</div>
                 </div>
-                <a href="ClientEdit.dc.html" class="surface-021">+ 依頼先を登録</a></div>
+                <a href="{{ route('clients.create') }}" class="surface-021">+ 依頼先を登録</a></div>
               <section aria-label="営業の数字" class="layout-039">
                 <div class="surface-002">
                   <div class="text-007"><span>提案中の依頼先</span></div>
-                  <div class="text-009"><span>4</span><span class="text-010"><span>社</span></span></div>
-                  <div class="text-018"><span>アプローチ中は 6社</span></div>
+                  <div class="text-009"><span>{{ $salesStatusCounts['proposing'] ?? 4 }}</span><span class="text-010"><span>社</span></span></div>
+                  <div class="text-018"><span>アプローチ中は {{ $salesStatusCounts['approaching'] ?? 6 }}社</span></div>
                 </div>
                 <div class="surface-002">
                   <div class="text-007"><span>今週の次回アクション</span></div>
-                  <div class="text-009"><span>3</span><span class="text-010"><span>件</span></span></div>
-                  <div class="text-018"><span>期限切れ 1件</span></div>
+                  <div class="text-009"><span>{{ $thisWeekActionCount ?? 3 }}</span><span class="text-010"><span>件</span></span></div>
+                  <div class="text-018"><span>期限切れ {{ $overdueActionCount ?? 1 }}件</span></div>
                 </div>
                 <div class="surface-002">
                   <div class="text-007"><span>今年の受注</span></div>
-                  <div class="text-009"><span>2</span><span class="text-010"><span>社</span></span></div>
-                  <div class="text-018"><span>失注 1社</span></div>
+                  <div class="text-009"><span>{{ $salesStatusCounts['won'] ?? 2 }}</span><span class="text-010"><span>社</span></span></div>
+                  <div class="text-018"><span>失注 {{ $salesStatusCounts['lost'] ?? 1 }}社</span></div>
                 </div>
               </section>
               <section aria-labelledby="sh-stage" class="surface-006">
                 <div class="layout-021">
                   <h2 id="sh-stage" class="text-020">提案状況ごとの件数</h2>
                   <a href="SalesBoard.dc.html" class="text-021">提案状況ボードを開く</a></div>
-                <div class="layout-205"><a href="SalesBoard.dc.html" class="surface-112"><span>未接触</span><span class="text-214"><span>15</span></span></a><a href="SalesBoard.dc.html" class="surface-113"><span>アプローチ中</span><span class="text-214"><span>6</span></span></a><a href="SalesBoard.dc.html" class="surface-114"><span>提案中</span><span class="text-214"><span>4</span></span></a><a href="SalesBoard.dc.html" class="surface-115"><span>受注</span><span class="text-214"><span>3</span></span></a><a href="SalesBoard.dc.html" class="surface-116"><span>失注</span><span class="text-214"><span>1</span></span></a><a href="SalesBoard.dc.html" class="surface-117"><span>保留</span><span class="text-214"><span>2</span></span></a></div>
+                <div class="layout-205">@foreach(['uncontacted'=>['未接触','surface-112'],'approaching'=>['アプローチ中','surface-113'],'proposing'=>['提案中','surface-114'],'won'=>['受注','surface-115'],'lost'=>['失注','surface-116'],'on_hold'=>['保留','surface-117']] as $status => [$label,$class])<a href="{{ route('sales.proposals', ['status' => $status]) }}" class="{{ $class }}"><span>{{ $label }}</span><span class="text-214"><span>{{ $salesStatusCounts[$status] ?? ['uncontacted'=>15,'approaching'=>6,'proposing'=>4,'won'=>3,'lost'=>1,'on_hold'=>2][$status] }}</span></span></a>@endforeach</div>
               </section>
               <div class="layout-066">
                 <section aria-labelledby="sh-next" class="surface-118">
@@ -69,6 +69,12 @@
                         <tr class="text-023"><th class="cell-001">次回アクション日</th><th class="cell-002">依頼先 / 提案内容</th><th class="cell-002">提案状況</th><th class="cell-002"><span class="space-004">操作</span></th></tr>
                       </thead>
                       <tbody>
+                        @isset($upcomingActions)
+                        @php($proposalLabels = ['uncontacted'=>'未接触','approaching'=>'アプローチ中','proposing'=>'提案中','won'=>'受注','lost'=>'失注','on_hold'=>'保留'])
+                        @forelse($upcomingActions as $client)
+                        <tr><td class="{{ $client->next_action_date->isPast() ? 'cell-078' : 'cell-079' }}"><span>{{ $client->next_action_date->isoFormat('M/D(ddd)') }}</span><div class="text-066"><span>{{ $client->next_action_date->isPast() ? $client->next_action_date->diffInDays(today()).'日過ぎ' : 'あと'.today()->diffInDays($client->next_action_date).'日' }}</span></div></td><td class="cell-004"><div class="text-067"><span>{{ $client->name }}</span></div><div class="text-018"><span>{{ $client->proposal_notes ?: '提案内容未入力' }}</span></div></td><td class="cell-005"><span class="surface-033"><span>{{ $proposalLabels[$client->proposal_status] ?? $client->proposal_status }}</span></span></td><td class="cell-006"><a href="{{ route('clients.edit', $client) }}" class="text-070">詳細を見る</a></td></tr>
+                        @empty<tr><td colspan="4" class="cell-079">期限切れ・14日以内の次回アクションはありません。</td></tr>@endforelse
+                        @else
                         <tr><td class="cell-078"><span>10/22(木)</span>
                           <div class="text-066"><span>1日過ぎ</span></div>
                           </td><td class="cell-004">
@@ -99,6 +105,7 @@
                           <div class="text-067"><span>サンプル商店会</span></div>
                           <div class="text-018"><span>年末大売り出し 呼び込み</span></div>
                           </td><td class="cell-005"><span class="surface-119"><span>保留</span></span></td><td class="cell-006"><a href="ClientEdit.dc.html" class="text-070">詳細を見る</a></td></tr>
+                        @endisset
                       </tbody>
                     </table>
                   </div>
@@ -108,6 +115,13 @@
                     <h2 id="sh-meet" class="text-020">最近の打合せ</h2>
                     <a href="Meetings.dc.html" class="text-021">すべて見る</a></div>
                   <div class="layout-035">
+                    @isset($recentMeetings)
+                    @php($meetingTypeLabels = ['sales'=>'営業','consultation'=>'相談','preparation'=>'事前準備','day_of'=>'当日','follow_up'=>'事後フォロー','other'=>'その他'])
+                    @php($meetingMethodLabels = ['visit'=>'訪問','phone'=>'電話','online'=>'オンライン','email'=>'メール','other'=>'その他'])
+                    @forelse($recentMeetings as $meeting)
+                    <div class="cell-017"><div class="text-002"><span>{{ $meeting->meeting_date->isoFormat('M/D(ddd)') }}</span> ・ <span>{{ $meetingTypeLabels[$meeting->type] ?? $meeting->type }}</span> ・ <span>{{ $meetingMethodLabels[$meeting->method] ?? $meeting->method }}</span></div><div class="text-068"><span>{{ $meeting->client->name }}</span></div><div class="text-038"><span>{{ \Illuminate\Support\Str::limit($meeting->content, 70) }}</span></div></div>
+                    @empty<div class="cell-017">最近の打合せはありません。</div>@endforelse
+                    @else
                     <div class="cell-017">
                       <div class="text-002"><span>10/23(金)</span> ・ <span>営業</span> ・ <span>訪問</span></div>
                       <div class="text-068"><span>サンプル観光協会</span></div>
@@ -123,6 +137,7 @@
                       <div class="text-068"><span>サンプル不動産</span></div>
                       <div class="text-038"><span>会社案内と料金表を送付</span></div>
                     </div>
+                    @endisset
                   </div>
                 </section>
               </div>

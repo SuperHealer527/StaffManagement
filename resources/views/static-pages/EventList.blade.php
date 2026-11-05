@@ -34,23 +34,32 @@
                   <h1 class="text-044">イベント</h1>
                   <div class="text-060">日付の近い順に並んでいます。イベント名を押すと詳細(社員は編集画面、準社員は閲覧用の詳細)、「アサイン」でアサイン画面が開きます。</div>
                 </div>
-                <a href="EventEdit.dc.html" class="surface-021">+ イベントを登録</a></div>
-              <section aria-label="絞り込み" class="layout-151">
-                <div role="group" aria-label="期間" class="layout-152"><span class="text-147">期間</span><button type="button" aria-pressed="false" class="control-008"><span>今日</span></button><button type="button" aria-pressed="false" class="control-008"><span>今週</span></button><button type="button" aria-pressed="true" class="control-009"><span>今月</span></button><button type="button" aria-pressed="false" class="control-008"><span>来月</span></button><button type="button" aria-pressed="false" class="control-008"><span>日付を指定</span></button></div>
+                @if (auth()->user()->isEmployee())<a href="{{ route('events.create') }}" class="surface-021">+ イベントを登録</a>@endif</div>
+              <form method="GET" action="{{ route('events.index') }}" aria-label="絞り込み" class="layout-151" data-auto-filter-form>
+                @php $selectedPeriod = request('period', 'month'); @endphp
+                <div role="group" aria-label="期間" class="layout-152"><span class="text-147">期間</span>@foreach (['today' => '今日', 'week' => '今週', 'month' => '今月', 'next_month' => '来月', 'custom' => '日付を指定'] as $value => $label)<button type="submit" name="period" value="{{ $value }}" aria-pressed="{{ $selectedPeriod === $value ? 'true' : 'false' }}" class="{{ $selectedPeriod === $value ? 'control-009' : 'control-008' }}"><span>{{ $label }}</span></button>@endforeach</div>
                 <div class="layout-071">
-                  <div class="layout-051"><label for="el-q" class="text-002">キーワード</label><input id="el-q" type="text" placeholder="イベント名・事業名で探す" class="text-071"></div>
-                  <div class="layout-051"><label for="el-client" class="text-002">依頼先</label><select id="el-client" class="surface-017"><option>すべて</option><option>サンプル商事</option><option>サンプル町会</option><option>サンプル市</option><option>サンプル商店会</option></select></div>
-                  <div class="layout-051"><label for="el-status" class="text-002">ステータス</label><select id="el-status" class="surface-017"><option>中止・実施済み以外</option><option>下書き</option><option>募集中</option><option>確定</option><option>実施済み</option><option>中止</option><option>すべて</option></select></div>
-                  <label class="control-010"><input type="checkbox" class="space-006">人数不足のイベントだけ</label></div>
-              </section>
+                  <div class="layout-051"><label for="el-q" class="text-002">キーワード</label><input id="el-q" name="q" value="{{ request('q') }}" type="search" placeholder="イベント名・事業名で探す" class="text-071"></div>
+                  <div class="layout-051"><label for="el-client" class="text-002">依頼先</label><select id="el-client" name="client_id" class="surface-017"><option value="">すべて</option>@foreach ($clients as $clientOption)<option value="{{ $clientOption->id }}" @selected((string) request('client_id') === (string) $clientOption->id)>{{ $clientOption->name }}</option>@endforeach</select></div>
+                  <div class="layout-051"><label for="el-status" class="text-002">ステータス</label><select id="el-status" name="status" class="surface-017">@foreach (['active' => '中止・実施済み以外', 'draft' => '下書き', 'recruiting' => '募集中', 'confirmed' => '確定', 'completed' => '実施済み', 'cancelled' => '中止', 'all' => 'すべて'] as $value => $label)<option value="{{ $value }}" @selected(request('status', 'active') === $value)>{{ $label }}</option>@endforeach</select></div>
+                  <label class="control-010"><input type="checkbox" name="shortage" value="1" @checked(request()->boolean('shortage')) class="space-006">人数不足のイベントだけ</label>@if ($selectedPeriod === 'custom')<input name="from" type="date" value="{{ request('from', today()->format('Y-m-d')) }}" class="text-071"><input name="to" type="date" value="{{ request('to', today()->format('Y-m-d')) }}" class="text-071">@endif</div>
+              </form>
               <section aria-labelledby="el-list" class="surface-006">
-                <h2 id="el-list" class="text-020"><span>7</span>件</h2>
+                <h2 id="el-list" class="text-020"><span>{{ method_exists($events, 'total') ? $events->total() : $events->count() }}</span>件</h2>
                 <div class="utility-001">
                   <table class="text-148">
                     <thead>
                       <tr class="text-023"><th class="cell-009">ステータス</th><th class="cell-048">確定 / 必要</th><th class="cell-002">実施日・時間</th><th class="cell-002">イベント</th><th class="cell-002">備考</th><th class="cell-002">報告書</th><th class="cell-020">操作</th></tr>
                     </thead>
                     <tbody>
+                      @php $eventStatusLabels = ['draft' => '下書き', 'recruiting' => '募集中', 'confirmed' => '確定', 'completed' => '実施済み', 'cancelled' => '中止']; $eventStatusClasses = ['draft' => 'surface-079', 'recruiting' => 'surface-077', 'confirmed' => 'surface-078', 'completed' => 'surface-080', 'cancelled' => 'surface-081']; @endphp
+                      @forelse ($events as $listedEvent)
+                        @php $confirmedCount = $listedEvent->confirmed_count ?? $listedEvent->assignments->where('status', 'confirmed')->count(); $shortageCount = max(0, $listedEvent->required_staff - $confirmedCount); @endphp
+                        <tr><td class="cell-049"><span class="{{ $eventStatusClasses[$listedEvent->status] ?? 'surface-079' }}"><span>{{ $eventStatusLabels[$listedEvent->status] ?? $listedEvent->status }}</span></span></td><td class="cell-021"><div class="text-067"><span>{{ $confirmedCount }} / {{ $listedEvent->required_staff }}人</span></div>@if ($shortageCount > 0 && ! in_array($listedEvent->status, ['draft', 'cancelled', 'completed'], true))<div class="text-149"><span>あと{{ $shortageCount }}人</span></div>@endif</td><td class="cell-022"><div class="text-015"><span>{{ $listedEvent->event_date->isoFormat('M/D(ddd)') }}</span></div><div class="text-018"><span>集合 {{ substr($listedEvent->meeting_time, 0, 5) }} 〜 解散 {{ substr($listedEvent->dismissal_time, 0, 5) }}</span></div></td><td class="cell-022"><a href="{{ auth()->user()->isEmployee() ? route('events.edit', $listedEvent) : route('events.show', $listedEvent) }}" class="text-072"><span>{{ $listedEvent->name ?: $listedEvent->business_name }}</span></a><div class="text-018"><span>{{ $listedEvent->client->name }}</span> / <span>{{ $listedEvent->business_name }}</span></div></td><td class="cell-050"><span>{{ $listedEvent->notes ?: '—' }}</span></td><td class="cell-051"><span>{{ $listedEvent->report_required ? '必要' : '不要' }}</span></td><td class="cell-023"><a href="{{ route('events.assignments.index', $listedEvent) }}" class="text-073">アサイン</a></td></tr>
+                      @empty
+                        <tr><td colspan="7" class="cell-022">条件に一致するイベントはありません。</td></tr>
+                      @endforelse
+                      @if (false)
                       <tr><td class="cell-049"><span class="surface-077"><span>募集中</span></span></td><td class="cell-021">
                         <div class="text-067"><span>2 / 5人</span></div>
                         <div class="text-149"><span>あと3人</span></div>
@@ -111,6 +120,7 @@
                         </td><td class="cell-022"><a href="EventEdit.dc.html" class="text-072"><span>子ども食堂まつり</span></a>
                         <div class="text-018"><span>サンプル町会</span> / <span>地域交流</span></div>
                         </td><td class="cell-050"><span>時間は依頼先と調整中(下書きのため依頼はまだ送れません)</span></td><td class="cell-051"><span>不要</span></td><td class="cell-023"><a href="Assign.dc.html" class="text-073">アサイン</a></td></tr>
+                      @endif
                     </tbody>
                   </table>
                 </div>

@@ -40,6 +40,11 @@ class Event extends Model
         return $this->hasMany(ReportSubmission::class);
     }
 
+    public function reportQuestions(): HasMany
+    {
+        return $this->hasMany(ReportQuestion::class)->orderBy('display_order');
+    }
+
     protected function casts(): array
     {
         return ['event_date' => 'date', 'items' => 'array', 'emergency_contacts' => 'array', 'report_required' => 'boolean'];

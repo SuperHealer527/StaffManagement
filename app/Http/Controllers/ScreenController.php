@@ -115,12 +115,12 @@ class ScreenController extends Controller
         }
 
         $events = Event::query()
-            ->with(['client.contacts', 'assignments.user', 'invoiceItems', 'expenses', 'reportSubmissions'])
+            ->with(['client.contacts', 'assignments.user', 'invoiceItems', 'expenses', 'reportQuestions', 'reportSubmissions'])
             ->withCount(['assignments as confirmed_count' => fn ($query) => $query->where('status', 'confirmed')])
             ->orderBy('event_date')
             ->get();
         $clients = Client::query()
-            ->with(['contacts', 'events.invoiceItems', 'events.assignments', 'events.expenses', 'salesOwner'])
+            ->with(['contacts', 'events.invoiceItems', 'events.assignments', 'events.expenses', 'salesOwner', 'meetings.recorder'])
             ->orderBy('name')
             ->get();
         $staffMembers = User::query()

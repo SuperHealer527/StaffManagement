@@ -35,3 +35,40 @@
 @import "../../Document/StaffManagement_staticHTML/css/pages/Staff.css";
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffDetail.css";
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffList.css";
+
+.pending-email-list {
+  display: grid;
+  flex-basis: 100%;
+  gap: 8px;
+}
+
+.pending-email-row {
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgb(240, 213, 140);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 280px) auto;
+  padding: 10px 12px;
+}
+
+.pending-email-content {
+  display: grid;
+  font-size: 12px;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pending-email-content span {
+  color: rgb(91, 74, 26);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .pending-email-row {
+    grid-template-columns: 1fr;
+  }
+}

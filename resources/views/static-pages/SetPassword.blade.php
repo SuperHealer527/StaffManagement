@@ -17,11 +17,13 @@
           <div class="utility-006">
             <div class="text-075">HIGHCLASS</div>
             <h1 class="text-221">パスワードの設定</h1>
-            <p class="text-222">佐藤 花子 さん、ようこそ。<br>ログインに使うパスワードを決めてください。</p></div>
-          <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : '#' }}" class="layout-212">
+            <p class="text-222">{{ $user?->name ?? '' }}{{ isset($actionToken) ? ' さん、ようこそ。' : '' }}<br>ログインに使うパスワードを設定してください。</p></div>
+          <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : route('password.update') }}" class="layout-212">
             @csrf
+            @isset($passwordResetToken)<input type="hidden" name="token" value="{{ $passwordResetToken }}">@endisset
+            @isset($passwordResetToken)<input type="hidden" name="email" value="{{ $email }}">@endisset
             <div class="layout-055"><span class="text-042">メールアドレス(ログインID)</span>
-              <div class="layout-213">hanako@example.com</div>
+              <div class="layout-213">{{ $user?->email ?? $email ?? '' }}</div>
             </div>
             <div class="layout-055"><label for="sp-pass" class="text-042">新しいパスワード</label><input id="sp-pass" name="password" type="password" autocomplete="new-password" required="" minlength="8" value="" class="text-076"></div>
             <ul class="layout-214">
@@ -29,6 +31,8 @@
               <li class="layout-215"><span aria-hidden="true" class="text-067"><span>・</span></span>英字と数字を両方ふくむ</li>
             </ul>
             <div class="layout-055"><label for="sp-pass2" class="text-042">もう一度入力</label><input id="sp-pass2" name="password_confirmation" type="password" autocomplete="new-password" required="" minlength="8" class="text-076"></div>
+            @error('email')<p role="alert" class="text-157">{{ $message }}</p>@enderror
+            @error('password')<p role="alert" class="text-157">{{ $message }}</p>@enderror
             <button type="submit" class="control-004">設定してはじめる</button></form>
           <p class="text-223">設定が終わると、マイプロフィールが開きます。<br>ご自身の情報と対応可能時間の登録をお願いします。</p></div>
       </div>

@@ -102,7 +102,7 @@
             <section class="panel">
                 <div class="panel-heading"><h2>人数不足のイベント（2週間以内）</h2><a href="{{ route('screens.show', 'shortages') }}">すべて見る</a></div>
                 <div class="table-wrap"><table><thead><tr><th>日付</th><th>イベント / 依頼先</th><th>確定 / 必要</th><th>操作</th></tr></thead><tbody>
-                    @foreach($shortages->take(4) as $event)<tr><td>{{ $event->event_date->format('m/d') }}</td><td><strong>{{ $event->name }}</strong><small>{{ $event->client->name }} / {{ $event->business_name }}</small></td><td>{{ $event->confirmed_count }} / {{ $event->required_staff }}人 <span class="badge badge-orange">あと{{ $event->required_staff - $event->confirmed_count }}人</span></td><td><a class="secondary-button" href="{{ route('screens.show', 'assignments') }}">アサインする</a></td></tr>@endforeach
+                    @foreach($shortages->take(4) as $event)<tr><td>{{ $event->event_date->format('m/d') }}</td><td><strong>{{ $event->name }}</strong><small>{{ $event->client->name }} / {{ $event->business_name }}</small></td><td>{{ $event->confirmed_count }} / {{ $event->required_staff }}人 <span class="badge badge-orange">あと{{ $event->required_staff - $event->confirmed_count }}人</span></td><td><a class="secondary-button" href="{{ route('events.assignments.index', $event) }}">アサインする</a></td></tr>@endforeach
                 </tbody></table></div>
             </section>
 

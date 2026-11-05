@@ -36,25 +36,33 @@
               <section aria-label="スタッフの状況" class="layout-235">
                 <div class="surface-030">
                   <div class="text-007">登録人数</div>
-                  <div class="text-063">48<span class="text-010">人</span></div>
+                  <div class="text-063">{{ isset($expiringCount) ? $staffMembers->total() : 48 }}<span class="text-010">人</span></div>
                 </div>
                 <div class="surface-031">
                   <div class="text-011">資格の期限が60日以内</div>
-                  <div class="text-064">2<span class="text-010">人</span></div>
+                  <div class="text-064">{{ $expiringCount ?? 2 }}<span class="text-010">人</span></div>
                 </div>
               </section>
               <section aria-labelledby="sl-list" class="surface-006">
-                <div class="layout-071">
+                @if(isset($expiringCount))<form method="GET" action="{{ route('staff.index') }}" class="layout-071">
+                  <div class="layout-051"><label for="sl-q" class="text-002">名前で探す</label><input id="sl-q" name="keyword" value="{{ request('keyword') }}" type="search" placeholder="名前の一部" class="text-049"></div><div class="layout-051"><label for="sl-role" class="text-002">区分</label><select id="sl-role" name="role" class="surface-017"><option value="">すべて</option>@foreach(['employee'=>'社員','semi_employee'=>'準社員','staff'=>'スタッフ','temporary'=>'その他(単発)','trainer'=>'その他(トレーナー)'] as $value=>$label)<option value="{{ $value }}" @selected(request('role') === $value)>{{ $label }}</option>@endforeach</select></div><label class="control-010"><input name="student" value="1" type="checkbox" @checked(request()->boolean('student')) class="space-006">学生</label><label class="control-010"><input name="has_car" value="1" type="checkbox" @checked(request()->boolean('has_car')) class="space-006">車あり</label><button type="submit" class="control-024">検索</button></form>@else<div class="layout-071">
                   <div class="layout-051"><label for="sl-q" class="text-002">名前で探す</label><input id="sl-q" type="text" placeholder="名前の一部" class="text-049"></div>
                   <div class="layout-051"><label for="sl-role" class="text-002">区分</label><select id="sl-role" class="surface-017"><option>すべて</option><option>社員</option><option>準社員</option><option>スタッフ</option><option>その他(単発)</option><option>その他(トレーナー)</option></select></div>
-                  <label class="control-010"><input type="checkbox" class="space-006">学生</label><label class="control-010"><input type="checkbox" class="space-006">車あり</label></div>
-                <h2 id="sl-list" class="text-233"><span>9</span>人</h2>
+                  <label class="control-010"><input type="checkbox" class="space-006">学生</label><label class="control-010"><input type="checkbox" class="space-006">車あり</label></div>@endif
+                <h2 id="sl-list" class="text-233"><span>{{ isset($expiringCount) ? $staffMembers->total() : 9 }}</span>人</h2>
                 <div class="utility-024">
                   <table class="text-069">
                     <thead>
                       <tr class="text-023"><th class="cell-001">名前</th><th class="cell-002">最寄り駅</th><th class="cell-002">携帯電話</th><th class="cell-002">車</th><th class="cell-002">LINE</th><th class="cell-092">今年の勤務</th><th class="cell-002">資格の期限</th><th class="cell-020"><span class="space-004">操作</span></th></tr>
                     </thead>
                     <tbody>
+                      @if(isset($expiringCount))
+                      @php $roleLabels=['employee'=>'社員','semi_employee'=>'準社員','staff'=>'スタッフ','temporary'=>'その他(単発)','trainer'=>'その他(トレーナー)']; @endphp
+                      @forelse($staffMembers as $listedStaff)
+                      @php $expiring=$listedStaff->qualifications->first(fn($qualification) => $qualification->expires_at && $qualification->expires_at->between(today(), today()->addDays(60))); @endphp
+                      <tr><td class="cell-093"><a href="{{ route('staff.show', $listedStaff) }}" class="text-072">{{ $listedStaff->name }}</a><div class="layout-236"><span class="surface-144">{{ $roleLabels[$listedStaff->role] ?? $listedStaff->role }}</span>@if($listedStaff->is_student)<span class="surface-145">学生</span>@endif</div></td><td class="cell-005">{{ $listedStaff->nearest_station ?: '—' }}</td><td class="cell-005">{{ $listedStaff->phone ?: '—' }}</td><td class="cell-005">{{ $listedStaff->has_car ? 'あり' : 'なし' }}</td><td class="cell-005"><span class="{{ $listedStaff->line_user_id ? 'surface-032' : 'surface-027' }}">{{ $listedStaff->line_user_id ? '連携済み' : '未連携' }}</span></td><td class="cell-094">{{ $listedStaff->year_work_count }}回</td><td class="{{ $expiring ? 'cell-096' : 'cell-095' }}">{{ $expiring ? $expiring->name.' '.$expiring->expires_at->format('Y/m/d') : '—' }}</td><td class="cell-013"><a href="{{ route('staff.show', $listedStaff) }}" class="text-073">詳細を見る</a></td></tr>
+                      @empty<tr><td colspan="8" class="cell-093">条件に一致するスタッフはいません。</td></tr>@endforelse
+                      @else
                       <tr><td class="cell-093"><a href="StaffDetail.dc.html" class="text-072"><span>佐藤 花子</span></a>
                         <div class="layout-236"><span class="surface-144"><span>スタッフ</span></span><span class="surface-145">学生</span></div>
                         </td><td class="cell-005"><span>池袋駅</span></td><td class="cell-005"><span>090-XXXX-XXXX</span></td><td class="cell-005"><span>なし</span></td><td class="cell-005"><span class="surface-032"><span>連携済み</span></span></td><td class="cell-094"><span>14回</span></td><td class="cell-095"><span>—</span></td><td class="cell-013"><a href="StaffDetail.dc.html" class="text-073">詳細を見る</a></td></tr>
@@ -82,9 +90,11 @@
                       <tr><td class="cell-093"><a href="StaffDetail.dc.html" class="text-072"><span>田村 優子</span></a>
                         <div class="layout-236"><span class="surface-149"><span>社員</span></span></div>
                         </td><td class="cell-005"><span>荻窪駅</span></td><td class="cell-005"><span>090-XXXX-XXXX</span></td><td class="cell-005"><span>なし</span></td><td class="cell-005"><span class="surface-032"><span>連携済み</span></span></td><td class="cell-094"><span>8回</span></td><td class="cell-095"><span>—</span></td><td class="cell-013"><a href="StaffDetail.dc.html" class="text-073">詳細を見る</a></td></tr>
+                      @endif
                     </tbody>
                   </table>
                 </div>
+                @if(isset($expiringCount)){{ $staffMembers->links() }}@endif
                 <div class="text-058">準社員の画面でも同じ一覧が見られます。住所と口座は詳細ページでも準社員には表示されません。</div>
               </section>
             </div>

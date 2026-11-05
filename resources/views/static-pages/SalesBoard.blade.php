@@ -34,10 +34,16 @@
                   <h1 class="text-044">提案状況</h1>
                   <div class="text-060">依頼先を提案状況ごとの列に並べます。状況・次回アクション日は各依頼先の詳細で変えます。社員だけが開けます。</div>
                 </div>
-                <div class="layout-070"><input type="text" aria-label="依頼先名で探す" placeholder="依頼先名で探す" class="text-047"><select aria-label="種別" class="surface-017"><option>種別:すべて</option><option>法人</option><option>行政</option><option>個人</option><option>団体</option><option>その他</option></select></div>
+                @if(isset($proposalClients))<form method="GET" action="{{ route('sales.proposals') }}" class="layout-070"><input name="keyword" value="{{ request('keyword') }}" type="search" aria-label="依頼先名で探す" placeholder="依頼先名で探す" class="text-047"><select name="type" aria-label="種別" class="surface-017"><option value="">種別:すべて</option>@foreach(['corporation'=>'法人','government'=>'行政','individual'=>'個人','organization'=>'団体','other'=>'その他'] as $value=>$label)<option value="{{ $value }}" @selected(request('type')===$value)>{{ $label }}</option>@endforeach</select><button class="control-024">検索</button></form>@else<div class="layout-070"><input type="text" aria-label="依頼先名で探す" placeholder="依頼先名で探す" class="text-047"><select aria-label="種別" class="surface-017"><option>種別:すべて</option><option>法人</option><option>行政</option><option>個人</option><option>団体</option><option>その他</option></select></div>@endif
               </div>
               <div class="utility-021">
                 <div class="layout-201">
+                  @if(isset($proposalClients))
+                  @php $statusLabels=['uncontacted'=>'未接触','approaching'=>'アプローチ中','proposing'=>'提案中','won'=>'受注','lost'=>'失注','on_hold'=>'保留']; $statusClasses=['uncontacted'=>'surface-105','approaching'=>'surface-107','proposing'=>'surface-108','won'=>'surface-109','lost'=>'surface-110','on_hold'=>'surface-111']; @endphp
+                  @foreach($statusLabels as $status=>$label)
+                  <section aria-label="{{ $label }}" class="layout-202"><div class="layout-203"><span class="{{ $statusClasses[$status] }}">{{ $label }}</span><span class="text-210">{{ ($proposalClients->get($status) ?? collect())->count() }}社</span></div>@forelse(($proposalClients->get($status) ?? collect()) as $proposalClient)<a href="{{ route('clients.edit',$proposalClient) }}" class="surface-106"><div class="text-017">{{ $proposalClient->name }}</div><div class="text-059">{{ $proposalClient->proposal_notes ?: '提案内容未入力' }}</div><div class="layout-204"><span class="{{ $proposalClient->next_action_date && $proposalClient->next_action_date->isPast() ? 'text-213':'text-211' }}">次回 {{ $proposalClient->next_action_date?->format('n/j') ?? '未定' }}@if($proposalClient->next_action_date?->isPast()) 過ぎ@endif</span><span class="utility-002">{{ $proposalClient->salesOwner?->name ?? '未担当' }}</span></div></a>@empty<div class="surface-106">該当なし</div>@endforelse</section>
+                  @endforeach
+                  @else
                   <section aria-label="未接触" class="layout-202">
                     <div class="layout-203"><span class="surface-105"><span>未接触</span></span><span class="text-210"><span>15</span>社</span></div>
                     <a href="ClientEdit.dc.html" class="surface-106">
@@ -100,6 +106,7 @@
                     <div class="text-059"><span>年末大売り出し 呼び込み</span></div>
                     <div class="layout-204"><span class="text-211">次回 <span>11/5</span></span><span class="utility-002"><span>田村</span></span></div>
                     </a><a href="Clients.dc.html" class="text-212">ほか <span>1</span>社を一覧で見る</a></section>
+                  @endif
                 </div>
               </div>
               <div class="text-002">「未接触」は依頼先一覧に登録しただけの営業先です。営業リストとして使うときは、依頼先一覧を「未接触」で絞り込みます。</div>

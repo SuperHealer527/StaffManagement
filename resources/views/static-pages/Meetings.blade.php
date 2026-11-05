@@ -37,10 +37,52 @@
               </div>
               <section aria-labelledby="mt-wait" class="layout-160">
                 <div>
-                  <h2 id="mt-wait" class="text-159">振り分け待ちのメール 2件</h2>
-                  <div class="text-160">送信先から依頼先を判定できなかった営業メールです(メール自動登録は第3段階)。</div>
+                  <h2 id="mt-wait" class="text-159">振り分け待ちのメール {{ isset($pendingEmails) ? $pendingEmails->count() : 2 }}件</h2>
+                  <div class="text-160">送信先から依頼先を判定できなかった営業メールです。</div>
                 </div>
-                <a href="#" class="surface-082">振り分ける</a></section>
+                @isset($pendingEmails)
+                  @if($pendingEmails->isNotEmpty())<a href="#pending-email-list" class="surface-082">振り分ける</a>@endif
+                  <div id="pending-email-list" class="pending-email-list">
+                    @forelse($pendingEmails as $pendingEmail)
+                      <form method="post" action="{{ route('meetings.inbound.assign', $pendingEmail) }}" class="pending-email-row">
+                        @csrf
+                        <div class="pending-email-content">
+                          <strong>{{ $pendingEmail->subject }}</strong>
+                          <span>{{ $pendingEmail->received_at->format('Y/m/d H:i') }}・{{ $pendingEmail->sender_email }}</span>
+                          @if($pendingEmail->body_excerpt)<span>{{ $pendingEmail->body_excerpt }}</span>@endif
+                        </div>
+                        <label>
+                          <span class="sr-only">依頼先</span>
+                          <select name="client_id" class="surface-017" required>
+                            <option value="">依頼先を選択</option>
+                            @foreach($clients as $client)<option value="{{ $client->id }}">{{ $client->name }}</option>@endforeach
+                          </select>
+                        </label>
+                        <button type="submit" class="surface-082">振り分ける</button>
+                      </form>
+                    @empty
+                      <div class="text-160">現在、振り分け待ちのメールはありません。</div>
+                    @endforelse
+                  </div>
+                @else
+                  <a href="#" class="surface-082">振り分ける</a>
+                @endisset
+              </section>
+              @isset($meetingsPage)
+              @php
+                $meetingTypeLabels = ['sales'=>'営業','consultation'=>'相談','preparation'=>'事前準備','day_of'=>'当日','follow_up'=>'事後フォロー','other'=>'その他'];
+                $meetingMethodLabels = ['visit'=>'訪問','phone'=>'電話','online'=>'オンライン','email'=>'メール','other'=>'その他'];
+              @endphp
+              <section aria-labelledby="mt-list" class="surface-006">
+                <form method="get" action="{{ route('meetings.index') }}">
+                  <div role="group" aria-label="種別で絞り込み" class="layout-069"><a href="{{ route('meetings.index', request()->except('type', 'page')) }}" class="{{ request('type') ? 'control-007' : 'control-006' }}"><span>すべて</span></a>@foreach($meetingTypeLabels as $value=>$label)<a href="{{ route('meetings.index', [...request()->except('page'), 'type'=>$value]) }}" class="{{ request('type') === $value ? 'control-006' : 'control-007' }}"><span>{{ $label }}</span></a>@endforeach</div>
+                  <div class="layout-041"><h2 id="mt-list" class="text-020">打合せ・メール(<span>{{ $meetingsPage->total() }}</span>件)</h2><div class="layout-070"><input name="keyword" value="{{ request('keyword') }}" type="search" aria-label="依頼先名・内容で探す" placeholder="依頼先名・内容で探す" class="text-071"><select name="period" aria-label="期間" class="surface-017"><option value="three_months">直近3か月</option><option value="year" @selected(request('period') === 'year')>今年</option><option value="all" @selected(request('period') === 'all')>すべて</option></select><button class="control-006">検索</button></div></div>
+                </form>
+                <div class="utility-001"><table class="text-078"><thead><tr class="text-023"><th class="cell-001">日付</th><th class="cell-002">依頼先</th><th class="cell-002">種別</th><th class="cell-002">方法</th><th class="cell-002">先方の参加者</th><th class="cell-002">内容</th><th class="cell-002">記録者</th></tr></thead><tbody>
+                  @forelse($meetingsPage as $meeting)<tr><td class="cell-003">{{ $meeting->meeting_date->isoFormat('M/D(ddd)') }}</td><td class="cell-004"><a href="{{ route('clients.edit', $meeting->client) }}" class="text-067">{{ $meeting->client->name }}</a></td><td class="cell-005"><span class="surface-028">{{ $meetingTypeLabels[$meeting->type] ?? $meeting->type }}</span></td><td class="cell-005">{{ $meetingMethodLabels[$meeting->method] ?? $meeting->method }}</td><td class="cell-004">{{ $meeting->participants ?: '—' }}</td><td class="cell-052">{{ $meeting->content }}</td><td class="cell-008">{{ $meeting->recorder?->name ?? '自動' }}</td></tr>@empty<tr><td colspan="7" class="cell-052">条件に一致する打合せ・メールはありません。</td></tr>@endforelse
+                </tbody></table></div>{{ $meetingsPage->links() }}
+              </section>
+              @else
               <section aria-labelledby="mt-list" class="surface-006">
                 <div role="group" aria-label="種別で絞り込み" class="layout-069"><button type="button" aria-pressed="true" class="control-006"><span>すべて</span></button><button type="button" aria-pressed="false" class="control-007"><span>営業</span></button><button type="button" aria-pressed="false" class="control-007"><span>相談</span></button><button type="button" aria-pressed="false" class="control-007"><span>事前準備</span></button><button type="button" aria-pressed="false" class="control-007"><span>当日</span></button><button type="button" aria-pressed="false" class="control-007"><span>事後フォロー</span></button><button type="button" aria-pressed="false" class="control-007"><span>その他</span></button></div>
                 <div class="layout-041">
@@ -62,6 +104,7 @@
                   </table>
                 </div>
               </section>
+              @endisset
             </div>
           </main>
         </div>

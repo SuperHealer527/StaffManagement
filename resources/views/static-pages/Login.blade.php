@@ -22,8 +22,9 @@
             @csrf
             <div class="layout-055"><label for="lg-mail" class="text-042">メールアドレス</label><input id="lg-mail" name="email" type="email" value="{{ old('email') }}" autocomplete="username" placeholder="例:hanako@example.com" required="" class="text-076"></div>
             <div class="layout-055"><label for="lg-pass" class="text-042">パスワード</label><input id="lg-pass" name="password" type="password" autocomplete="current-password" required="" class="text-076"></div>
+            @if (session('status'))<p role="status" class="text-157">{{ session('status') }}</p>@endif
             @error('email')<p role="alert" class="text-157">{{ $message }}</p>@enderror
-            <label class="control-048"><input name="remember" value="1" type="checkbox" checked="" class="space-009">ログインしたままにする</label><button type="submit" class="control-004">ログイン</button><a href="SetPassword.dc.html" class="text-156">パスワードを忘れた方</a></form>
+            <label class="control-048"><input name="remember" value="1" type="checkbox" checked="" class="space-009">ログインしたままにする</label><button type="submit" class="control-004">ログイン</button><a href="{{ route('password.request') }}" class="text-156">パスワードを忘れた方</a></form>
           <p class="text-157">アカウントは社員からの招待で作成されます。<br>依頼や出勤確認は、メール・LINEのリンクから<br>ログインせずに回答できます。</p></div>
       </div>
     </div>

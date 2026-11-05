@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -18,6 +19,7 @@ class DashboardAccessTest extends TestCase
     public function test_authenticated_employee_sees_the_exact_client_dashboard(): void
     {
         $user = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        Event::factory()->create(['name' => '秋季健康フェア', 'event_date' => today()->addWeek()]);
         $response = $this->actingAs($user)->get('/dashboard');
 
         $response->assertOk()
