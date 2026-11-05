@@ -14,6 +14,14 @@
         'report-submit', 'payment-statement', 'profile', 'first-password',
         'mobile-areas', 'interview-select', 'line-connect', 'temporary-bank',
     ], true);
+    $mobileTabScreens = ['staff-home', 'my-requests', 'payment-statement', 'profile', 'mobile-areas'];
+    $hasMobileTabs = request()->routeIs('dashboard') || in_array(request()->route('screen'), $mobileTabScreens, true);
+    $mobileTab = match (request()->route('screen')) {
+        'my-requests', 'assignment-response' => 'requests',
+        'payment-statement' => 'payments',
+        'profile' => 'profile',
+        default => 'home',
+    };
     $section = match (true) {
         request()->is('screens/sales-*'), request()->is('screens/proposal-*'), request()->is('screens/meeting-*') => '営業',
         request()->is('screens/interview*') => '面談',
@@ -23,7 +31,7 @@
         default => '事業',
     };
 @endphp
-<div class="app-shell {{ $isMobilePage ? 'mobile-focused' : '' }}">
+<div class="app-shell {{ $isMobilePage ? 'mobile-focused' : '' }} {{ $hasMobileTabs ? 'has-mobile-tabs' : 'standalone-mobile' }}">
     <aside class="area-rail" aria-label="エリア切り替え">
         <a href="{{ route('dashboard') }}" class="brand-mark" aria-label="ホーム">HC</a>
         <nav class="area-nav">
@@ -79,11 +87,14 @@
         <main class="page-container">@yield('content')</main>
     </div>
 
-    <nav class="bottom-nav" aria-label="スマートフォンメニュー">
-        @foreach ([['事業', '▣', 'dashboard'], ['営業', '⌁', 'sales-home'], ['会計', '¥', 'payments'], ['メニュー', '☷', 'mobile-areas']] as [$label, $icon, $target])
-            <a href="{{ $target === 'dashboard' ? route('dashboard') : route('screens.show', $target) }}"><span>{{ $icon }}</span>{{ $label }}</a>
-        @endforeach
-    </nav>
+    @if($hasMobileTabs)
+        <nav class="bottom-nav" aria-label="スタッフメニュー">
+            <a class="{{ $mobileTab === 'home' ? 'active' : '' }}" href="{{ route('dashboard') }}"><span>⌂</span>ホーム</a>
+            <a class="{{ $mobileTab === 'requests' ? 'active' : '' }}" href="{{ route('screens.show', 'my-requests') }}"><span>▤</span>依頼</a>
+            <a class="{{ $mobileTab === 'payments' ? 'active' : '' }}" href="{{ route('screens.show', 'payment-statement') }}"><span>¥</span>支払明細</a>
+            <a class="{{ $mobileTab === 'profile' ? 'active' : '' }}" href="{{ route('screens.show', 'profile') }}"><span>○</span>プロフィール</a>
+        </nav>
+    @endif
 </div>
 </body>
 </html>

@@ -15,8 +15,8 @@
                     @forelse($unanswered as $assignment)
                         <article class="mobile-event">
                             <div><span class="badge badge-orange">回答してください</span><h2 class="mt-2">{{ $assignment->event->name }}</h2></div>
-                            <p>{{ $assignment->event->event_date->isoFormat('M月D日（ddd）') }}　集合 {{ substr($assignment->event->meeting_time, 0, 5) }}<br>{{ $assignment->event->meeting_place }}</p>
-                            <a class="primary-button" href="{{ route('screens.show', 'assignment-response') }}">依頼を確認して回答する</a>
+                            <p>{{ $assignment->event->event_date->isoFormat('M月D日（ddd）') }}　集合 {{ substr($assignment->event->meeting_time, 0, 5) }}<br>{{ $assignment->event->meeting_place }}<br>謝金 ¥{{ number_format($assignment->fee) }}　交通費 ¥{{ number_format($assignment->transportation) }}</p>
+                            <div class="grid grid-cols-3 gap-2"><a class="primary-button px-2" href="{{ route('screens.show', 'assignment-response') }}">承諾</a><a class="secondary-button px-2" href="{{ route('screens.show', 'assignment-response') }}">未定</a><a class="danger-button px-2" href="{{ route('screens.show', 'assignment-response') }}">辞退</a></div>
                         </article>
                     @empty
                         <div class="mobile-event"><p>現在、回答が必要な依頼はありません。</p></div>
@@ -24,8 +24,12 @@
                 </div>
             </section>
             <section class="panel">
-                <div class="panel-heading"><h2>出勤確認</h2><span class="badge badge-blue">当日</span></div>
-                <div class="panel-body text-sm leading-7">当日の集合2時間前に確認ボタンが表示されます。安全にお越しください。</div>
+                <div class="panel-heading"><div><h2>出勤確認</h2><p>7日前と当日に届きます</p></div><span class="badge badge-orange">確認待ち</span></div>
+                <div class="panel-body grid gap-3 text-sm leading-7"><strong>{{ $myAssignments->where('status', 'confirmed')->first()?->event?->name ?? '次回のお仕事' }}</strong><p class="m-0 text-[#5b6270]">予定どおり勤務できることを確認してください。確認後に変更がある場合は、必ず担当者へ連絡してください。</p><a class="primary-button" href="{{ route('screens.show', 'attendance-confirmed') }}">予定どおり出勤します</a></div>
+            </section>
+            <section class="panel">
+                <div class="panel-heading"><h2>緊急連絡先</h2></div>
+                <div class="panel-body grid gap-3 text-sm"><a class="success-button" href="#">ハイクラスへLINEする</a><a class="secondary-button" href="tel:0000000000">社員へ電話する</a><p class="m-0 text-xs leading-5 text-[#5b6270]">当日はイベントの当日責任者にも連絡できます。</p></div>
             </section>
             <section class="panel">
                 <div class="panel-heading"><h2>報告書の提出</h2><a href="{{ route('screens.show', 'report-submit') }}">開く ›</a></div>
@@ -42,6 +46,7 @@
                     @endforeach
                 </div>
             </section>
+            <section class="grid grid-cols-2 gap-3"><div class="detail-box"><span>今年の勤務回数</span><strong>{{ $myAssignments->where('status', 'confirmed')->count() }}回</strong></div><a class="detail-box no-underline" href="{{ route('screens.show', 'payment-statement') }}"><span>支払明細</span><strong class="text-[#1f5bd8]">明細を見る ›</strong></a></section>
         </div>
     </div>
 @else
@@ -113,7 +118,7 @@
             <section class="panel">
                 <div class="panel-heading"><h2>あなたの予定</h2></div>
                 <div class="panel-body">
-                    <div class="grid grid-cols-2 gap-3"><div class="detail-box"><span>未回答の依頼</span><strong>{{ $myAssignments->where('status', 'requested')->count() }}件</strong></div><div class="detail-box"><span>今年の勤務回数</span><strong>{{ $user->assignments()->where('status', 'confirmed')->count() }}回</strong></div></div>
+                    <div class="grid grid-cols-2 gap-3"><div class="detail-box"><span>未回答の依頼</span><strong>{{ $myAssignments->where('status', 'requested')->count() }}件</strong></div><div class="detail-box"><span>今後の確定勤務</span><strong>{{ $myAssignments->where('status', 'confirmed')->count() }}回</strong></div></div>
                     <div class="mt-4">@foreach($myAssignments->where('status', 'confirmed')->take(3) as $assignment)<div class="person-row"><strong>{{ $assignment->event->event_date->format('m/d') }}</strong><div class="flex-1"><strong>{{ $assignment->event->name }}</strong><p>{{ substr($assignment->event->meeting_time, 0, 5) }}・{{ $assignment->event->meeting_place }}</p></div></div>@endforeach</div>
                 </div>
             </section>

@@ -54,13 +54,13 @@ class ScreenController extends Controller
     /** @var list<string> */
     private const EMPLOYEE_ONLY = [
         'event-form', 'event-copy', 'payments', 'profit-loss', 'client-detail', 'accounts',
-        'notifications', 'sales-home', 'proposal-board', 'meeting-history', 'interviews', 'phone-log',
+        'notifications', 'sales-home', 'proposal-board', 'meeting-history', 'interviews',
     ];
 
     /** @var list<string> */
     private const MANAGEMENT = [
         'semi-home', 'assignments', 'event-detail', 'reports', 'clients', 'events', 'staff',
-        'staff-detail', 'shortages',
+        'staff-detail', 'shortages', 'phone-log',
     ];
 
     public function show(string $screen): View
@@ -69,6 +69,7 @@ class ScreenController extends Controller
 
         /** @var User $user */
         $user = request()->user();
+        $user->loadMissing('qualifications');
         if (in_array($screen, self::EMPLOYEE_ONLY, true)) {
             abort_unless($user->isEmployee(), 403);
         }
