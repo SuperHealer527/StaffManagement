@@ -6,10 +6,14 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PublicActionController;
 use App\Http\Controllers\ScreenController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
+Route::get('/action/{token}', [PublicActionController::class, 'show'])->name('public-actions.show');
+Route::post('/action/{token}', [PublicActionController::class, 'update'])->middleware('throttle:10,1')->name('public-actions.update');
+Route::get('/action/{token}/complete', [PublicActionController::class, 'complete'])->name('public-actions.complete');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [AuthController::class, 'store'])->middleware('throttle:6,1')->name('login.store');

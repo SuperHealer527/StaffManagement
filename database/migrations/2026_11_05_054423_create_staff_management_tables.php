@@ -72,7 +72,7 @@ return new class extends Migration
             $table->unsignedInteger('transportation')->default(0);
             $table->unsignedInteger('reimbursement')->default(0);
             $table->unsignedInteger('withholding_tax')->default(0);
-            $table->string('payment_status')->default('unconfirmed');
+            $table->string('payment_status')->default('waiting');
             $table->string('payment_source')->nullable();
             $table->date('paid_at')->nullable();
             $table->string('seven_day_confirmation')->default('not_sent');

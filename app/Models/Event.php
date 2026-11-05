@@ -25,6 +25,21 @@ class Event extends Model
         return $this->hasMany(Assignment::class);
     }
 
+    public function invoiceItems(): HasMany
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+    public function reportSubmissions(): HasMany
+    {
+        return $this->hasMany(ReportSubmission::class);
+    }
+
     protected function casts(): array
     {
         return ['event_date' => 'date', 'items' => 'array', 'emergency_contacts' => 'array', 'report_required' => 'boolean'];

@@ -22,6 +22,12 @@ class UpdatePaymentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return ['payment_status' => ['required', 'in:waiting,paid'], 'payment_source' => ['required_if:payment_status,paid', 'nullable', 'in:rakuten,gmo,yucho,cash'], 'paid_at' => ['required_if:payment_status,paid', 'nullable', 'date'], 'reimbursement' => ['nullable', 'integer', 'min:0'], 'withholding_tax' => ['nullable', 'integer', 'min:0']];
+        return [
+            'payment_status' => ['required', 'in:waiting,paid'],
+            'payment_source' => ['required_if:payment_status,paid', 'nullable', 'in:rakuten,gmo,yucho,cash'],
+            'paid_at' => ['required_if:payment_status,paid', 'nullable', 'date'],
+            'reimbursement' => ['nullable', 'integer', 'min:0'],
+            'withholding_tax' => ['nullable', 'integer', 'min:0'],
+        ];
     }
 }

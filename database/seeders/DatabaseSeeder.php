@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Assignment;
 use App\Models\Client;
 use App\Models\Event;
+use App\Models\Interview;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,7 @@ class DatabaseSeeder extends Seeder
                 Assignment::query()->create([
                     'event_id' => $event->id, 'user_id' => $staff->id, 'status' => $staffIndex < 2 ? 'confirmed' : 'requested',
                     'special_notes' => $staffIndex === 0 ? '受付の担当です。' : null, 'fee' => $staff->base_fee, 'transportation' => 480,
-                    'payment_status' => 'unconfirmed', 'is_day_leader' => $staffIndex === 0, 'is_report_representative' => $staffIndex === 0, 'requested_at' => $now,
+                    'payment_status' => 'waiting', 'is_day_leader' => $staffIndex === 0, 'is_report_representative' => $staffIndex === 0, 'requested_at' => $now,
                 ]);
             }
         }
@@ -77,6 +78,61 @@ class DatabaseSeeder extends Seeder
         DB::table('invoice_items')->insert(['event_id' => 1, 'type' => 'work_fee', 'memo' => '運営スタッフ費', 'amount' => 90000, 'created_at' => $now, 'updated_at' => $now]);
         DB::table('expenses')->insert(['event_id' => 1, 'type' => 'supplies', 'memo' => '消耗品', 'amount' => 4000, 'created_at' => $now, 'updated_at' => $now]);
         DB::table('notification_logs')->insert(['user_id' => 3, 'type' => 'assignment_request', 'channel' => 'line', 'destination' => 'demo-line-staff', 'status' => 'sent', 'subject' => 'お仕事のご依頼', 'body' => '秋季健康フェアのお仕事のご依頼です。', 'sent_at' => $now, 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('notification_logs')->insert(['user_id' => 4, 'type' => 'attendance_confirmation', 'channel' => 'email', 'destination' => 'tanaka@staffmanagement.test', 'status' => 'failed', 'subject' => '本日の出勤確認', 'body' => '本日の集合時間と場所をご確認ください。', 'error_message' => 'メールアドレスへの配信に失敗しました。', 'created_at' => $now, 'updated_at' => $now]);
         DB::table('phone_logs')->insert(['called_at' => $now, 'caller_name' => '森 様', 'company' => 'サンプル商事', 'phone' => '03-1234-5678', 'purpose' => 'お仕事の依頼・相談', 'content' => '次回イベントについて折り返し希望。', 'recipient_id' => $admin->id, 'received_by' => 2, 'status' => 'callback_required', 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('meetings')->insert([
+            ['client_id' => 1, 'recorded_by' => $admin->id, 'type' => 'meeting', 'meeting_date' => now()->subDays(3), 'method' => '訪問', 'participants' => '森 一樹 課長', 'content' => '来年度の健康づくり事業について、実施時期と概算費用を確認しました。', 'created_at' => $now, 'updated_at' => $now],
+            ['client_id' => 3, 'recorded_by' => $admin->id, 'type' => 'email', 'meeting_date' => now()->subDays(7), 'method' => 'メール', 'participants' => '健康推進課 ご担当者', 'content' => '提案書と見積書を送付し、次回のオンライン打合せ候補日を案内しました。', 'created_at' => $now, 'updated_at' => $now],
+        ]);
+        DB::table('interviews')->insert([
+            'subject_user_id' => 3,
+            'manager_id' => $admin->id,
+            'type' => '定期面談',
+            'method' => '対面',
+            'location' => '本社会議室',
+            'candidate_times' => json_encode([now()->addDays(5)->setTime(10, 0)->toDateTimeString(), now()->addDays(6)->setTime(14, 0)->toDateTimeString()]),
+            'scheduled_at' => now()->addDays(5)->setTime(10, 0),
+            'content' => '最近の勤務状況と今後担当したい仕事について確認しました。',
+            'next_tasks' => '防災関連イベントのリーダー候補として研修を案内する。',
+            'next_timing' => '3か月後',
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        DB::table('report_submissions')->insert([
+            'event_id' => 1,
+            'user_id' => 3,
+            'answers' => json_encode(['completion' => '問題なく終了した', 'attendance' => 120, 'notes' => '予定どおり終了しました。']),
+            'submitted_at' => $now,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+        DB::table('availabilities')->insert([
+            ['user_id' => 3, 'weekday' => 6, 'time_slot' => 'all_day', 'availability' => 'available', 'created_at' => $now, 'updated_at' => $now],
+            ['user_id' => 3, 'weekday' => 0, 'time_slot' => 'all_day', 'availability' => 'available', 'created_at' => $now, 'updated_at' => $now],
+        ]);
+
+        $demoAssignmentId = Assignment::query()->where('user_id', 3)->firstOrFail()->id;
+        $demoTokens = [
+            ['token' => 'demo-response', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'assignment_response'],
+            ['token' => 'demo-attendance', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'attendance_confirmation'],
+            ['token' => 'demo-report', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'report_submission'],
+            ['token' => 'demo-interview', 'user_id' => 3, 'type' => Interview::class, 'id' => 1, 'purpose' => 'interview_selection'],
+            ['token' => 'demo-profile', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'temporary_profile'],
+            ['token' => 'demo-password', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'first_password'],
+            ['token' => 'demo-line', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'line_connect'],
+        ];
+
+        foreach ($demoTokens as $demoToken) {
+            DB::table('secure_action_tokens')->insert([
+                'user_id' => $demoToken['user_id'],
+                'actionable_type' => $demoToken['type'],
+                'actionable_id' => $demoToken['id'],
+                'purpose' => $demoToken['purpose'],
+                'token_hash' => hash('sha256', $demoToken['token']),
+                'expires_at' => now()->addDays(30),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
     }
 }
