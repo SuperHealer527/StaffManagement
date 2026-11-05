@@ -1,0 +1,517 @@
+.layout-081 {
+  min-height: 2100px;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.layout-082 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgb(255, 244, 214);
+}
+
+.control-020 {
+  height: 34px;
+  padding: 0px 12px;
+  border-radius: 8px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+}
+
+.control-021 {
+  height: 34px;
+  padding: 0px 12px;
+  border-radius: 8px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+}
+
+.space-010 {
+  width: 1px;
+  height: 22px;
+  background: rgb(231, 217, 168);
+  margin: 0px 4px;
+}
+
+.layout-083 {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.space-011 {
+  min-width: 0px;
+  flex: 1 1 520px;
+}
+
+.surface-038 {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.surface-039 {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgb(253, 241, 234);
+  color: rgb(138, 49, 8);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.text-084 {
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgb(63, 69, 80);
+}
+
+.text-085 {
+  margin-top: 2px;
+  font-size: 14px;
+  color: rgb(63, 69, 80);
+}
+
+.layout-084 {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.text-086 {
+  font-size: 13px;
+  color: rgb(91, 98, 112);
+  margin-right: 2px;
+}
+
+.text-087 {
+  margin-left: 8px;
+  font-size: 13px;
+}
+
+.space-012 {
+  flex: 0 1 280px;
+  min-width: 220px;
+}
+
+.text-088 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.surface-040 {
+  margin-top: 8px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgb(238, 240, 243);
+  overflow: hidden;
+}
+
+.space-013 {
+  width: 40%;
+  height: 100%;
+  background: rgb(28, 122, 74);
+}
+
+.text-089 {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgb(138, 49, 8);
+}
+
+.layout-085 {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0px, 1fr));
+  gap: 16px;
+}
+
+.surface-041 {
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  height: 44px;
+  font-size: 14px;
+}
+
+.control-022 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.text-090 {
+  margin: 0px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.layout-086 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.text-091 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.text-092 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 860px;
+}
+
+.cell-031 {
+  padding: 8px 0px 8px 8px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.text-093 {
+  font-weight: 500;
+  color: rgb(26, 29, 35);
+}
+
+.surface-042 {
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(26, 29, 35);
+  color: rgb(255, 255, 255);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.surface-043 {
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cell-032 {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  max-width: 180px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgb(26, 29, 35);
+}
+
+.text-094 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  width: 80px;
+}
+
+.text-095 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  width: 68px;
+}
+
+.control-023 {
+  margin-left: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(63, 69, 80);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cell-033 {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  max-width: 180px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgb(91, 98, 112);
+}
+
+.control-024 {
+  padding: 8px 12px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.text-096 {
+  font-weight: 500;
+  color: rgb(91, 98, 112);
+}
+
+.surface-044 {
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+  font-size: 11px;
+  font-weight: 500;
+  vertical-align: 2px;
+}
+
+.text-097 {
+  font-size: 13px;
+  color: rgb(138, 49, 8);
+  font-weight: 700;
+}
+
+.layout-087 {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.layout-088 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+}
+
+.layout-089 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  font-size: 13px;
+}
+
+.control-025 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.text-098 {
+  margin-top: 16px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+}
+
+.text-099 {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgb(21, 92, 56);
+  font-weight: 500;
+}
+
+.layout-090 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.layout-091 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.text-100 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  width: 220px;
+}
+
+.text-101 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  width: 92px;
+}
+
+.control-026 {
+  height: 40px;
+  padding: 0px 16px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.surface-045 {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgb(253, 241, 234);
+  color: rgb(138, 49, 8);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.surface-046 {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  font-size: 11px;
+  font-weight: 700;
+  vertical-align: 2px;
+}
+
+.text-102 {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+  line-height: 1.7;
+}
+
+.layout-092 {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.text-103 {
+  height: 40px;
+  width: 180px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.text-104 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  width: 100px;
+}
+
+.text-105 {
+  height: 38px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: right;
+  width: 90px;
+}
+
+.control-027 {
+  height: 40px;
+  padding: 0px 16px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 91, 216);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.text-106 {
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+  line-height: 1.8;
+}

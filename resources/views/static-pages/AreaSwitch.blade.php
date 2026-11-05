@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>エリア切り替えの試作(スマホ)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--areaswitch" data-static-screen="AreaSwitch">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-075">
+          <header class="cell-030">
+            <div class="text-002">ハイクラス業務管理システム</div>
+            <div class="text-083"><span>事業(イベント運営)</span></div>
+            <div class="layout-076"><a href="#" class="surface-036"><span>ホーム</span></a><a href="EventList.dc.html" class="surface-037"><span>イベント</span></a><a href="Assign.dc.html" class="surface-037"><span>アサイン</span></a><a href="StaffList.dc.html" class="surface-037"><span>スタッフ</span></a></div>
+          </header>
+          <main class="layout-077">
+            <div class="surface-010">
+              <div class="text-007"><span>2週間以内のイベント</span></div>
+              <div class="text-063"><span>6件</span></div>
+              <div class="text-018"><span>4週間以内は21件</span></div>
+            </div>
+            <div class="surface-010">
+              <div class="text-007"><span>人数不足のイベント(2週間以内)</span></div>
+              <div class="text-063"><span>3件</span></div>
+              <div class="text-018"><span>いちばん近いのは 10/21(水) 秋季健康フェア</span></div>
+            </div>
+            <div class="surface-010">
+              <div class="text-007"><span>当日確認が済んでいない人</span></div>
+              <div class="text-063"><span>2人</span></div>
+              <div class="text-018"><span>企業説明会 会場案内</span></div>
+            </div>
+          </main>
+          <nav aria-label="エリア切り替え" class="layout-078"><button type="button" aria-pressed="true" class="control-018"><span aria-hidden="true" class="layout-079"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg></span><span class="text-001"><span>事業</span></span></button><button type="button" aria-pressed="false" class="control-019"><span aria-hidden="true" class="layout-080"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="14 7 21 7 21 14"></polyline></svg></span><span class="text-001"><span>営業</span></span></button><button type="button" aria-pressed="false" class="control-019"><span aria-hidden="true" class="layout-080"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l5 7 5-7"></path><line x1="12" y1="11" x2="12" y2="20"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg></span><span class="text-001"><span>会計</span></span></button><button type="button" aria-pressed="false" class="control-019"><span aria-hidden="true" class="layout-080"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg></span><span class="text-001"><span>メニュー</span></span></button></nav>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

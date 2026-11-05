@@ -1,0 +1,44 @@
+.layout-160 {
+  background: rgb(255, 248, 230);
+  border: 1px solid rgb(240, 213, 140);
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.text-159 {
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(122, 82, 0);
+}
+
+.text-160 {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgb(91, 74, 26);
+}
+
+.surface-082 {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0px 12px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgb(255, 255, 255);
+}
+
+.cell-052 {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+}

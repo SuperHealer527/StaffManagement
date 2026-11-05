@@ -1,0 +1,85 @@
+.layout-196 {
+  width: 390px;
+  height: 1300px;
+  box-sizing: border-box;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-direction: column;
+}
+
+.surface-103 {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.text-206 {
+  margin: 10px 0px 0px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.surface-104 {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgb(255, 244, 214);
+}
+
+.text-207 {
+  font-size: 12px;
+  color: rgb(107, 78, 0);
+  font-weight: 700;
+}
+
+.text-208 {
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.text-209 {
+  margin-top: 2px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.layout-197 {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0px, 1fr));
+  gap: 6px;
+  font-size: 13px;
+}
+
+.layout-198 {
+  border-top: 1px solid rgb(238, 240, 243);
+  padding-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0px, 1fr));
+  gap: 8px;
+}
+
+.layout-199 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-068 {
+  height: 52px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 10px;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}

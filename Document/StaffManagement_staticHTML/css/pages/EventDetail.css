@@ -1,0 +1,109 @@
+.text-124 {
+  margin-top: 6px;
+  font-size: 14px;
+  color: rgb(63, 69, 80);
+}
+
+.surface-064 {
+  background: rgb(234, 240, 252);
+  border: 1px solid rgb(198, 213, 245);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: rgb(22, 68, 159);
+}
+
+.layout-120 {
+  display: grid;
+  grid-template-columns: minmax(0px, 1fr) minmax(0px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.layout-121 {
+  margin: 16px 0px 0px;
+  display: grid;
+  grid-template-columns: 104px minmax(0px, 1fr);
+  gap: 14px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.text-125 {
+  color: rgb(91, 98, 112);
+  font-size: 13px;
+}
+
+.layout-122 {
+  margin: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.text-126 {
+  padding: 3px 10px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.layout-123 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0px;
+}
+
+.text-127 {
+  font-size: 18px;
+  color: rgb(26, 29, 35);
+}
+
+.layout-124 {
+  margin: 14px 0px 0px;
+  padding: 0px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.surface-065 {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgb(245, 246, 248);
+  font-size: 14px;
+}
+
+.layout-125 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.surface-066 {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(26, 29, 35);
+  color: rgb(255, 255, 255);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.surface-067 {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.text-128 {
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+  line-height: 1.6;
+}

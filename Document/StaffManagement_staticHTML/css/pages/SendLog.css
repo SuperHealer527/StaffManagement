@@ -1,0 +1,286 @@
+.layout-206 {
+  min-height: 1650px;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.layout-207 {
+  background: rgb(251, 227, 223);
+  border: 1px solid rgb(232, 180, 168);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.text-215 {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgb(138, 31, 17);
+}
+
+.text-216 {
+  margin-top: 2px;
+  font-size: 13px;
+  color: rgb(91, 42, 32);
+}
+
+.control-069 {
+  height: 40px;
+  padding: 0px 16px;
+  border: 1px solid rgb(138, 31, 17);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(138, 31, 17);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.layout-208 {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.layout-209 {
+  display: flex;
+  gap: 6px;
+}
+
+.control-070 {
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  border: 1px solid rgb(201, 206, 214);
+  background: rgb(255, 255, 255);
+  color: rgb(63, 69, 80);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-071 {
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  border: 1px solid rgb(31, 91, 216);
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.surface-121 {
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgb(255, 255, 255);
+  width: 140px;
+}
+
+.surface-122 {
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgb(255, 255, 255);
+  width: 220px;
+}
+
+.surface-123 {
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgb(255, 255, 255);
+  width: 120px;
+}
+
+.layout-210 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1 1 140px;
+}
+
+.surface-124 {
+  height: 40px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: rgb(255, 255, 255);
+}
+
+.surface-125 {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 8px 24px 16px;
+}
+
+.layout-211 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0px 4px;
+}
+
+.text-217 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.cell-080 {
+  padding: 10px 8px 10px 0px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  white-space: nowrap;
+}
+
+.cell-081 {
+  padding: 10px 8px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  white-space: nowrap;
+}
+
+.cell-082 {
+  padding: 10px 0px 10px 8px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.utility-022 {
+  background: rgb(255, 248, 246);
+}
+
+.cell-083 {
+  padding: 12px 8px 12px 0px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  vertical-align: top;
+  white-space: nowrap;
+  color: rgb(63, 69, 80);
+}
+
+.surface-126 {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+}
+
+.cell-084 {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  vertical-align: top;
+  max-width: 320px;
+}
+
+.surface-127 {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgb(251, 227, 223);
+  color: rgb(138, 31, 17);
+}
+
+.text-218 {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgb(138, 31, 17);
+}
+
+.text-219 {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0px 12px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  color: rgb(63, 69, 80);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.control-072 {
+  margin-left: 6px;
+  height: 36px;
+  padding: 0px 14px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.surface-128 {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(230, 244, 236);
+  color: rgb(21, 92, 56);
+}
+
+.surface-129 {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgb(230, 244, 236);
+  color: rgb(21, 92, 56);
+}
+
+.text-220 {
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgb(91, 98, 112);
+}

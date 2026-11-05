@@ -1,0 +1,94 @@
+.text-173 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.layout-167 {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0px, 1fr));
+  gap: 8px;
+  border-top: 1px solid rgb(238, 240, 243);
+  padding-top: 12px;
+}
+
+.text-174 {
+  font-size: 11.5px;
+  color: rgb(91, 98, 112);
+}
+
+.text-175 {
+  font-size: 11.5px;
+  color: rgb(138, 49, 8);
+}
+
+.text-176 {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(138, 49, 8);
+}
+
+.layout-168 {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-177 {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.utility-017 {
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+.text-178 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.surface-087 {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+}
+
+.surface-088 {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgb(253, 241, 234);
+  color: rgb(138, 49, 8);
+}
+
+.surface-089 {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgb(230, 244, 236);
+  color: rgb(21, 92, 56);
+}
+
+.cell-063 {
+  display: block;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(238, 240, 243);
+  font-size: 13px;
+  text-align: center;
+}

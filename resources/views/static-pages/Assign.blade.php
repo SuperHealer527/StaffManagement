@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>アサイン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--assign" data-static-screen="Assign">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-081">
+          <div class="layout-002">
+            <nav aria-label="エリア切り替え" class="layout-003">
+              <div aria-hidden="true" class="layout-004">HC</div>
+              <a href="#" aria-current="page" class="layout-005"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg><span class="text-001">事業</span></a><a href="SalesHome.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="14 7 21 7 21 14"></polyline></svg><span class="text-001">営業</span></a><a href="Coaching.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3a2 2 0 0 1-2-2z"></path><path d="M19 9a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2v3l-4-3h-3"></path></svg><span class="text-001">面談</span></a><a href="PhoneLog.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><rect x="9" y="2" width="6" height="4" rx="1"></rect><line x1="9" y1="11" x2="15" y2="11"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg><span class="text-001">総務</span></a><a href="PayManage.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l5 7 5-7"></path><line x1="12" y1="11" x2="12" y2="20"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg><span class="text-001">会計</span></a>
+              <div class="layout-007"><a href="Accounts.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2" fill="#16213A"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2" fill="#16213A"></circle></svg><span class="text-001">設定</span></a></div>
+            </nav>
+            <nav aria-label="メインメニュー" class="layout-008">
+              <div class="space-001">
+                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-003">事業(イベント運営)</div>
+              </div>
+              <a href="Main.dc.html" class="layout-010"><span>ホーム</span></a><a href="EventList.dc.html" class="layout-010"><span>イベント</span></a><a href="#" aria-current="page" class="layout-009"><span>アサイン</span></a><a href="Shortage.dc.html" class="layout-010"><span>人数不足一覧</span></a><a href="ReportView.dc.html" class="layout-010"><span>報告書</span></a><a href="StaffList.dc.html" class="layout-010"><span>スタッフ</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先</span><span class="surface-001">共通</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span><span>山田 太郎(社員)</span></span><span class="text-004">自分のページを開く ›</span></a></nav>
+          </div>
+          <main class="space-005">
+            <div class="layout-040">
+              <div class="layout-041">
+                <div class="text-007"><a href="EventList.dc.html">イベント</a> / 秋季健康フェア(10/21) / アサイン</div>
+                <div role="group" aria-label="画面案の表示切り替え" class="layout-082"><span class="text-043">画面案の確認用</span><button type="button" aria-pressed="true" class="control-020">社員として見る</button><button type="button" aria-pressed="false" class="control-021">準社員として見る</button><span class="space-010"></span><button type="button" aria-pressed="true" class="control-020">実施前(10/19)</button><button type="button" aria-pressed="false" class="control-021">実施後(10/22)</button></div>
+              </div>
+              <section aria-label="イベントの情報" class="layout-083">
+                <div class="space-011">
+                  <div class="layout-042">
+                    <h1 class="text-044">秋季健康フェア</h1>
+                    <span class="surface-038"><span>募集中</span></span><span class="surface-039"><span>開催まであと2日</span></span></div>
+                  <div class="text-084">10/21(水) 集合 8:30〜解散 17:30 ・ サンプル商事 / 地域イベント運営</div>
+                  <div class="text-085">集合場所:サンプル公民館 1階ロビー ・ 実施場所:サンプル公民館 2階 大ホール</div>
+                  <div class="layout-084"><span class="text-086">持ち物</span><span class="text-045">昼食</span><span class="text-045">室内履き</span><span class="text-045">ハイクラスTシャツ</span><span class="text-045">その他:筆記用具</span><a href="EventEdit.dc.html" class="text-087"><span>イベントの編集を開く</span></a></div>
+                </div>
+                <div class="space-012">
+                  <div class="layout-043"><span class="text-007"><span>確定</span> / 必要人数</span><span class="text-088"><span>2</span><span class="text-032"> / 5人</span></span></div>
+                  <div role="img" aria-label="必要5人のうち2人確定" class="surface-040">
+                    <div class="space-013"></div>
+                  </div>
+                  <div class="text-089"><span>あと3人必要</span></div>
+                </div>
+              </section>
+              <section aria-labelledby="h-lead" class="surface-006">
+                <h2 id="h-lead" class="text-020">当日責任者と報告書の代表者</h2>
+                <div class="text-033">どちらも「確定」の人の中から選びます(社員・準社員)。当日責任者は、スタッフのホームと出勤確認の画面の緊急連絡先に出ます。</div>
+                <div class="layout-085"><label class="layout-044">当日責任者 <select class="surface-041"><option value="suzuki"><span>鈴木 一郎(確定)</span></option><option value="tanaka"><span>田中 健(確定)</span></option></select></label>
+                  <div class="layout-044">報告書の代表者 <label class="control-022"><input type="checkbox" checked="" class="space-006">当日責任者と同じ人にする(<span>鈴木 一郎</span>)</label></div>
+                </div>
+              </section>
+              <section aria-label="アサインする人" class="surface-006">
+                <div class="layout-045">
+                  <div class="space-003">
+                    <h2 class="text-090">アサインする人</h2>
+                    <div class="text-046">イベントの時間:集合 8:30 ・ 開始 9:00 ・ 終了 17:00 ・ 解散 17:30。リーダーを頼む・集合を早めるなど人によって違うことは、その人の備考に書きます。</div>
+                  </div>
+                  <div class="layout-086"><span class="text-007"><span>確定</span></span><span class="text-091"><span>2</span><span class="text-042"> / 5人</span></span><span class="surface-011"><span>あと3人</span></span></div>
+                </div>
+                <div class="utility-001">
+                  <table class="text-092">
+                    <thead>
+                      <tr class="text-023"><th class="cell-009">スタッフ</th><th class="cell-010">備考(特記)</th><th class="cell-010">ステータス</th><th class="cell-010">謝金(円)</th><th class="cell-010">交通費(円)</th><th class="cell-010">7日前確認</th><th class="cell-010">当日確認</th><th class="cell-031">操作</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td class="cell-011">
+                        <div class="text-093"><span>鈴木 一郎</span><span class="surface-042">当日責任者</span><span class="surface-043">代表者</span></div>
+                        <div class="text-018"><span>準社員 ・ 中野駅</span></div>
+                        </td><td class="cell-032"><span>リーダーをお願いします。集合は8:00(30分早め)です。</span></td><td class="cell-005"><span class="surface-012"><span>確定</span></span></td><td class="cell-004"><input type="number" aria-label="鈴木 一郎の謝金" value="12000" class="text-094"></td><td class="cell-004"><input type="number" aria-label="鈴木 一郎の交通費" value="840" class="text-095"></td><td class="cell-012"><span>確認済み</span></td><td class="cell-012"><span>当日 4:30 送信予定</span></td><td class="cell-013"><button type="button" class="control-023">取消</button></td></tr>
+                      <tr><td class="cell-011">
+                        <div class="text-093"><span>田中 健</span></div>
+                        <div class="text-018"><span>スタッフ ・ 高田馬場駅</span></div>
+                        </td><td class="cell-033"><span>—</span></td><td class="cell-005"><span class="surface-012"><span>確定</span></span></td><td class="cell-004"><input type="number" aria-label="田中 健の謝金" value="9500" class="text-094"></td><td class="cell-004"><input type="number" aria-label="田中 健の交通費" value="620" class="text-095"></td><td class="cell-012"><span>対象外</span></td><td class="cell-012"><span>当日 4:30 送信予定</span></td><td class="cell-013"><button type="button" class="control-023">取消</button></td></tr>
+                      <tr><td class="cell-011">
+                        <div class="text-093"><span>伊藤 愛</span></div>
+                        <div class="text-018"><span>スタッフ ・ 目白駅</span></div>
+                        </td><td class="cell-033"><span>—</span></td><td class="cell-005"><span class="surface-013"><span>承諾</span></span></td><td class="cell-004"><input type="number" aria-label="伊藤 愛の謝金" value="9000" class="text-094"></td><td class="cell-004"><input type="number" aria-label="伊藤 愛の交通費" value="700" class="text-095"></td><td class="cell-012"><span>—</span></td><td class="cell-012"><span>—</span></td><td class="cell-013"><button type="button" class="control-024">確定にする</button><button type="button" class="control-023">見送り</button></td></tr>
+                      <tr><td class="cell-011">
+                        <div class="text-093"><span>高橋 美咲</span></div>
+                        <div class="text-018"><span>スタッフ ・ 大塚駅</span></div>
+                        </td><td class="cell-033"><span>—</span></td><td class="cell-005"><span class="surface-014"><span>未定</span></span></td><td class="cell-004"><input type="number" aria-label="高橋 美咲の謝金" value="8500" class="text-094"></td><td class="cell-004"><input type="number" aria-label="高橋 美咲の交通費" value="560" class="text-095"></td><td class="cell-012"><span>—</span></td><td class="cell-012"><span>—</span></td><td class="cell-013"><button type="button" class="control-023">見送り</button></td></tr>
+                      <tr><td class="cell-011">
+                        <div class="text-093"><span>佐藤 花子</span></div>
+                        <div class="text-018"><span>スタッフ ・ 池袋駅 ・ 10/15に依頼</span></div>
+                        </td><td class="cell-032"><span>受付の担当です。</span></td><td class="cell-005"><span class="surface-015"><span>依頼中</span></span></td><td class="cell-004"><input type="number" aria-label="佐藤 花子の謝金" value="9000" class="text-094"></td><td class="cell-004"><input type="number" aria-label="佐藤 花子の交通費" value="480" class="text-095"></td><td class="cell-012"><span>—</span></td><td class="cell-012"><span>—</span></td><td class="cell-013"><button type="button" class="control-023">見送り</button></td></tr>
+                      <tr><td class="cell-011">
+                        <div class="text-096"><span>山本 大輔</span></div>
+                        <div class="text-018"><span>スタッフ ・ 代々木駅</span></div>
+                        </td><td class="cell-033"><span>—</span></td><td class="cell-005"><span class="surface-016"><span>辞退</span></span></td><td class="cell-004"><span class="utility-002">—</span></td><td class="cell-004"><span class="utility-002">—</span></td><td class="cell-012"><span>—</span></td><td class="cell-012"><span>—</span></td><td class="cell-013"></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+              <section aria-labelledby="h-find" class="surface-006">
+                <div class="layout-041">
+                  <h2 id="h-find" class="text-020">候補を探して依頼する<span class="surface-044">社員のみ</span></h2>
+                  <span class="text-097">あと<span>3</span>人</span></div>
+                <div class="layout-087">
+                  <div class="layout-046"><label class="layout-088">名前で探す<input type="text" placeholder="名前の一部を入力" class="text-047"></label><label class="layout-088">資格<select class="surface-017"><option>指定なし</option><option>普通自動車免許</option><option>防災士</option></select></label><label class="layout-088">性別<select class="surface-017"><option>指定なし</option><option>男性</option><option>女性</option></select></label><label class="layout-088">並び順<select class="surface-017"><option>この依頼先での勤務回数が多い順</option><option>今年の勤務回数が少ない順</option><option>名前順</option></select></label></div>
+                  <div class="layout-089"><label class="control-025"><input type="checkbox" checked="" class="space-006">水曜 8:30〜17:30(イベントの時間)に対応できる人だけ</label><label class="control-025"><input type="checkbox" checked="" class="space-006">同じ時間帯に予定がない人だけ</label><label class="control-025"><input type="checkbox" class="space-006">学生</label><label class="control-025"><input type="checkbox" class="space-006">車あり</label></div>
+                </div>
+                <div class="text-098">候補 <span>3</span>人(全スタッフ 48人中)</div>
+                <div class="layout-047">
+                  <div class="cell-014">
+                    <div class="layout-041">
+                      <div class="space-003">
+                        <div class="text-017"><span>中村 翔</span></div>
+                        <div class="text-018"><span>車あり ・ この依頼先で4回 ・ 今年12回 ・ 基本の謝金 10,000円</span></div>
+                        <div class="text-099"><span>水曜 全時間帯 対応可</span></div>
+                      </div>
+                      <div class="layout-090"><label class="layout-091">備考<input type="text" aria-label="中村 翔への備考(特記)" placeholder="あれば(例:リーダー・集合8:00)" class="text-100"></label><label class="layout-091">謝金<input type="number" aria-label="中村 翔の謝金" value="10000" class="text-101">円</label><label class="layout-091">交通費<input type="number" aria-label="中村 翔の交通費" placeholder="入力" value="1020" class="text-094">円</label><button type="button" class="control-026">依頼する</button></div>
+                    </div>
+                  </div>
+                  <div class="cell-014">
+                    <div class="layout-041">
+                      <div class="space-003">
+                        <div class="text-017"><span>小林 さくら</span></div>
+                        <div class="text-018"><span>車なし ・ この依頼先で2回 ・ 今年9回 ・ 基本の謝金 9,000円</span></div>
+                        <div class="text-099"><span>水曜 全時間帯 対応可</span></div>
+                      </div>
+                      <div class="layout-090"><label class="layout-091">備考<input type="text" aria-label="小林 さくらへの備考(特記)" placeholder="あれば(例:リーダー・集合8:00)" class="text-100"></label><label class="layout-091">謝金<input type="number" aria-label="小林 さくらの謝金" value="9000" class="text-101">円</label><label class="layout-091">交通費<input type="number" aria-label="小林 さくらの交通費" placeholder="入力" value="560" class="text-094">円</label><button type="button" class="control-026">依頼する</button></div>
+                    </div>
+                    <div role="alert" class="surface-045"><span>同じ時間帯に「企業展示会(受付) 10/21 9:00〜」のアサインが確定しています。依頼はできますが、重複にご注意ください。</span></div>
+                  </div>
+                  <div class="cell-014">
+                    <div class="layout-041">
+                      <div class="space-003">
+                        <div class="text-017"><span>加藤 陽太</span><span class="surface-046">学生</span></div>
+                        <div class="text-018"><span>車なし ・ この依頼先で0回 ・ 今年5回 ・ 基本の謝金 8,000円</span></div>
+                        <div class="text-099"><span>水曜 全時間帯 対応可</span></div>
+                      </div>
+                      <div class="layout-090"><label class="layout-091">備考<input type="text" aria-label="加藤 陽太への備考(特記)" placeholder="あれば(例:リーダー・集合8:00)" class="text-100"></label><label class="layout-091">謝金<input type="number" aria-label="加藤 陽太の謝金" value="8000" class="text-101">円</label><label class="layout-091">交通費<input type="number" aria-label="加藤 陽太の交通費" placeholder="入力" value="" class="text-094">円</label><button type="button" class="control-026">依頼する</button></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-048">謝金には、スタッフ詳細の「基本の謝金」が入っています(その場で直せます)。交通費は一人ずつ入れます。役割と時間は全員イベントと同じです。リーダーを頼む・集合を早めるなど、その人だけのことは備考に書きます。「依頼する」を押すと、謝金・交通費と備考つきの依頼が本人に届き(LINEまたはメール)、ステータスが「依頼中」になります。</div>
+              </section>
+              <section aria-labelledby="h-swap" class="surface-006">
+                <h2 id="h-swap" class="text-020">当日の交代を追加する<span class="surface-044">社員のみ</span></h2>
+                <div class="text-102">当日急に入ってもらった人を、依頼を送らずに「確定」として追加します(実施後でも追加できます)。来なかった人は「欠勤にする」を押します。欠勤は支払の対象になりません。</div>
+                <div class="layout-092"><label class="layout-088">備考(任意)<input type="text" placeholder="その人だけのこと" class="text-103"></label><label class="layout-088">スタッフ<input type="text" value="中村 翔" class="text-049"></label><label class="layout-088">謝金(円)<input type="number" value="10000" class="text-104"></label><label class="layout-088">交通費(円)<input type="number" value="1020" class="text-105"></label><button type="button" class="control-027">確定として追加</button></div>
+              </section>
+              <div class="text-106">7日前確認・当日確認の連絡は「確定」の人にだけ送られます。7日前を過ぎてから確定した人の7日前確認は「対象外」(送らない)です。当日確認は、その人の集合時間の4時間前に送られます(早朝でもそのまま)。イベント日を過ぎても依頼中・未定・承諾のままの人は、自動で見送りになります(お知らせは送りません)。</div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

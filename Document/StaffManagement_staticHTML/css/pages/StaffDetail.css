@@ -1,0 +1,254 @@
+.layout-222 {
+  min-height: 2300px;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.layout-223 {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 10px;
+  background: rgb(255, 244, 214);
+}
+
+.control-073 {
+  height: 34px;
+  padding: 0px 12px;
+  border-radius: 8px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-074 {
+  height: 34px;
+  padding: 0px 12px;
+  border-radius: 8px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.layout-224 {
+  flex: 1 1 480px;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.layout-225 {
+  margin: 12px 0px 0px;
+  display: grid;
+  grid-template-columns: 120px minmax(0px, 1fr);
+  gap: 10px 12px;
+  font-size: 14px;
+}
+
+.utility-023 {
+  text-decoration: none;
+}
+
+.space-023 {
+  margin: 0px;
+  color: rgb(91, 98, 112);
+}
+
+.layout-226 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0px;
+  border-top: 1px solid rgb(238, 240, 243);
+  font-size: 14px;
+}
+
+.text-228 {
+  font-size: 12px;
+  color: rgb(138, 49, 8);
+  font-weight: 500;
+}
+
+.layout-227 {
+  flex: 1 1 400px;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.layout-228 {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.surface-138 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: rgb(207, 224, 251);
+}
+
+.surface-139 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: rgb(251, 231, 161);
+}
+
+.surface-140 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: rgb(246, 201, 194);
+}
+
+.layout-229 {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 72px repeat(7, minmax(0px, 1fr));
+  gap: 3px;
+  font-size: 11.5px;
+}
+
+.text-229 {
+  text-align: center;
+  font-weight: 700;
+}
+
+.layout-230 {
+  height: 24px;
+  border-radius: 3px;
+  background: rgb(246, 201, 194);
+  color: rgb(138, 31, 17);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.layout-231 {
+  height: 24px;
+  border-radius: 3px;
+  background: rgb(251, 231, 161);
+  color: rgb(107, 78, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.layout-232 {
+  height: 24px;
+  border-radius: 3px;
+  background: rgb(207, 224, 251);
+  color: rgb(22, 68, 159);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.text-230 {
+  margin-top: 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.text-231 {
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(91, 98, 112);
+}
+
+.text-232 {
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+  line-height: 1.7;
+}
+
+.layout-233 {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.layout-234 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.cell-091 {
+  padding: 12px 0px 12px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.surface-141 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+}
+
+.surface-142 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+}
+
+.surface-143 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(238, 240, 243);
+  color: rgb(91, 98, 112);
+}

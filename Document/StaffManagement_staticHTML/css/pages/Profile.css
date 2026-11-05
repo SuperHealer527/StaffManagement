@@ -1,0 +1,353 @@
+.layout-174 {
+  width: 390px;
+  height: 3500px;
+  box-sizing: border-box;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-direction: column;
+}
+
+.control-052 {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0px 16px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 91, 216);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.layout-175 {
+  margin: 0px;
+  padding: 0px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.text-182 {
+  height: 44px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 12px;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.layout-176 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0px, 1fr));
+  gap: 10px;
+}
+
+.surface-090 {
+  height: 44px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 15px;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+}
+
+.text-183 {
+  height: 44px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.control-053 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.text-184 {
+  width: 160px;
+  height: 44px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 12px;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.layout-177 {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgb(245, 246, 248);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.text-185 {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgb(63, 69, 80);
+}
+
+.control-054 {
+  height: 48px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 10px;
+  background: rgb(5, 122, 52);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.text-186 {
+  padding: 0px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+}
+
+.layout-178 {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.control-055 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.layout-179 {
+  margin-top: 6px;
+  display: flex;
+  gap: 20px;
+}
+
+.text-187 {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+  line-height: 1.6;
+}
+
+.layout-180 {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.surface-091 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgb(207, 224, 251);
+}
+
+.surface-092 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgb(251, 231, 161);
+}
+
+.surface-093 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgb(246, 201, 194);
+}
+
+.layout-181 {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 66px repeat(7, minmax(0px, 1fr));
+  gap: 3px;
+  font-size: 11.5px;
+}
+
+.text-188 {
+  text-align: center;
+  font-weight: 700;
+  padding: 4px 0px;
+}
+
+.control-056 {
+  height: 34px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 4px;
+  background: rgb(246, 201, 194);
+  color: rgb(138, 31, 17);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0px;
+}
+
+.control-057 {
+  height: 34px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 4px;
+  background: rgb(251, 231, 161);
+  color: rgb(107, 78, 0);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0px;
+}
+
+.control-058 {
+  height: 34px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 4px;
+  background: rgb(207, 224, 251);
+  color: rgb(22, 68, 159);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0px;
+}
+
+.layout-182 {
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.layout-183 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.text-189 {
+  color: rgb(21, 92, 56);
+  font-weight: 500;
+}
+
+.control-059 {
+  align-self: flex-start;
+  height: 40px;
+  padding: 0px 14px;
+  border: 1px dashed rgb(31, 91, 216);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 91, 216);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-060 {
+  height: 44px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 91, 216);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.layout-184 {
+  display: grid;
+  grid-template-columns: minmax(0px, 2fr) minmax(0px, 1fr);
+  gap: 10px;
+}
+
+.layout-185 {
+  display: grid;
+  grid-template-columns: minmax(0px, 1fr) minmax(0px, 2fr);
+  gap: 10px;
+}
+
+.surface-094 {
+  height: 44px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 8px;
+  font-family: inherit;
+  font-size: 15px;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+}
+
+.layout-186 {
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.layout-187 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0px;
+}
+
+.text-190 {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0px 12px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgb(26, 29, 35);
+  font-size: 13px;
+}

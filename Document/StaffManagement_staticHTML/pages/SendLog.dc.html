@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>送信履歴</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/SendLog.css">
+  </head>
+  <body class="page page--sendlog">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-206">
+          <div class="layout-002">
+            <nav aria-label="エリア切り替え" class="layout-003">
+              <div aria-hidden="true" class="layout-004">HC</div>
+              <a href="Main.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg><span class="text-001">事業</span></a><a href="SalesHome.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="14 7 21 7 21 14"></polyline></svg><span class="text-001">営業</span></a><a href="Coaching.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3a2 2 0 0 1-2-2z"></path><path d="M19 9a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2v3l-4-3h-3"></path></svg><span class="text-001">面談</span></a><a href="PhoneLog.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><rect x="9" y="2" width="6" height="4" rx="1"></rect><line x1="9" y1="11" x2="15" y2="11"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg><span class="text-001">総務</span></a><a href="PayManage.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l5 7 5-7"></path><line x1="12" y1="11" x2="12" y2="20"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg><span class="text-001">会計</span></a>
+              <div class="layout-007"><a href="#" aria-current="page" class="layout-005"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2" fill="#16213A"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2" fill="#16213A"></circle></svg><span class="text-001">設定</span></a></div>
+            </nav>
+            <nav aria-label="メインメニュー" class="layout-008">
+              <div class="space-001">
+                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-003">設定</div>
+              </div>
+              <a href="Accounts.dc.html" class="layout-010"><span>アカウント管理</span></a><a href="#" aria-current="page" class="layout-009"><span>送信履歴</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+          </div>
+          <main class="space-005">
+            <div class="layout-040">
+              <div>
+                <h1 class="text-044">送信履歴</h1>
+                <div class="text-060">アプリから送ったLINE・メールの結果です。送れなかったものは、宛先を確かめてから再送できます。この画面は社員だけが見られます。</div>
+              </div>
+              <section aria-label="送れなかった連絡" class="layout-207">
+                <div>
+                  <div class="text-215">送れなかった連絡が <span>2</span>件 あります</div>
+                  <div class="text-216">宛先(メールアドレス・LINE連携)を確かめてから再送してください。件数は社員のホームにも出ます。</div>
+                </div>
+                <button type="button" class="control-069">送れなかったものだけ見る</button></section>
+              <section aria-label="絞り込み" class="layout-208">
+                <div role="group" aria-label="期間" class="layout-051"><span class="text-042">期間</span>
+                  <div class="layout-209"><button type="button" aria-pressed="false" class="control-070"><span>今日</span></button><button type="button" aria-pressed="true" class="control-071"><span>直近7日</span></button><button type="button" aria-pressed="false" class="control-070"><span>今月</span></button><button type="button" aria-pressed="false" class="control-070"><span>日付指定</span></button></div>
+                </div>
+                <label class="layout-052">結果 <select class="surface-121"><option value="all">すべて</option><option value="ok">送信済み</option><option value="fail">送れなかった</option></select></label><label class="layout-052">連絡の種類 <select class="surface-122"><option>すべて</option><option>お仕事のご依頼</option><option>確定のお知らせ</option><option>1週間前の出勤確認</option><option>当日の出勤確認</option><option>報告書のご提出</option><option>取消のお知らせ</option><option>見送りのお知らせ</option><option>アプリへのご招待</option><option>支払明細のお知らせ</option><option>LINE連携のご案内</option><option>振込先と住所の入力のお願い</option><option>面談の日程のご案内</option><option>面談の前日のお知らせ</option><option>パスワードの再設定</option></select></label><label class="layout-052">送り方 <select class="surface-123"><option>すべて</option><option>LINE</option><option>メール</option></select></label><label class="layout-210">相手 <input type="search" placeholder="名前で探す" class="surface-124"></label></section>
+              <section aria-label="送信履歴の一覧" class="surface-125">
+                <div class="layout-211">
+                  <div class="text-007"><span>15件(うち送れなかった 2件)</span></div>
+                </div>
+                <table class="text-217">
+                  <thead>
+                    <tr class="text-023"><th class="cell-080">日時</th><th class="cell-081">連絡の種類</th><th class="cell-081">相手</th><th class="cell-081">送り方</th><th class="cell-081">結果</th><th class="cell-082">操作</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr class="utility-022"><td class="cell-083"><span>10/19(月) 10:05</span></td><td class="cell-022">
+                      <div class="text-024"><span>LINE連携のご案内</span></div>
+                      <div class="text-018"><span>単発の人の登録(最初の連絡)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>岡本 直人</span></div>
+                      <div class="text-018"><span>その他(単発)</span></div>
+                      </td><td class="cell-021"><span class="surface-126"><span>メール</span></span></td><td class="cell-084"><span class="surface-127"><span>送れなかった</span></span>
+                      <div class="text-218"><span>宛先のメールアドレスが見つかりませんでした。アカウント管理で連絡先を直してから再送してください。</span></div>
+                      </td><td class="cell-023"><a href="Accounts.dc.html" class="text-219"><span>連絡先を直す</span></a><button type="button" class="control-072">再送する</button></td></tr>
+                    <tr class="utility-022"><td class="cell-083"><span>10/19(月) 8:31</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>ハロウィンマルシェ(設営) 10/24(土)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>伊藤 愛</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-126"><span>メール</span></span></td><td class="cell-084"><span class="surface-127"><span>送れなかった</span></span>
+                      <div class="text-218"><span>相手のメールボックスがいっぱいで届きませんでした。時間をおいて再送するか、電話で伝えてください。</span></div>
+                      </td><td class="cell-023"><a href="StaffDetail.dc.html" class="text-219"><span>スタッフ詳細</span></a><button type="button" class="control-072">再送する</button></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/19(月) 8:31</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>ハロウィンマルシェ(設営) 10/24(土)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>中村 翔</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/19(月) 5:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>当日の出勤確認</span></div>
+                      <div class="text-018"><span>企業説明会(会場案内) 10/19(月)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>中村 翔</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/19(月) 5:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>当日の出勤確認</span></div>
+                      <div class="text-018"><span>企業説明会(会場案内) 10/19(月)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>小林 さくら</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/18(日) 18:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>アプリへのご招待</span></div>
+                      <div class="text-018"><span>アカウントの作成</span></div>
+                      </td><td class="cell-021">
+                      <div><span>西田 涼</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-126"><span>メール</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/18(日) 17:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>報告書のご提出</span></div>
+                      <div class="text-018"><span>秋祭り 10/18(日) の代表者</span></div>
+                      </td><td class="cell-021">
+                      <div><span>佐藤 花子</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/17(土) 12:10</span></td><td class="cell-022">
+                      <div class="text-024"><span>面談の日程のご案内</span></div>
+                      <div class="text-018"><span>個別指導の候補日時</span></div>
+                      </td><td class="cell-021">
+                      <div><span>鈴木 一郎</span></div>
+                      <div class="text-018"><span>準社員</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/17(土) 10:02</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>市民マラソン(給水所) 10/31(土)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>高橋 美咲</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-126"><span>メール</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/17(土) 9:00</span></td><td class="cell-022">
+                      <div class="text-024"><span>1週間前の出勤確認</span></div>
+                      <div class="text-018"><span>ハロウィンマルシェ(設営) 10/24(土)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>佐藤 花子</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/16(金) 15:20</span></td><td class="cell-022">
+                      <div class="text-024"><span>確定のお知らせ</span></div>
+                      <div class="text-018"><span>秋季健康フェア 10/21(水)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>田中 健</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/16(金) 14:00</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>ハロウィンマルシェ(設営) 10/24(土)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>鈴木 一郎</span></div>
+                      <div class="text-018"><span>準社員</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/15(木) 10:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>秋季健康フェア 10/21(水)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>佐藤 花子</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/15(木) 10:30</span></td><td class="cell-022">
+                      <div class="text-024"><span>お仕事のご依頼</span></div>
+                      <div class="text-018"><span>秋季健康フェア 10/21(水)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>高橋 美咲</span></div>
+                      <div class="text-018"><span>スタッフ</span></div>
+                      </td><td class="cell-021"><span class="surface-126"><span>メール</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                    <tr class="utility-004"><td class="cell-083"><span>10/14(水) 9:00</span></td><td class="cell-022">
+                      <div class="text-024"><span>1週間前の出勤確認</span></div>
+                      <div class="text-018"><span>秋季健康フェア 10/21(水)</span></div>
+                      </td><td class="cell-021">
+                      <div><span>鈴木 一郎</span></div>
+                      <div class="text-018"><span>準社員</span></div>
+                      </td><td class="cell-021"><span class="surface-128"><span>LINE</span></span></td><td class="cell-084"><span class="surface-129"><span>送信済み</span></span></td><td class="cell-023"></td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <div class="text-220">「送信済み」は、こちらから送れたことを表します(相手が読んだかどうかまでは分かりません)。「送れなかった」は、メールが戻ってきたときや、LINEで送れなかったときに付きます。送り方は本人の通知方法に従います(LINE連携済みでLINEを選んだ人はLINE、ほかはメール。その他(単発)の人も同じで、LINE連携していなければメール。最初のLINE連携のご案内はメール)。</div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    <script src="../js/common.js"></script>
+    <script src="../js/navigation.js"></script>
+  </body>
+</html>

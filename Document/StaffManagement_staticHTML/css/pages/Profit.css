@@ -1,0 +1,246 @@
+.layout-188 {
+  min-height: 1250px;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.text-191 {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgb(91, 98, 112);
+  line-height: 1.7;
+}
+
+.layout-189 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.layout-190 {
+  display: flex;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgb(255, 255, 255);
+}
+
+.control-061 {
+  height: 38px;
+  padding: 0px 16px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-062 {
+  height: 38px;
+  padding: 0px 16px;
+  border-width: medium medium medium 1px;
+  border-style: none none none solid;
+  border-color: currentcolor currentcolor currentcolor rgb(201, 206, 214);
+  border-image: none;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-063 {
+  height: 40px;
+  padding: 0px 16px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.surface-095 {
+  background: rgb(255, 255, 255);
+  border: 2px solid rgb(21, 92, 56);
+  border-radius: 12px;
+  padding: 17px 19px;
+}
+
+.text-192 {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgb(21, 92, 56);
+}
+
+.text-193 {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgb(63, 69, 80);
+}
+
+.text-194 {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgb(138, 49, 8);
+}
+
+.text-195 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 960px;
+}
+
+.cell-064 {
+  padding: 8px 6px 8px 0px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  text-align: left;
+}
+
+.cell-065 {
+  padding: 8px 6px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  text-align: left;
+}
+
+.cell-066 {
+  padding: 8px 0px 8px 6px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  text-align: right;
+}
+
+.cell-067 {
+  padding: 12px 6px 12px 0px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+}
+
+.cell-068 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+}
+
+.text-196 {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cell-069 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cell-070 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  color: rgb(63, 69, 80);
+}
+
+.cell-071 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+}
+
+.cell-072 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+  color: rgb(21, 92, 56);
+}
+
+.cell-073 {
+  padding: 12px 0px 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  color: rgb(21, 92, 56);
+}
+
+.cell-074 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+  color: rgb(180, 35, 24);
+}
+
+.cell-075 {
+  padding: 12px 0px 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  color: rgb(180, 35, 24);
+}
+
+.utility-018 {
+  background: rgb(255, 248, 243);
+}
+
+.utility-019 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cell-076 {
+  padding: 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+  color: rgb(91, 98, 112);
+}
+
+.cell-077 {
+  padding: 12px 0px 12px 6px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  text-align: right;
+  font-weight: 700;
+  color: rgb(91, 98, 112);
+}
+
+.space-018 {
+  padding: 12px 6px 12px 0px;
+}
+
+.space-019 {
+  padding: 12px 6px;
+  text-align: right;
+}
+
+.space-020 {
+  padding: 12px 6px;
+  text-align: right;
+  color: rgb(21, 92, 56);
+}
+
+.space-021 {
+  padding: 12px 0px 12px 6px;
+  text-align: right;
+  color: rgb(21, 92, 56);
+}

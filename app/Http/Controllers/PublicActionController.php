@@ -18,7 +18,18 @@ class PublicActionController extends Controller
 {
     public function show(string $token): View
     {
-        return view('public-actions.show', $this->viewData($this->findUsableToken($token)));
+        $viewData = $this->viewData($this->findUsableToken($token));
+        $template = match ($viewData['actionToken']->purpose) {
+            'assignment_response' => 'static-pages.Respond',
+            'report_submission' => 'static-pages.Report',
+            'interview_selection' => 'static-pages.InterviewSchedule',
+            'temporary_profile' => 'static-pages.PaymentDetails',
+            'first_password' => 'static-pages.SetPassword',
+            'line_connect' => 'static-pages.LineConnect',
+            default => 'public-actions.show',
+        };
+
+        return view($template, $viewData);
     }
 
     public function update(UpdatePublicActionRequest $request, string $token): RedirectResponse
@@ -55,6 +66,10 @@ class PublicActionController extends Controller
         $actionToken = SecureActionToken::query()
             ->where('token_hash', hash('sha256', $token))
             ->firstOrFail();
+
+        if ($actionToken->purpose === 'attendance_confirmation') {
+            return view('static-pages.AttendanceComplete', ['actionToken' => $actionToken]);
+        }
 
         return view('public-actions.complete', ['actionToken' => $actionToken]);
     }

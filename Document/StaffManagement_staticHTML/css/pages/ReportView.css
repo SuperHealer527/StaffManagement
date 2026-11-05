@@ -1,0 +1,136 @@
+.surface-098 {
+  flex: 2 1 380px;
+  min-width: 0px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 16px 0px;
+}
+
+.text-202 {
+  margin: 0px;
+  padding: 0px 20px 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.layout-194 {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-065 {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-width: 1px medium medium;
+  border-style: solid none none;
+  border-color: rgb(238, 240, 243) currentcolor currentcolor;
+  border-image: none;
+  background: rgb(255, 255, 255);
+  padding: 12px 20px;
+  font-family: inherit;
+  color: rgb(26, 29, 35);
+  cursor: pointer;
+}
+
+.surface-099 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgb(253, 241, 234);
+  color: rgb(138, 49, 8);
+}
+
+.text-203 {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.control-066 {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border-width: 1px medium medium;
+  border-style: solid none none;
+  border-color: rgb(238, 240, 243) currentcolor currentcolor;
+  border-image: none;
+  background: rgb(234, 240, 252);
+  padding: 12px 20px;
+  font-family: inherit;
+  color: rgb(26, 29, 35);
+  cursor: pointer;
+}
+
+.surface-100 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgb(230, 244, 236);
+  color: rgb(21, 92, 56);
+}
+
+.surface-101 {
+  flex: 3 1 520px;
+  min-width: 0px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.text-204 {
+  margin: 4px 0px 0px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.layout-195 {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.space-022 {
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.utility-020 {
+  margin-top: 8px;
+}
+
+.surface-102 {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  background: rgb(255, 244, 214);
+  color: rgb(107, 78, 0);
+}
+
+.control-067 {
+  height: 36px;
+  padding: 0px 12px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(31, 91, 216);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.text-205 {
+  margin: 10px 0px 0px;
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-line;
+}

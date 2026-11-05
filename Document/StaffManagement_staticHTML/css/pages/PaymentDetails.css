@@ -1,0 +1,15 @@
+.layout-166 {
+  width: 390px;
+  min-height: 1130px;
+  box-sizing: border-box;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-direction: column;
+}
+
+.text-172 {
+  font-size: 14px;
+  line-height: 1.7;
+}

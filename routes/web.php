@@ -8,6 +8,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublicActionController;
 use App\Http\Controllers\ScreenController;
+use App\Http\Controllers\UiActionController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
@@ -23,8 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/screens/{screen}', [ScreenController::class, 'show'])->name('screens.show');
     Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+    Route::patch('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::patch('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::patch('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
     Route::patch('/payments/{assignment}', [PaymentController::class, 'update'])->name('payments.update');
+    Route::post('/ui-actions/{action}', UiActionController::class)->name('ui-actions.store');
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 });

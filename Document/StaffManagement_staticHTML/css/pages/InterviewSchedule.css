@@ -1,0 +1,52 @@
+.text-150 {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgb(91, 98, 112);
+}
+
+.text-151 {
+  font-size: 15px;
+}
+
+.layout-153 {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.text-152 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.control-045 {
+  min-height: 56px;
+  padding: 0px 16px;
+  border-radius: 10px;
+  border: 2px solid rgb(31, 91, 216);
+  background: rgb(234, 240, 252);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.control-046 {
+  min-height: 56px;
+  padding: 0px 16px;
+  border-radius: 10px;
+  border: 2px solid rgb(201, 206, 214);
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}

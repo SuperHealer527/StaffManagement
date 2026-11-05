@@ -1,0 +1,68 @@
+.layout-093 {
+  width: 390px;
+  min-height: 880px;
+  box-sizing: border-box;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-094 {
+  flex: 1 1 auto;
+  padding: 32px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.layout-095 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.layout-096 {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgb(230, 244, 236);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-107 {
+  margin: 0px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.text-108 {
+  margin: 0px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgb(63, 69, 80);
+}
+
+.cell-034 {
+  padding-top: 12px;
+  border-top: 1px solid rgb(238, 240, 243);
+}
+
+.layout-097 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 10px;
+  background: rgb(255, 255, 255);
+  text-decoration: none;
+  color: rgb(26, 29, 35);
+  font-size: 15px;
+  font-weight: 500;
+}

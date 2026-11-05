@@ -14,4 +14,11 @@ class EventController extends Controller
 
         return back()->with('status', 'イベントを登録しました。');
     }
+
+    public function update(StoreEventRequest $request, Event $event): RedirectResponse
+    {
+        $event->update($request->validated());
+
+        return back()->with('status', 'イベントを保存しました。');
+    }
 }

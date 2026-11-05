@@ -1,0 +1,40 @@
+.surface-080 {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.surface-081 {
+  margin-left: 6px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(238, 240, 243);
+  color: rgb(91, 98, 112);
+}
+
+.text-158 {
+  margin-top: 2px;
+  font-size: 14px;
+  color: rgb(91, 98, 112);
+}
+
+.layout-159 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid rgb(232, 180, 168);
+  border-radius: 10px;
+  background: rgb(251, 227, 223);
+  color: rgb(138, 31, 17);
+  text-decoration: none;
+  font-size: 14px;
+}

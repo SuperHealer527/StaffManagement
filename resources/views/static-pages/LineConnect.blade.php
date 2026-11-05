@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>単発の人のLINE連携</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--lineconnect" data-static-screen="LineConnect">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-073">
+          <header class="cell-025">
+            <div class="text-002">ハイクラス</div>
+            <h1 class="text-079">お仕事の連絡をLINEで受け取る</h1>
+          </header>
+          <main class="layout-074">
+            <div class="text-153">鈴木 次郎 さん、ハイクラスです。お仕事のご依頼・確定・当日の確認などは、公式LINEと連携するとLINEでお届けします。連携しない場合は、これまでどおりメールでお届けします。</div>
+            <ol class="layout-154">
+              <li class="layout-155"><span class="layout-156"><span>1</span></span><span class="text-017"><span>公式LINEを友だち追加して連携</span></span></li>
+              <li class="layout-155"><span class="layout-157"><span>2</span></span><span class="text-154"><span>LINEで届く依頼に回答</span></span></li>
+              <li class="layout-155"><span class="layout-157"><span>3</span></span><span class="text-154"><span>確定したら、振込先と住所を入力</span></span></li>
+            </ol>
+            <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : '#' }}">@csrf<button type="submit" class="control-047">LINEで友だち追加して連携する</button></form>
+            <div class="text-080">このページは社員が登録したメールアドレスあてに送ったものです。ログインは不要です。リンクは本人専用で、連携が済むと使えなくなります。LINEをお使いでない場合は、このまま閉じてください(ご連絡はメールで届きます)。リンクの有効期限は送信から24時間です。</div>
+          </main>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

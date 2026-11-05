@@ -27,8 +27,9 @@ class PublicActionTest extends TestCase
 
         $this->get(route('public-actions.show', $plainToken))
             ->assertOk()
-            ->assertSee('依頼への回答')
-            ->assertSee($assignment->event->name);
+            ->assertSee('お仕事の依頼')
+            ->assertSee('秋季健康フェア')
+            ->assertSee('このお仕事を引き受けられますか?');
 
         $this->post(route('public-actions.update', $plainToken), ['response' => 'accepted'])
             ->assertRedirect(route('public-actions.complete', $plainToken));

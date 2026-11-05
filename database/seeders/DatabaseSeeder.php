@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Interview;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,123 +16,200 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = now();
+        $now = Carbon::parse('2026-10-23 14:05:00');
         $users = [
-            ['name' => '山田 太郎', 'email' => 'admin@staffmanagement.test', 'role' => 'employee', 'nearest_station' => '新宿駅', 'phone' => '090-1111-1111', 'base_fee' => 12000],
-            ['name' => '鈴木 一郎', 'email' => 'semi@staffmanagement.test', 'role' => 'semi_employee', 'nearest_station' => '池袋駅', 'phone' => '080-2222-2222', 'base_fee' => 10000],
-            ['name' => '佐藤 花子', 'email' => 'staff@staffmanagement.test', 'role' => 'staff', 'nearest_station' => '池袋駅', 'phone' => '090-3333-3333', 'base_fee' => 9000, 'is_student' => true, 'line_user_id' => 'demo-line-staff', 'line_linked_at' => $now],
-            ['name' => '田中 健', 'email' => 'tanaka@staffmanagement.test', 'role' => 'staff', 'nearest_station' => '渋谷駅', 'phone' => '090-4444-4444', 'base_fee' => 9500, 'has_car' => true, 'car_number' => '品川 な 2040'],
-            ['name' => '中村 翔', 'email' => 'nakamura@staffmanagement.test', 'role' => 'trainer', 'nearest_station' => '横浜駅', 'phone' => '090-5555-5555', 'base_fee' => 11000],
-            ['name' => '鈴木 次郎', 'email' => 'spot@staffmanagement.test', 'role' => 'temporary', 'nearest_station' => '上野駅', 'phone' => '080-6666-6666', 'base_fee' => 9000],
+            ['山田 太郎', 'admin@staffmanagement.test', 'employee', 'active'],
+            ['田村 優子', 'tamura@highclass-inc.com', 'employee', 'active'],
+            ['佐々木 恵', 'sasaki@highclass-inc.com', 'employee', 'active'],
+            ['鈴木 一郎', 'semi@staffmanagement.test', 'semi_employee', 'active'],
+            ['佐藤 花子', 'staff@staffmanagement.test', 'staff', 'active'],
+            ['田中 健', 'tanaka@staffmanagement.test', 'staff', 'active'],
+            ['中村 翔', 'nakamura@staffmanagement.test', 'trainer', 'active'],
+            ['鈴木 次郎', 'spot@staffmanagement.test', 'temporary', 'no_login'],
+            ['伊藤 愛', 'ito@example.com', 'staff', 'active'],
+            ['高橋 美咲', 'takahashi@example.com', 'staff', 'active'],
+            ['小林 さくら', 'kobayashi@example.com', 'staff', 'active'],
+            ['加藤 陽太', 'kato@example.com', 'staff', 'active'],
+            ['山本 大輔', 'yamamoto@example.com', 'staff', 'active'],
+            ['西田 涼', 'nishida@example.com', 'staff', 'invited'],
+            ['前田 由紀', 'maeda@example.com', 'staff', 'active'],
+            ['森 健二', 'mori@example.com', 'staff', 'suspended'],
+            ['小川 拓也', 'ogawa@example.com', 'temporary', 'no_login'],
+            ['岡本 直人', 'okamoto@example.com', 'temporary', 'no_login'],
+            ['石井 美保', 'ishii@example.com', 'staff', 'suspended'],
+            ['青木 一郎', 'aoki@example.com', 'staff', 'suspended'],
         ];
 
-        foreach ($users as $attributes) {
-            User::query()->create(array_merge([
+        foreach ($users as $index => [$name, $email, $role, $status]) {
+            $usesLine = in_array($name, ['佐藤 花子', '鈴木 一郎', '田中 健'], true);
+            User::query()->updateOrCreate(['email' => $email], [
+                'name' => $name,
                 'password' => Hash::make('password123'),
-                'account_status' => $attributes['role'] === 'temporary' ? 'no_login' : 'active',
-                'notification_method' => isset($attributes['line_user_id']) ? 'line' : 'email',
+                'role' => $role,
+                'account_status' => $status,
+                'nearest_station' => ['新宿駅', '池袋駅', '渋谷駅', '横浜駅'][$index % 4],
+                'phone' => sprintf('090-1000-%04d', $index + 1),
+                'base_fee' => $role === 'employee' ? 12000 : 9000,
+                'notification_method' => $usesLine ? 'line' : 'email',
+                'line_user_id' => $usesLine ? 'demo-line-'.md5($email) : null,
+                'line_linked_at' => $usesLine ? $now : null,
                 'email_verified_at' => $now,
-            ], $attributes));
-        }
-
-        $admin = User::query()->where('role', 'employee')->firstOrFail();
-        $clients = [
-            ['name' => 'サンプル商事 株式会社', 'type' => 'corporation', 'department' => '地域連携部', 'phone' => '03-1234-5678', 'address' => '東京都新宿区西新宿1-1-1', 'proposal_status' => 'proposing', 'next_action_date' => now()->addDays(9), 'proposal_notes' => '来年度の健康づくり事業を提案中。', 'sales_owner_id' => $admin->id],
-            ['name' => 'サンプル町会', 'type' => 'organization', 'phone' => '03-2345-6789', 'proposal_status' => 'won', 'sales_owner_id' => $admin->id],
-            ['name' => 'サンプル市', 'type' => 'government', 'department' => '健康推進課', 'phone' => '03-3456-7890', 'proposal_status' => 'approaching', 'sales_owner_id' => $admin->id],
-            ['name' => 'サンプル商店会', 'type' => 'organization', 'phone' => '03-4567-8901', 'proposal_status' => 'uncontacted', 'sales_owner_id' => $admin->id],
-        ];
-
-        foreach ($clients as $attributes) {
-            Client::query()->create($attributes);
-        }
-
-        $primaryClient = Client::query()->firstOrFail();
-        DB::table('client_contacts')->insert(['client_id' => $primaryClient->id, 'position' => '課長', 'name' => '森 一樹', 'mobile' => '090-7777-7777', 'email' => 'mori@example.test', 'created_at' => $now, 'updated_at' => $now]);
-
-        foreach (['秋季健康フェア', 'ハロウィンマルシェ', '市民マラソン', '企業説明会', '文化祭'] as $index => $eventName) {
-            $event = Event::query()->create([
-                'client_id' => Client::query()->skip($index % 4)->firstOrFail()->id,
-                'business_name' => $index === 0 ? '地域イベント運営' : 'イベント運営スタッフ派遣',
-                'name' => $eventName, 'details' => '来場者の受付・検温・会場案内を担当します。', 'work_content' => '受付、誘導、会場運営',
-                'event_date' => now()->addDays(2 + ($index * 4))->toDateString(),
-                'meeting_time' => '08:30', 'start_time' => '09:00', 'end_time' => '17:00', 'dismissal_time' => '17:30',
-                'required_staff' => 5 + ($index % 3), 'meeting_place' => 'サンプル公民館 1階ロビー', 'venue' => 'サンプル公民館 2階 大ホール',
-                'items' => ['昼食', '室内履き', 'ハイクラスTシャツ', '筆記用具'], 'emergency_contacts' => ['ハイクラスLINE', '山田 太郎'],
-                'notes' => '駐車場はありません。公共交通機関でお越しください。', 'status' => $index === 0 ? 'recruiting' : 'confirmed',
-                'report_required' => true, 'created_by' => $admin->id,
+                'invited_at' => $status === 'invited' ? $now->copy()->subDay() : null,
+                'suspended_at' => $status === 'suspended' ? $now->copy()->subMonths(3) : null,
             ]);
-
-            foreach (User::query()->whereIn('role', ['staff', 'semi_employee', 'trainer', 'temporary'])->limit(3)->get() as $staffIndex => $staff) {
-                Assignment::query()->create([
-                    'event_id' => $event->id, 'user_id' => $staff->id, 'status' => $staffIndex < 2 ? 'confirmed' : 'requested',
-                    'special_notes' => $staffIndex === 0 ? '受付の担当です。' : null, 'fee' => $staff->base_fee, 'transportation' => 480,
-                    'payment_status' => 'waiting', 'is_day_leader' => $staffIndex === 0, 'is_report_representative' => $staffIndex === 0, 'requested_at' => $now,
-                ]);
-            }
         }
 
-        DB::table('qualifications')->insert([
-            ['user_id' => 3, 'name' => '普通自動車免許', 'expires_at' => now()->addYears(3), 'created_at' => $now, 'updated_at' => $now],
-            ['user_id' => 3, 'name' => '防災士', 'expires_at' => now()->addDays(25), 'created_at' => $now, 'updated_at' => $now],
-        ]);
-        DB::table('invoice_items')->insert(['event_id' => 1, 'type' => 'work_fee', 'memo' => '運営スタッフ費', 'amount' => 90000, 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('expenses')->insert(['event_id' => 1, 'type' => 'supplies', 'memo' => '消耗品', 'amount' => 4000, 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('notification_logs')->insert(['user_id' => 3, 'type' => 'assignment_request', 'channel' => 'line', 'destination' => 'demo-line-staff', 'status' => 'sent', 'subject' => 'お仕事のご依頼', 'body' => '秋季健康フェアのお仕事のご依頼です。', 'sent_at' => $now, 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('notification_logs')->insert(['user_id' => 4, 'type' => 'attendance_confirmation', 'channel' => 'email', 'destination' => 'tanaka@staffmanagement.test', 'status' => 'failed', 'subject' => '本日の出勤確認', 'body' => '本日の集合時間と場所をご確認ください。', 'error_message' => 'メールアドレスへの配信に失敗しました。', 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('phone_logs')->insert(['called_at' => $now, 'caller_name' => '森 様', 'company' => 'サンプル商事', 'phone' => '03-1234-5678', 'purpose' => 'お仕事の依頼・相談', 'content' => '次回イベントについて折り返し希望。', 'recipient_id' => $admin->id, 'received_by' => 2, 'status' => 'callback_required', 'created_at' => $now, 'updated_at' => $now]);
-        DB::table('meetings')->insert([
-            ['client_id' => 1, 'recorded_by' => $admin->id, 'type' => 'meeting', 'meeting_date' => now()->subDays(3), 'method' => '訪問', 'participants' => '森 一樹 課長', 'content' => '来年度の健康づくり事業について、実施時期と概算費用を確認しました。', 'created_at' => $now, 'updated_at' => $now],
-            ['client_id' => 3, 'recorded_by' => $admin->id, 'type' => 'email', 'meeting_date' => now()->subDays(7), 'method' => 'メール', 'participants' => '健康推進課 ご担当者', 'content' => '提案書と見積書を送付し、次回のオンライン打合せ候補日を案内しました。', 'created_at' => $now, 'updated_at' => $now],
-        ]);
-        DB::table('interviews')->insert([
-            'subject_user_id' => 3,
-            'manager_id' => $admin->id,
-            'type' => '定期面談',
-            'method' => '対面',
-            'location' => '本社会議室',
-            'candidate_times' => json_encode([now()->addDays(5)->setTime(10, 0)->toDateTimeString(), now()->addDays(6)->setTime(14, 0)->toDateTimeString()]),
-            'scheduled_at' => now()->addDays(5)->setTime(10, 0),
-            'content' => '最近の勤務状況と今後担当したい仕事について確認しました。',
-            'next_tasks' => '防災関連イベントのリーダー候補として研修を案内する。',
-            'next_timing' => '3か月後',
-            'created_at' => $now,
-            'updated_at' => $now,
-        ]);
-        DB::table('report_submissions')->insert([
-            'event_id' => 1,
-            'user_id' => 3,
-            'answers' => json_encode(['completion' => '問題なく終了した', 'attendance' => 120, 'notes' => '予定どおり終了しました。']),
-            'submitted_at' => $now,
-            'created_at' => $now,
-            'updated_at' => $now,
-        ]);
-        DB::table('availabilities')->insert([
-            ['user_id' => 3, 'weekday' => 6, 'time_slot' => 'all_day', 'availability' => 'available', 'created_at' => $now, 'updated_at' => $now],
-            ['user_id' => 3, 'weekday' => 0, 'time_slot' => 'all_day', 'availability' => 'available', 'created_at' => $now, 'updated_at' => $now],
-        ]);
-
-        $demoAssignmentId = Assignment::query()->where('user_id', 3)->firstOrFail()->id;
-        $demoTokens = [
-            ['token' => 'demo-response', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'assignment_response'],
-            ['token' => 'demo-attendance', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'attendance_confirmation'],
-            ['token' => 'demo-report', 'user_id' => 3, 'type' => Assignment::class, 'id' => $demoAssignmentId, 'purpose' => 'report_submission'],
-            ['token' => 'demo-interview', 'user_id' => 3, 'type' => Interview::class, 'id' => 1, 'purpose' => 'interview_selection'],
-            ['token' => 'demo-profile', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'temporary_profile'],
-            ['token' => 'demo-password', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'first_password'],
-            ['token' => 'demo-line', 'user_id' => 6, 'type' => User::class, 'id' => 6, 'purpose' => 'line_connect'],
+        $admin = User::query()->where('email', 'admin@staffmanagement.test')->firstOrFail();
+        $clients = [
+            ['サンプル商事', 'corporation', '地域連携部', 'proposing'],
+            ['サンプル観光協会', 'organization', null, 'won'],
+            ['サンプル町会', 'organization', null, 'won'],
+            ['サンプル市', 'government', '健康推進課', 'approaching'],
+            ['サンプル大学', 'corporation', '入試課', 'proposing'],
+            ['サンプル商店会', 'organization', null, 'uncontacted'],
         ];
 
-        foreach ($demoTokens as $demoToken) {
-            DB::table('secure_action_tokens')->insert([
-                'user_id' => $demoToken['user_id'],
-                'actionable_type' => $demoToken['type'],
-                'actionable_id' => $demoToken['id'],
-                'purpose' => $demoToken['purpose'],
-                'token_hash' => hash('sha256', $demoToken['token']),
-                'expires_at' => now()->addDays(30),
-                'created_at' => $now,
-                'updated_at' => $now,
+        foreach ($clients as $index => [$name, $type, $department, $status]) {
+            Client::query()->updateOrCreate(['name' => $name], [
+                'type' => $type,
+                'department' => $department,
+                'phone' => sprintf('03-%04d-%04d', 1234 + $index, 5678 + $index),
+                'address' => '東京都新宿区西新宿1-1-1',
+                'proposal_status' => $status,
+                'next_action_date' => '2026-10-28',
+                'proposal_notes' => '来年度の事業について提案・調整中です。',
+                'sales_owner_id' => $admin->id,
+            ]);
+        }
+
+        $primaryClient = Client::query()->where('name', 'サンプル商事')->firstOrFail();
+        DB::table('client_contacts')->updateOrInsert(
+            ['client_id' => $primaryClient->id, 'email' => 'mori@example.test'],
+            ['position' => '課長', 'name' => '森 一樹', 'mobile' => '090-7777-7777', 'is_retired' => false, 'created_at' => $now, 'updated_at' => $now],
+        );
+
+        $events = [
+            ['秋季健康フェア', 'サンプル商事', '地域イベント運営', '2026-10-21', 6, 'confirmed'],
+            ['ハロウィンマルシェ', 'サンプル観光協会', '催事場 販売補助', '2026-10-24', 8, 'recruiting'],
+            ['市民マラソン', 'サンプル市', '市民大会 運営補助', '2026-10-25', 12, 'recruiting'],
+            ['企業説明会', 'サンプル大学', '企業説明会 会場案内', '2026-10-28', 5, 'confirmed'],
+            ['体力測定会', 'サンプル市', '体力測定会 年', '2026-11-03', 10, 'recruiting'],
+            ['健診会場 受付', 'サンプル商事', '健診会場 受付', '2026-11-07', 4, 'confirmed'],
+        ];
+
+        foreach ($events as [$name, $clientName, $businessName, $date, $requiredStaff, $status]) {
+            Event::query()->updateOrCreate(['name' => $name], [
+                'client_id' => Client::query()->where('name', $clientName)->value('id'),
+                'business_name' => $businessName,
+                'details' => '来場者の受付・検温・会場案内を担当します。',
+                'work_content' => '受付、誘導、会場運営',
+                'event_date' => $date,
+                'meeting_time' => '08:30',
+                'start_time' => '09:00',
+                'end_time' => '17:00',
+                'dismissal_time' => '17:30',
+                'required_staff' => $requiredStaff,
+                'meeting_place' => 'サンプル公民館 1階ロビー',
+                'venue' => 'サンプル公民館 2階 大ホール',
+                'items' => ['昼食', '室内履き', 'ハイクラスTシャツ', '筆記用具'],
+                'emergency_contacts' => ['ハイクラスLINE', '山田 太郎'],
+                'notes' => '公共交通機関でお越しください。',
+                'status' => $status,
+                'report_required' => true,
+                'created_by' => $admin->id,
+            ]);
+        }
+
+        $event = Event::query()->where('name', '秋季健康フェア')->firstOrFail();
+        $assignments = [
+            ['鈴木 一郎', 'confirmed', 12000, 840, true],
+            ['田中 健', 'confirmed', 9500, 620, false],
+            ['伊藤 愛', 'accepted', 9000, 700, false],
+            ['高橋 美咲', 'unknown', 8500, 560, false],
+            ['佐藤 花子', 'requested', 9000, 480, false],
+            ['中村 翔', 'declined', 11000, 900, false],
+        ];
+
+        foreach ($assignments as [$name, $status, $fee, $transportation, $isLeader]) {
+            Assignment::query()->updateOrCreate(
+                ['event_id' => $event->id, 'user_id' => User::query()->where('name', $name)->value('id')],
+                [
+                    'status' => $status,
+                    'special_notes' => $isLeader ? 'リーダーをお願いします。集合は8:00(30分早め)です。' : null,
+                    'fee' => $fee,
+                    'transportation' => $transportation,
+                    'payment_status' => 'waiting',
+                    'is_day_leader' => $isLeader,
+                    'is_report_representative' => $isLeader,
+                    'requested_at' => $now->copy()->subDays(4),
+                ],
+            );
+        }
+
+        $staff = User::query()->where('name', '佐藤 花子')->firstOrFail();
+        $this->seedRelatedData($now, $admin, $staff, $event);
+        $this->seedActionTokens($now, $staff, $event);
+    }
+
+    private function seedRelatedData(Carbon $now, User $admin, User $staff, Event $event): void
+    {
+        DB::table('qualifications')->updateOrInsert(['user_id' => $staff->id, 'name' => '普通自動車免許'], ['expires_at' => '2029-10-23', 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('qualifications')->updateOrInsert(['user_id' => $staff->id, 'name' => '防災士'], ['expires_at' => '2026-11-17', 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('invoice_items')->updateOrInsert(['event_id' => $event->id, 'type' => 'work_fee'], ['memo' => '運営スタッフ費', 'amount' => 90000, 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('expenses')->updateOrInsert(['event_id' => $event->id, 'type' => 'supplies'], ['memo' => '消耗品', 'amount' => 4000, 'created_at' => $now, 'updated_at' => $now]);
+
+        $phoneLogs = [
+            ['2026-10-23 11:20:00', '森 様', 'サンプル観光協会', 'お仕事の依頼・相談', '見積の件で折り返しがほしい。午後は16時まで在席', 'callback_required'],
+            ['2026-10-23 09:45:00', '中村 翔', 'スタッフ', 'スタッフからの連絡', '10/24の集合場所の確認。地図をLINEで送って解決', 'completed'],
+            ['2026-10-22 16:10:00', '西田 様', 'サンプル大学', '問い合わせ', 'オープンキャンパスの人数を2人増やせるか', 'callback_required'],
+            ['2026-10-22 13:30:00', '(名乗らず)', '求人広告の会社', '営業・売り込み', '求人広告の案内。不要と回答', 'completed'],
+            ['2026-10-21 10:05:00', '大野 様', 'サンプル町会', 'お仕事の依頼・相談', '来年の秋祭りの日程が決まったとの連絡', 'message_only'],
+        ];
+        foreach ($phoneLogs as [$calledAt, $callerName, $company, $purpose, $content, $status]) {
+            DB::table('phone_logs')->updateOrInsert(['called_at' => $calledAt, 'caller_name' => $callerName], [
+                'company' => $company, 'phone' => '0XX-XXX-XXXX', 'purpose' => $purpose, 'content' => $content,
+                'recipient_id' => $admin->id, 'received_by' => $admin->id, 'status' => $status, 'created_at' => $now, 'updated_at' => $now,
+            ]);
+        }
+
+        foreach (['サンプル商事', 'サンプル観光協会', 'サンプル市'] as $index => $clientName) {
+            DB::table('meetings')->updateOrInsert(
+                ['client_id' => Client::query()->where('name', $clientName)->value('id'), 'meeting_date' => '2026-10-'.(16 + $index)],
+                ['recorded_by' => $admin->id, 'type' => $index === 0 ? 'meeting' : 'sales', 'method' => $index === 0 ? '訪問' : '電話', 'participants' => '森 様 ほか', 'content' => '来年度の事業について実施時期と概算費用を確認しました。', 'created_at' => $now, 'updated_at' => $now],
+            );
+        }
+
+        Interview::query()->updateOrCreate(['subject_user_id' => $staff->id, 'manager_id' => $admin->id, 'type' => '定期面談'], [
+            'method' => '対面', 'location' => 'ハイクラス 事務所',
+            'candidate_times' => ['2026-11-28 18:00:00', '2026-11-29 18:00:00', '2026-12-01 10:00:00'],
+            'content' => '最近の勤務状況と今後担当したい仕事について確認しました。', 'next_tasks' => '研修を案内する。', 'next_timing' => '3か月後',
+        ]);
+        DB::table('report_submissions')->updateOrInsert(['event_id' => $event->id, 'user_id' => $staff->id], ['answers' => json_encode(['completion' => 'completed', 'notes' => '予定どおり終了しました。'], JSON_UNESCAPED_UNICODE), 'submitted_at' => $now, 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('notification_logs')->updateOrInsert(['user_id' => $staff->id, 'type' => 'assignment_request'], ['channel' => 'line', 'destination' => $staff->line_user_id, 'status' => 'sent', 'subject' => 'お仕事のご依頼', 'body' => '秋季健康フェアのお仕事のご依頼です。', 'sent_at' => $now, 'created_at' => $now, 'updated_at' => $now]);
+        $tanaka = User::query()->where('name', '田中 健')->firstOrFail();
+        DB::table('notification_logs')->updateOrInsert(['user_id' => $tanaka->id, 'type' => 'attendance_confirmation'], ['channel' => 'email', 'destination' => $tanaka->email, 'status' => 'failed', 'subject' => '本日の出勤確認', 'body' => '本日の集合時間と場所をご確認ください。', 'error_message' => 'メールアドレスへの配信に失敗しました。', 'sent_at' => null, 'created_at' => $now, 'updated_at' => $now]);
+        DB::table('availabilities')->updateOrInsert(['user_id' => $staff->id, 'weekday' => 6, 'time_slot' => '8時前'], ['availability' => 'available', 'created_at' => $now, 'updated_at' => $now]);
+    }
+
+    private function seedActionTokens(Carbon $now, User $staff, Event $event): void
+    {
+        $assignment = Assignment::query()->where('event_id', $event->id)->where('user_id', $staff->id)->firstOrFail();
+        $interview = Interview::query()->where('subject_user_id', $staff->id)->firstOrFail();
+        $temporary = User::query()->where('email', 'spot@staffmanagement.test')->firstOrFail();
+        $tokens = [
+            ['demo-response', $staff->id, Assignment::class, $assignment->id, 'assignment_response'],
+            ['demo-attendance', $staff->id, Assignment::class, $assignment->id, 'attendance_confirmation'],
+            ['demo-report', $staff->id, Assignment::class, $assignment->id, 'report_submission'],
+            ['demo-interview', $staff->id, Interview::class, $interview->id, 'interview_selection'],
+            ['demo-profile', $temporary->id, User::class, $temporary->id, 'temporary_profile'],
+            ['demo-password', $temporary->id, User::class, $temporary->id, 'first_password'],
+            ['demo-line', $temporary->id, User::class, $temporary->id, 'line_connect'],
+        ];
+
+        foreach ($tokens as [$token, $userId, $type, $id, $purpose]) {
+            DB::table('secure_action_tokens')->updateOrInsert(['token_hash' => hash('sha256', $token)], [
+                'user_id' => $userId, 'actionable_type' => $type, 'actionable_id' => $id, 'purpose' => $purpose,
+                'expires_at' => '2027-12-31 23:59:59', 'used_at' => null, 'created_at' => $now, 'updated_at' => $now,
             ]);
         }
     }

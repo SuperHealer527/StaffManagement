@@ -1,0 +1,152 @@
+.layout-217 {
+  width: 390px;
+  min-height: 1380px;
+  box-sizing: border-box;
+  background: rgb(245, 246, 248);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(26, 29, 35);
+  display: flex;
+  flex-direction: column;
+}
+
+.surface-131 {
+  background: rgb(255, 255, 255);
+  border: 2px solid rgb(31, 91, 216);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.surface-132 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.text-224 {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.text-225 {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgb(63, 69, 80);
+}
+
+.layout-218 {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0px, 1fr));
+  gap: 8px;
+}
+
+.surface-133 {
+  height: 44px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.surface-134 {
+  height: 44px;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  background: rgb(255, 255, 255);
+  color: rgb(26, 29, 35);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.surface-135 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(253, 241, 234);
+  color: rgb(138, 49, 8);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.surface-136 {
+  margin-top: 14px;
+  width: 100%;
+  height: 44px;
+  border-width: medium;
+  border-style: none;
+  border-color: currentcolor;
+  border-image: none;
+  border-radius: 8px;
+  background: rgb(31, 91, 216);
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cell-090 {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(238, 240, 243);
+}
+
+.surface-137 {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.layout-219 {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border: 1px solid rgb(31, 91, 216);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.layout-220 {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0px;
+  border-top: 1px solid rgb(238, 240, 243);
+}
+
+.text-226 {
+  flex: 0 0 64px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.layout-221 {
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-227 {
+  margin-top: 2px;
+  font-size: 24px;
+  font-weight: 700;
+}

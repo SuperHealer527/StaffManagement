@@ -1,0 +1,137 @@
+.layout-205 {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.surface-112 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(238, 240, 243);
+  color: rgb(63, 69, 80);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.text-214 {
+  font-size: 16px;
+}
+
+.surface-113 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(234, 240, 252);
+  color: rgb(22, 68, 159);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.surface-114 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(255, 244, 214);
+  color: rgb(122, 82, 0);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.surface-115 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(230, 244, 236);
+  color: rgb(21, 92, 56);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.surface-116 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(238, 240, 243);
+  color: rgb(91, 98, 112);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.surface-117 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0px 14px;
+  border-radius: 999px;
+  background: rgb(243, 238, 251);
+  color: rgb(91, 58, 140);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.surface-118 {
+  flex: 2 1 560px;
+  min-width: 0px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.cell-078 {
+  padding: 12px 8px 12px 0px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+  font-weight: 700;
+  color: rgb(138, 49, 8);
+}
+
+.cell-079 {
+  padding: 12px 8px 12px 0px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+  font-weight: 700;
+  color: rgb(26, 29, 35);
+}
+
+.surface-119 {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(243, 238, 251);
+  color: rgb(91, 58, 140);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.surface-120 {
+  flex: 1 1 300px;
+  min-width: 0px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(227, 230, 235);
+  border-radius: 12px;
+  padding: 20px 24px;
+}

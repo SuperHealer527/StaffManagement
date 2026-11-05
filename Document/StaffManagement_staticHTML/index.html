@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>派遣管理アプリ 画面一覧</title>
+  <link rel="stylesheet" href="css/catalog.css">
+</head>
+<body>
+  <header class="catalog-header">
+    <div>
+      <p class="catalog-kicker">StaffManagement</p>
+      <h1>派遣管理アプリ 画面一覧</h1>
+      <p id="screen-count" class="catalog-summary">画面を読み込んでいます…</p>
+    </div>
+    <a class="catalog-start" href="pages/Login.dc.html">ログイン画面を開く</a>
+  </header>
+  <main>
+    <nav class="catalog-filters" aria-label="画面の絞り込み">
+      <button class="is-active" type="button" data-filter="all">すべて</button>
+      <button type="button" data-filter="desktop">PC</button>
+      <button type="button" data-filter="mobile">スマホ</button>
+    </nav>
+    <div id="screen-grid" class="screen-grid" aria-live="polite"></div>
+  </main>
+  <script src="js/catalog.js"></script>
+</body>
+</html>

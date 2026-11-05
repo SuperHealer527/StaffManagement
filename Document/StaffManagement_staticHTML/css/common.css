@@ -1,0 +1,22 @@
+:root {
+  color: #1a1d23;
+  background: #f5f6f8;
+  font-family: "Noto Sans JP", "Yu Gothic UI", "Yu Gothic", sans-serif;
+  font-synthesis: none;
+}
+
+html { min-width: 320px; }
+body { margin: 0; }
+a { color: #1f5bd8; }
+a:hover { color: #16449f; }
+button, input, select, textarea { font: inherit; }
+button, [role="button"] { touch-action: manipulation; }
+[hidden] { display: none !important; }
+
+button.is-selected {
+  border-color: #1f5bd8 !important;
+  color: #16449f !important;
+  background: #eaf0fc !important;
+}
+
+button:disabled { cursor: default; opacity: .72; }

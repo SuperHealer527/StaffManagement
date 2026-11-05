@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>報告書の提出</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--report" data-static-screen="Report">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-191">
+          <header class="layout-030">
+            <div class="text-035">ハイクラス業務管理システム</div>
+            <div class="text-002">鈴木 一郎 さん</div>
+          </header>
+          <main class="layout-057">
+            <div><span class="surface-096">あなたが代表者です</span>
+              <h1 class="text-197">報告書の提出</h1>
+              <div class="text-062">秋季健康フェア</div>
+              <div class="text-037">10月21日(水) ・ サンプル商事 / 地域イベント運営</div>
+            </div>
+            <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : '#' }}" class="layout-053">
+              @csrf
+              <fieldset class="surface-097"><legend class="text-198"><span class="text-199">設問1</span>本日の事業は、無事終了しましたか?</legend>
+                <div class="layout-192"><label class="control-064"><input type="radio" name="completion" value="completed" checked="" class="space-009">問題なく終了した</label><label class="control-064"><input type="radio" name="completion" value="issue" class="space-009">問題なく終了したが、報告事項あり</label><label class="control-064"><input type="radio" name="completion" value="incident" class="space-009">トラブル等あり</label></div>
+              </fieldset>
+              <div class="layout-193"><label for="q2" class="text-200"><span class="text-199">設問2</span>依頼先への報告用の文章は下記に記載してください。</label><textarea id="q2" name="notes" rows="5" class="text-052">本日は受付・検温・会場案内を予定どおり実施しました。来場者の誘導も混乱なく行えました。</textarea></div>
+              <div class="layout-193"><label for="q3" class="text-200"><span class="text-199">設問3</span>ハイクラスへの報告用文章を作成してください。</label><textarea id="q3" name="internal_notes" rows="5" placeholder="社内向けの報告を書いてください" class="text-052"></textarea></div>
+              <button type="submit" class="control-004">報告書を提出する</button>
+              <div class="text-201">書きかけの内容は自動で保存されます</div>
+            </form>
+          </main>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

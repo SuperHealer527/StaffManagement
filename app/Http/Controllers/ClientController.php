@@ -14,4 +14,11 @@ class ClientController extends Controller
 
         return back()->with('status', '依頼先を登録しました。');
     }
+
+    public function update(StoreClientRequest $request, Client $client): RedirectResponse
+    {
+        $client->update($request->validated());
+
+        return back()->with('status', '依頼先を保存しました。');
+    }
 }

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>支払管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--paymanage" data-static-screen="PayManage">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-061">
+          <div class="layout-002">
+            <nav aria-label="エリア切り替え" class="layout-003">
+              <div aria-hidden="true" class="layout-004">HC</div>
+              <a href="Main.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg><span class="text-001">事業</span></a><a href="SalesHome.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="14 7 21 7 21 14"></polyline></svg><span class="text-001">営業</span></a><a href="Coaching.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3a2 2 0 0 1-2-2z"></path><path d="M19 9a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2v3l-4-3h-3"></path></svg><span class="text-001">面談</span></a><a href="PhoneLog.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><rect x="9" y="2" width="6" height="4" rx="1"></rect><line x1="9" y1="11" x2="15" y2="11"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg><span class="text-001">総務</span></a><a href="#" aria-current="page" class="layout-005"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l5 7 5-7"></path><line x1="12" y1="11" x2="12" y2="20"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg><span class="text-001">会計</span></a>
+              <div class="layout-007"><a href="Accounts.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2" fill="#16213A"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2" fill="#16213A"></circle></svg><span class="text-001">設定</span></a></div>
+            </nav>
+            <nav aria-label="メインメニュー" class="layout-008">
+              <div class="space-001">
+                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-003">会計</div>
+              </div>
+              <a href="#" aria-current="page" class="layout-009"><span>支払管理</span></a><a href="Profit.dc.html" class="layout-010"><span>収支一覧</span></a><a href="#" class="layout-010"><span>請求</span><span class="surface-023">今後</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+          </div>
+          <main class="space-005">
+            <div class="layout-040">
+              <div>
+                <h1 class="text-044">支払管理</h1>
+                <div class="text-060">一覧に出るのは「確定」と「実施済み」のアサインだけです(実施前は未確定、実施済みになると自動で支払待ち)。謝金・交通費は依頼のときにアサイン画面で入れた金額が入り、ここでも直せます。立替・源泉税はこの一覧で入力します。</div>
+              </div>
+              <section aria-label="支払状況" class="layout-039">
+                <div class="surface-024">
+                  <div class="text-007">未確定</div>
+                  <div class="text-063"><span>3</span><span class="text-010">件</span></div>
+                </div>
+                <div class="surface-025">
+                  <div class="text-011">支払待ち</div>
+                  <div class="text-064"><span>3</span><span class="text-010">件</span><span class="text-163"><span>¥29,702</span></span></div>
+                </div>
+                <div class="surface-024">
+                  <div class="text-007">支払済み</div>
+                  <div class="text-063"><span>4</span><span class="text-010">件</span></div>
+                </div>
+              </section>
+              <section aria-labelledby="h-list" class="surface-006">
+                <div class="layout-013">
+                  <h2 id="h-list" class="text-020">支払一覧</h2>
+                  <div class="layout-046">
+                    <div class="layout-051"><label for="pm-year" class="text-002">実施年</label><select id="pm-year" class="surface-017"><option>2026年</option><option>2025年</option><option>すべて</option></select></div>
+                    <div class="layout-051"><label for="pm-status" class="text-002">支払ステータス</label><select id="pm-status" class="surface-017"><option value="open">未確定・支払待ち</option><option value="未確定">未確定</option><option value="支払待ち">支払待ち</option><option value="支払済み">支払済み</option><option value="all">すべて</option></select></div>
+                    <div class="layout-051"><label for="pm-name" class="text-002">スタッフ名</label><input id="pm-name" type="text" placeholder="名前で探す" class="text-164"></div>
+                  </div>
+                </div>
+                <div class="utility-003">
+                  <table class="text-165">
+                    <thead>
+                      <tr class="text-023"><th class="cell-053"><span class="space-004">選択</span></th><th class="cell-054">実施日</th><th class="cell-054">イベント名</th><th class="cell-054">スタッフ名</th><th class="cell-054">謝金(円)</th><th class="cell-054">交通費(円)</th><th class="cell-054">立替(円)</th><th class="cell-054">源泉税(円)</th><th class="cell-016">総支払額</th><th class="cell-054">支払ステータス</th><th class="cell-054">支払元</th><th class="cell-054">支払日</th><th class="cell-055"><span class="space-004">操作</span></th></tr>
+                    </thead>
+                    <tbody>
+                      <tr class="utility-004"><td class="cell-056"><input type="checkbox" aria-label="佐藤 花子 ハロウィンマルシェ(設営)を選択" class="space-006"></td><td class="cell-057"><span>10/24(土)</span></td><td class="cell-058"><span>ハロウィンマルシェ(設営)</span></td><td class="cell-059"><span>佐藤 花子</span></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の謝金" value="9000" class="text-166"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の交通費" value="480" class="text-167"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の立替" value="0" class="text-168"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の源泉税" value="0" class="text-168"></td><td class="cell-060"><span>¥9,480</span></td><td class="cell-057"><span class="surface-014"><span>未確定</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                      <tr class="utility-004"><td class="cell-056"><input type="checkbox" aria-label="鈴木 一郎 秋季健康フェアを選択" class="space-006"></td><td class="cell-057"><span>10/21(水)</span></td><td class="cell-058"><span>秋季健康フェア</span></td><td class="cell-059"><span>鈴木 一郎</span></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の謝金" value="12000" class="text-166"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の交通費" value="840" class="text-167"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の立替" value="0" class="text-168"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の源泉税" value="0" class="text-168"></td><td class="cell-060"><span>¥12,840</span></td><td class="cell-057"><span class="surface-014"><span>未確定</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                      <tr class="utility-004"><td class="cell-056"><input type="checkbox" aria-label="田中 健 秋季健康フェアを選択" class="space-006"></td><td class="cell-057"><span>10/21(水)</span></td><td class="cell-058"><span>秋季健康フェア</span></td><td class="cell-059"><span>田中 健</span></td><td class="cell-058"><input type="number" aria-label="田中 健の謝金" value="9500" class="text-166"></td><td class="cell-058"><input type="number" aria-label="田中 健の交通費" value="620" class="text-167"></td><td class="cell-058"><input type="number" aria-label="田中 健の立替" value="0" class="text-168"></td><td class="cell-058"><input type="number" aria-label="田中 健の源泉税" value="0" class="text-168"></td><td class="cell-060"><span>¥10,120</span></td><td class="cell-057"><span class="surface-014"><span>未確定</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                      <tr class="utility-015"><td class="cell-056"><input type="checkbox" aria-label="佐藤 花子 秋祭り(運営補助)を選択" checked="" class="space-006"></td><td class="cell-057"><span>10/18(日)</span></td><td class="cell-058"><span>秋祭り(運営補助)</span></td><td class="cell-059"><span>佐藤 花子</span></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の謝金" value="9000" class="text-166"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の交通費" value="480" class="text-167"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の立替" value="0" class="text-168"></td><td class="cell-058"><input type="number" aria-label="佐藤 花子の源泉税" value="0" class="text-168"></td><td class="cell-060"><span>¥9,480</span></td><td class="cell-057"><span class="surface-011"><span>支払待ち</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                      <tr class="utility-015"><td class="cell-056"><input type="checkbox" aria-label="中村 翔 秋祭り(運営補助)を選択" checked="" class="space-006"></td><td class="cell-057"><span>10/18(日)</span></td><td class="cell-058"><span>秋祭り(運営補助)</span></td><td class="cell-059"><span>中村 翔</span></td><td class="cell-058"><input type="number" aria-label="中村 翔の謝金" value="10000" class="text-166"></td><td class="cell-058"><input type="number" aria-label="中村 翔の交通費" value="1020" class="text-167"></td><td class="cell-058"><input type="number" aria-label="中村 翔の立替" value="0" class="text-168"></td><td class="cell-058"><input type="number" aria-label="中村 翔の源泉税" value="919" class="text-168"></td><td class="cell-060"><span>¥10,101</span></td><td class="cell-057"><span class="surface-011"><span>支払待ち</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                      <tr class="utility-004"><td class="cell-056"><input type="checkbox" aria-label="鈴木 一郎 防災フェア(受付)を選択" class="space-006"></td><td class="cell-057"><span>10/17(土)</span></td><td class="cell-058"><span>防災フェア(受付)</span></td><td class="cell-059"><span>鈴木 一郎</span></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の謝金" value="9000" class="text-166"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の交通費" value="840" class="text-167"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の立替" value="1200" class="text-168"></td><td class="cell-058"><input type="number" aria-label="鈴木 一郎の源泉税" value="919" class="text-168"></td><td class="cell-060"><span>¥10,121</span></td><td class="cell-057"><span class="surface-011"><span>支払待ち</span></span></td><td class="cell-061"><span>—</span></td><td class="cell-061"><span>—</span></td><td class="cell-062"></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="text-058">総支払額 = 謝金 + 交通費 + 立替 − 源泉税(自動計算)。最初は未確定・支払待ちだけを表示し、支払済みにした行は一覧から消えます(「支払済み」「すべて」で確認できます)。支払元と支払日は「支払済みにする」の横で選び、選んだ行にまとめて記録されます(支払日の初期値は今日。振込を予約した日などに変えられます)。間違えて支払済みにした行は「取り消す」で支払待ちに戻せます。</div>
+              </section>
+              <section aria-label="選択した行の操作" class="layout-164">
+                <div class="text-169">選択中 <strong><span>2</span>件</strong><span class="utility-016">合計 <strong class="text-170"><span>¥19,581</span></strong></span></div>
+                <div class="layout-165">
+                  <div class="layout-051"><label for="pm-source" class="text-002">支払元</label><select id="pm-source" class="surface-026"><option>楽天銀行</option><option>GMO銀行</option><option>ゆうちょ銀行</option><option>現金</option></select></div>
+                  <div class="layout-051"><label for="pm-paidon" class="text-002">支払日</label><input id="pm-paidon" type="date" value="2026-10-19" class="surface-086"></div>
+                  <button type="button" data-ui-action="payment-paid" data-ui-values='@json(["assignment_ids" => $assignments->pluck("id")->values()])' data-success-text="支払済み" class="control-051">支払済みにする</button></div>
+                <div class="text-171">その他(単発)の人はアプリで明細を見られないため、「支払済みにする」を押すと支払明細がLINEで自動で届きます。</div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

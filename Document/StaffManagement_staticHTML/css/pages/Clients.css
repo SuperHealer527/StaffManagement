@@ -1,0 +1,57 @@
+.text-119 {
+  height: 40px;
+  width: 260px;
+  box-sizing: border-box;
+  border: 1px solid rgb(201, 206, 214);
+  border-radius: 8px;
+  padding: 0px 10px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.layout-107 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgb(91, 98, 112);
+}
+
+.surface-056 {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(238, 240, 243);
+  font-size: 11px;
+}
+
+.cell-042 {
+  padding: 8px 16px 8px 0px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+  white-space: nowrap;
+}
+
+.cell-043 {
+  padding: 8px 0px 8px 8px;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(227, 230, 235);
+}
+
+.cell-044 {
+  padding: 14px 16px 14px 0px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+}
+
+.cell-045 {
+  padding: 14px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+}
+
+.cell-046 {
+  padding: 14px 8px;
+  border-bottom: 1px solid rgb(238, 240, 243);
+  white-space: nowrap;
+  color: rgb(63, 69, 80);
+}

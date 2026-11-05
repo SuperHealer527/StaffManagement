@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function create(): View
     {
-        return view('auth.login');
+        return view('static-pages.Login');
     }
 
     public function store(LoginRequest $request): RedirectResponse

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>電話記録簿</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
+</head>
+<body class="page page--phonelog" data-static-screen="PhoneLog">
+    <div class="app-root">
+      <div class="screen">
+        <div class="layout-065">
+          <div class="layout-002">
+            <nav aria-label="エリア切り替え" class="layout-003">
+              <div aria-hidden="true" class="layout-004">HC</div>
+              <a href="Main.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="16" y1="3" x2="16" y2="7"></line></svg><span class="text-001">事業</span></a><a href="SalesHome.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="14 7 21 7 21 14"></polyline></svg><span class="text-001">営業</span></a><a href="Coaching.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-4 3v-3a2 2 0 0 1-2-2z"></path><path d="M19 9a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2v3l-4-3h-3"></path></svg><span class="text-001">面談</span></a><a href="#" aria-current="page" class="layout-005"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><rect x="9" y="2" width="6" height="4" rx="1"></rect><line x1="9" y1="11" x2="15" y2="11"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg><span class="text-001">総務</span></a><a href="PayManage.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l5 7 5-7"></path><line x1="12" y1="11" x2="12" y2="20"></line><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg><span class="text-001">会計</span></a>
+              <div class="layout-007"><a href="Accounts.dc.html" class="layout-006"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2" fill="#16213A"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2" fill="#16213A"></circle></svg><span class="text-001">設定</span></a></div>
+            </nav>
+            <nav aria-label="メインメニュー" class="layout-008">
+              <div class="space-001">
+                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-003">総務</div>
+              </div>
+              <a href="#" aria-current="page" class="layout-009"><span>電話記録簿</span></a><a href="#" class="layout-010"><span>(必要な機能をここに追加)</span><span class="surface-023">今後</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+          </div>
+          <main class="space-005">
+            <div class="layout-040">
+              <div class="layout-013">
+                <div>
+                  <h1 class="text-044">電話記録簿</h1>
+                  <div class="text-060">会社にかかってきた電話を記録し、伝言と折り返しを漏らさないようにします。社員と準社員が使えます。</div>
+                </div>
+              </div>
+              <form aria-labelledby="pl-new" class="surface-006" data-phone-log-form>
+                <h2 id="pl-new" class="text-179">電話を記録する</h2>
+                <input type="hidden" name="called_at" value="{{ now()->toIso8601String() }}">
+                <div class="layout-169"><label class="layout-044">日時<input type="text" value="10/23(金) 14:05" class="surface-034"></label><label class="layout-044">相手の名前<input name="caller_name" type="text" placeholder="例:森 様" required class="surface-034"></label><label class="layout-044">会社・所属<input name="company" type="text" placeholder="依頼先から選ぶか、入力" class="surface-034"></label><label class="layout-044">電話番号<input name="phone" type="tel" placeholder="折り返し先" class="surface-034"></label><label class="layout-044">用件<select name="purpose" class="surface-034"><option>お仕事の依頼・相談</option><option>問い合わせ</option><option>スタッフからの連絡</option><option>営業・売り込み</option><option>その他</option></select></label><label class="layout-044">だれあて<select name="recipient_id" class="surface-034"><option value="{{ $staffMembers->firstWhere('email', 'admin@staffmanagement.test')?->id }}">山田 太郎(社員)</option><option value="{{ $staffMembers->firstWhere('email', 'tamura@highclass-inc.com')?->id }}">田村 優子(社員)</option><option value="{{ $staffMembers->firstWhere('email', 'sasaki@highclass-inc.com')?->id }}">佐々木 恵(社員)</option><option value="{{ $staffMembers->firstWhere('email', 'semi@staffmanagement.test')?->id }}">鈴木 一郎(準社員)</option><option value="">だれでもよい</option></select></label></div>
+                <label class="layout-170">内容・伝言<textarea name="content" rows="2" placeholder="例:見積の件で折り返しがほしい" required class="text-180"></textarea></label>
+                <fieldset class="space-017"><legend class="text-181">対応</legend>
+                  <div class="layout-171"><label class="layout-172"><input type="radio" name="status" value="callback_required" checked=""> 折り返しが必要</label><label class="layout-172"><input type="radio" name="status" value="message_only"> 伝言のみ</label><label class="layout-172"><input type="radio" name="status" value="completed"> その場で対応済み</label></div>
+                </fieldset>
+                <div class="layout-173"><button type="submit" class="control-011">記録する</button><span class="text-002">受けた人は自動で入ります。「だれあて」の人にお知らせが届きます。</span></div>
+              </form>
+              <section aria-labelledby="pl-list" class="surface-006">
+                <div role="group" aria-label="絞り込み" class="layout-069"><button type="button" aria-pressed="true" class="control-006"><span>すべて</span></button><button type="button" aria-pressed="false" class="control-007"><span>対応が必要</span></button><button type="button" aria-pressed="false" class="control-007"><span>自分あて</span></button></div>
+                <h2 id="pl-list" class="text-020">記録(<span>5</span>件)</h2>
+                <div class="utility-001">
+                  <table class="text-078">
+                    <thead>
+                      <tr class="text-023"><th class="cell-001">日時</th><th class="cell-002">相手</th><th class="cell-002">用件・内容</th><th class="cell-002">だれあて</th><th class="cell-002">受けた人</th><th class="cell-002">状態</th><th class="cell-002"><span class="space-004">操作</span></th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td class="cell-003"><span>10/23(金) 11:20</span></td><td class="cell-004">
+                        <div class="text-067"><span>森 様</span></div>
+                        <div class="text-018"><span>サンプル観光協会</span> ・ <span>0XX-XXX-XXXX</span></div>
+                        </td><td class="cell-004">
+                        <div class="text-002"><span>お仕事の依頼・相談</span></div>
+                        <div class="utility-007"><span>見積の件で折り返しがほしい。午後は16時まで在席</span></div>
+                        </td><td class="cell-005"><span>山田 太郎</span></td><td class="cell-008"><span>田村</span></td><td class="cell-005"><span class="surface-020"><span>折り返し待ち</span></span></td><td class="cell-006"><button type="button" data-ui-action="phone-log-complete" data-ui-values='@json(["phone_log_id" => $phoneLogs->get(0)?->id])' data-success-text="対応済み" class="control-012">対応済みにする</button></td></tr>
+                      <tr><td class="cell-003"><span>10/23(金) 9:45</span></td><td class="cell-004">
+                        <div class="text-067"><span>中村 翔</span></div>
+                        <div class="text-018"><span>スタッフ</span> ・ <span>090-XXXX-XXXX</span></div>
+                        </td><td class="cell-004">
+                        <div class="text-002"><span>スタッフからの連絡</span></div>
+                        <div class="utility-007"><span>10/24の集合場所の確認。地図をLINEで送って解決</span></div>
+                        </td><td class="cell-005"><span>だれでもよい</span></td><td class="cell-008"><span>山田</span></td><td class="cell-005"><span class="surface-029"><span>対応済み</span></span></td><td class="cell-006"></td></tr>
+                      <tr><td class="cell-003"><span>10/22(木) 16:10</span></td><td class="cell-004">
+                        <div class="text-067"><span>西田 様</span></div>
+                        <div class="text-018"><span>サンプル大学</span> ・ <span>0XX-XXX-XXXX</span></div>
+                        </td><td class="cell-004">
+                        <div class="text-002"><span>問い合わせ</span></div>
+                        <div class="utility-007"><span>オープンキャンパスの人数を2人増やせるか</span></div>
+                        </td><td class="cell-005"><span>田村 優子</span></td><td class="cell-008"><span>山田</span></td><td class="cell-005"><span class="surface-020"><span>折り返し待ち</span></span></td><td class="cell-006"><button type="button" data-ui-action="phone-log-complete" data-ui-values='@json(["phone_log_id" => $phoneLogs->get(1)?->id ?? $phoneLogs->get(0)?->id])' data-success-text="対応済み" class="control-012">対応済みにする</button></td></tr>
+                      <tr><td class="cell-003"><span>10/22(木) 13:30</span></td><td class="cell-004">
+                        <div class="text-067"><span>(名乗らず)</span></div>
+                        <div class="text-018"><span>求人広告の会社</span> ・ <span>03-XXXX-XXXX</span></div>
+                        </td><td class="cell-004">
+                        <div class="text-002"><span>営業・売り込み</span></div>
+                        <div class="utility-007"><span>求人広告の案内。不要と回答</span></div>
+                        </td><td class="cell-005"><span>だれでもよい</span></td><td class="cell-008"><span>田村</span></td><td class="cell-005"><span class="surface-029"><span>対応済み</span></span></td><td class="cell-006"></td></tr>
+                      <tr><td class="cell-003"><span>10/21(水) 10:05</span></td><td class="cell-004">
+                        <div class="text-067"><span>大野 様</span></div>
+                        <div class="text-018"><span>サンプル町会</span> ・ <span>080-XXXX-XXXX</span></div>
+                        </td><td class="cell-004">
+                        <div class="text-002"><span>お仕事の依頼・相談</span></div>
+                        <div class="utility-007"><span>来年の秋祭りの日程が決まったとの連絡</span></div>
+                        </td><td class="cell-005"><span>山田 太郎</span></td><td class="cell-008"><span>田村</span></td><td class="cell-005"><span class="surface-018"><span>伝言のみ</span></span></td><td class="cell-006"><button type="button" data-ui-action="phone-log-complete" data-ui-values='@json(["phone_log_id" => $phoneLogs->get(2)?->id ?? $phoneLogs->get(0)?->id])' data-success-text="対応済み" class="control-012">対応済みにする</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

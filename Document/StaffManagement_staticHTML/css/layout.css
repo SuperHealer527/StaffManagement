@@ -1,0 +1,8 @@
+.app-root,
+.screen { min-height: 100%; }
+
+.page { min-height: 100vh; }
+
+@media (max-width: 640px) {
+  .page { overflow-x: hidden; }
+}

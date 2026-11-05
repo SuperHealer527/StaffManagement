@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Assignment;
-use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
@@ -17,31 +15,25 @@ class DashboardAccessTest extends TestCase
         $this->get('/dashboard')->assertRedirect(route('login'));
     }
 
-    public function test_authenticated_user_sees_dashboard_data(): void
+    public function test_authenticated_employee_sees_the_exact_client_dashboard(): void
     {
         $user = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        Event::factory()->create(['name' => '検証用イベント']);
-
         $response = $this->actingAs($user)->get('/dashboard');
 
-        $response->assertOk()->assertSee('社員のホーム')->assertSee('検証用イベント');
+        $response->assertOk()
+            ->assertSee('ホーム')
+            ->assertSee('秋季健康フェア')
+            ->assertSee('人数不足のイベント');
     }
 
-    public function test_dashboard_renders_confirmation_lists_without_lazy_loading(): void
+    public function test_dashboard_renders_the_client_confirmation_sections_without_lazy_loading(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        $event = Event::factory()->create(['event_date' => today()]);
-        $assignment = Assignment::factory()->create([
-            'event_id' => $event->id,
-            'status' => 'confirmed',
-            'same_day_confirmation' => 'not_sent',
-            'seven_day_confirmation' => 'not_sent',
-        ]);
-
         $this->actingAs($employee)->get('/dashboard')
             ->assertOk()
-            ->assertSee($assignment->user->name)
-            ->assertSee($event->name);
+            ->assertSee('当日確認が済んでいない人')
+            ->assertSee('7日前確認が済んでいない人')
+            ->assertSee('回答が来ていない依頼');
     }
 
     public function test_unknown_screen_returns_not_found(): void

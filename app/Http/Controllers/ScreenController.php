@@ -15,6 +15,43 @@ use Illuminate\View\View;
 class ScreenController extends Controller
 {
     /** @var array<string, string> */
+    private const TEMPLATES = [
+        'staff-home' => 'Staff',
+        'semi-home' => 'SubMain',
+        'assignments' => 'Assign',
+        'event-form' => 'EventEdit',
+        'event-copy' => 'Duplicate',
+        'event-detail' => 'EventDetail',
+        'assignment-response' => 'Respond',
+        'attendance-confirmed' => 'AttendanceComplete',
+        'report-submit' => 'Report',
+        'payments' => 'PayManage',
+        'profit-loss' => 'Profit',
+        'payment-statement' => 'Payslip',
+        'profile' => 'Profile',
+        'reports' => 'ReportView',
+        'clients' => 'Clients',
+        'client-detail' => 'ClientEdit',
+        'events' => 'EventList',
+        'staff' => 'StaffList',
+        'staff-detail' => 'StaffDetail',
+        'shortages' => 'Shortage',
+        'accounts' => 'Accounts',
+        'notifications' => 'SendLog',
+        'my-requests' => 'MyRequests',
+        'first-password' => 'SetPassword',
+        'mobile-areas' => 'AreaSwitch',
+        'sales-home' => 'SalesHome',
+        'proposal-board' => 'SalesBoard',
+        'meeting-history' => 'Meetings',
+        'interviews' => 'Coaching',
+        'interview-select' => 'InterviewSchedule',
+        'phone-log' => 'PhoneLog',
+        'line-connect' => 'LineConnect',
+        'temporary-bank' => 'PaymentDetails',
+    ];
+
+    /** @var array<string, string> */
     private const TITLES = [
         'staff-home' => 'スタッフのホーム',
         'semi-home' => '準社員のホーム',
@@ -93,7 +130,7 @@ class ScreenController extends Controller
             ->get();
         $assignments = Assignment::query()->with(['event.client', 'user'])->latest()->get();
 
-        return view('screens.show', [
+        return view('static-pages.'.self::TEMPLATES[$screen], [
             'screen' => $screen,
             'title' => self::TITLES[$screen],
             'events' => $events,
