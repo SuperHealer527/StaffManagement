@@ -81,7 +81,10 @@ class ScreenController extends Controller
             ->withCount(['assignments as confirmed_count' => fn ($query) => $query->where('status', 'confirmed')])
             ->orderBy('event_date')
             ->get();
-        $clients = Client::query()->with(['contacts', 'events', 'salesOwner'])->orderBy('name')->get();
+        $clients = Client::query()
+            ->with(['contacts', 'events.invoiceItems', 'events.assignments', 'events.expenses', 'salesOwner'])
+            ->orderBy('name')
+            ->get();
         $staffMembers = User::query()
             ->with(['qualifications', 'assignments.event'])
             ->whereIn('role', ['employee', 'semi_employee', 'staff', 'temporary', 'trainer'])

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -26,6 +27,23 @@ class DashboardAccessTest extends TestCase
         $response->assertOk()->assertSee('社員のホーム')->assertSee('検証用イベント');
     }
 
+    public function test_dashboard_renders_confirmation_lists_without_lazy_loading(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $event = Event::factory()->create(['event_date' => today()]);
+        $assignment = Assignment::factory()->create([
+            'event_id' => $event->id,
+            'status' => 'confirmed',
+            'same_day_confirmation' => 'not_sent',
+            'seven_day_confirmation' => 'not_sent',
+        ]);
+
+        $this->actingAs($employee)->get('/dashboard')
+            ->assertOk()
+            ->assertSee($assignment->user->name)
+            ->assertSee($event->name);
+    }
+
     public function test_unknown_screen_returns_not_found(): void
     {
         $user = User::factory()->create(['account_status' => 'active']);
@@ -35,7 +53,8 @@ class DashboardAccessTest extends TestCase
 
     public function test_all_client_screen_routes_render(): void
     {
-        $user = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $this->seed();
+        $user = User::query()->where('email', 'admin@staffmanagement.test')->firstOrFail();
         $screens = ['staff-home', 'semi-home', 'assignments', 'event-form', 'event-copy', 'event-detail', 'assignment-response', 'attendance-confirmed', 'report-submit', 'payments', 'profit-loss', 'payment-statement', 'profile', 'reports', 'clients', 'client-detail', 'events', 'staff', 'staff-detail', 'shortages', 'accounts', 'notifications', 'my-requests', 'first-password', 'mobile-areas', 'sales-home', 'proposal-board', 'meeting-history', 'interviews', 'interview-select', 'phone-log', 'line-connect', 'temporary-bank'];
 
         foreach ($screens as $screen) {

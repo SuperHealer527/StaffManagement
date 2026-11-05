@@ -31,6 +31,22 @@ class DashboardController extends Controller
             ->orderBy(Event::select('event_date')->whereColumn('events.id', 'assignments.event_id'))
             ->get();
 
+        $uncheckedAssignments = Assignment::query()
+            ->with(['event', 'user'])
+            ->where('status', 'confirmed')
+            ->where('same_day_confirmation', '!=', 'confirmed')
+            ->whereHas('event', fn ($query) => $query->whereDate('event_date', today()))
+            ->limit(2)
+            ->get();
+
+        $sevenDayUncheckedAssignments = Assignment::query()
+            ->with(['event', 'user'])
+            ->where('status', 'confirmed')
+            ->where('seven_day_confirmation', '!=', 'confirmed')
+            ->whereHas('event', fn ($query) => $query->whereBetween('event_date', [today(), today()->addDays(7)]))
+            ->limit(2)
+            ->get();
+
         return view('dashboard', [
             'user' => $user,
             'events' => $events,
@@ -41,6 +57,8 @@ class DashboardController extends Controller
             'staleAssignments' => Assignment::query()->with(['event', 'user'])->where('status', 'requested')->where('requested_at', '<=', now()->subDays(3))->limit(3)->get(),
             'expiringQualifications' => Qualification::query()->with('user')->whereBetween('expires_at', [today(), today()->addDays(60)])->limit(4)->get(),
             'myAssignments' => $myAssignments,
+            'uncheckedAssignments' => $uncheckedAssignments,
+            'sevenDayUncheckedAssignments' => $sevenDayUncheckedAssignments,
             'pendingPaymentCount' => Assignment::query()->where('payment_status', 'waiting')->count(),
             'pendingPaymentTotal' => Assignment::query()->where('payment_status', 'waiting')->get()->sum('total_payment'),
         ]);

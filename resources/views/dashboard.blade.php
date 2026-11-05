@@ -75,18 +75,22 @@
             <section class="panel alert-panel">
                 <div class="panel-heading"><h2>当日確認が済んでいない人</h2><p>集合2時間前の時点で未確認</p></div>
                 <div class="panel-body">
-                    @foreach($events->flatMap->assignments->take(2) as $assignment)
+                    @forelse($uncheckedAssignments as $assignment)
                         <div class="person-row"><div><strong>{{ $assignment->user?->name }}</strong><p>{{ $assignment->event?->name }}・集合 {{ substr($assignment->event?->meeting_time, 0, 5) }}</p></div><div class="page-actions"><a class="success-button" href="#">LINEする</a><a class="secondary-button" href="tel:{{ $assignment->user?->phone }}">電話する</a></div></div>
-                    @endforeach
+                    @empty
+                        <p class="m-0 text-sm text-[#5b6270]">当日確認待ちのスタッフはいません。</p>
+                    @endforelse
                 </div>
             </section>
 
             <section class="panel">
                 <div class="panel-heading"><h2>7日前確認が済んでいない人</h2><p>本人には5日前・3日前にもう一度届きます</p></div>
                 <div class="panel-body">
-                    @foreach($events->flatMap->assignments->where('seven_day_confirmation', '!=', 'confirmed')->take(2) as $assignment)
+                    @forelse($sevenDayUncheckedAssignments as $assignment)
                         <div class="person-row"><div><strong>{{ $assignment->user?->name }} <span class="badge badge-orange">未確認</span></strong><p>{{ $assignment->event?->name }}・7日前に送信済み</p></div><div class="page-actions"><a class="success-button" href="#">LINEする</a><a class="secondary-button" href="tel:{{ $assignment->user?->phone }}">電話する</a></div></div>
-                    @endforeach
+                    @empty
+                        <p class="m-0 text-sm text-[#5b6270]">7日前確認待ちのスタッフはいません。</p>
+                    @endforelse
                 </div>
             </section>
 
