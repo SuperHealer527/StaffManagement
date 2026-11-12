@@ -36,7 +36,7 @@ class EventManagementTest extends TestCase
                 'type' => 'supplies',
                 'memo' => '名札',
                 'amount' => 1000,
-                'receipt' => UploadedFile::fake()->image('receipt.jpg'),
+                'receipt' => UploadedFile::fake()->create('receipt.pdf', 100, 'application/pdf'),
             ]],
         ]);
 
