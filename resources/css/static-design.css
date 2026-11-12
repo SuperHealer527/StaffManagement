@@ -36,6 +36,11 @@
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffDetail.css";
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffList.css";
 
+.layout-012,
+.layout-040 {
+  max-width: 100%;
+}
+
 .pending-email-list {
   display: grid;
   flex-basis: 100%;
