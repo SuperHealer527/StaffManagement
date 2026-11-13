@@ -21,6 +21,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/Document/login_info.txt
 /.composer-cache
 /.npm-cache
 _ide_helper.php
