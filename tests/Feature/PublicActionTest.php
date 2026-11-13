@@ -90,9 +90,52 @@ class PublicActionTest extends TestCase
         $this->post(route('public-actions.update', $plainToken), [
             'password' => 'newpassword123',
             'password_confirmation' => 'newpassword123',
-        ])->assertRedirect(route('screens.show', 'profile'));
+        ])->assertRedirect(route('profile.edit'));
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'account_status' => 'active']);
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_suspended_account_cannot_be_reactivated_with_an_old_invitation_link(): void
+    {
+        $user = User::factory()->create(['account_status' => 'suspended']);
+        $plainToken = 'suspended-password-token';
+        SecureActionToken::query()->create([
+            'user_id' => $user->id,
+            'actionable_type' => User::class,
+            'actionable_id' => $user->id,
+            'purpose' => 'first_password',
+            'token_hash' => hash('sha256', $plainToken),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        $this->post(route('public-actions.update', $plainToken), [
+            'password' => 'newpassword123',
+            'password_confirmation' => 'newpassword123',
+        ])->assertForbidden();
+
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'account_status' => 'suspended']);
+        $this->assertGuest();
+    }
+
+    public function test_cancelled_assignment_cannot_use_an_old_attendance_link(): void
+    {
+        $assignment = Assignment::factory()->create(['status' => 'cancelled', 'same_day_confirmation' => 'sent']);
+        $plainToken = 'cancelled-attendance-token';
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'attendance_same_day',
+            'token_hash' => hash('sha256', $plainToken),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        $this->post(route('public-actions.update', $plainToken))->assertForbidden();
+
+        $this->assertDatabaseHas('assignments', [
+            'id' => $assignment->id,
+            'same_day_confirmation' => 'sent',
+        ]);
     }
 }

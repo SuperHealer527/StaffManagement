@@ -68,4 +68,32 @@ class ReportManagementTest extends TestCase
 
         $this->actingAs($staff)->get(route('reports.index'))->assertForbidden();
     }
+
+    public function test_former_representative_cannot_submit_with_an_old_report_link(): void
+    {
+        $event = Event::factory()->create(['report_required' => true]);
+        $assignment = Assignment::factory()->create([
+            'event_id' => $event->id,
+            'status' => 'confirmed',
+            'is_report_representative' => false,
+        ]);
+        $plainToken = 'former-representative-token';
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'report_submission',
+            'token_hash' => hash('sha256', $plainToken),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        $this->post(route('public-actions.update', $plainToken), [
+            'completion' => 'completed',
+        ])->assertForbidden();
+
+        $this->assertDatabaseMissing('report_submissions', [
+            'event_id' => $event->id,
+            'user_id' => $assignment->user_id,
+        ]);
+    }
 }

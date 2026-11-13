@@ -69,7 +69,7 @@ class PublicActionController extends Controller
             Auth::login($actionToken->user);
             $request->session()->regenerate();
 
-            return redirect()->route('screens.show', 'profile')->with('status', 'パスワードを設定しました。プロフィールを確認してください。');
+            return redirect()->route('profile.edit')->with('status', 'パスワードを設定しました。プロフィールを確認してください。');
         }
 
         return redirect()->route('public-actions.complete', $token)->with('status', $actionToken->purpose === 'line_connect'
@@ -98,6 +98,7 @@ class PublicActionController extends Controller
             ->firstOrFail();
 
         abort_unless($actionToken->isUsable(), 410);
+        abort_unless($actionToken->isEligibleForPurpose(), 403);
 
         return $actionToken;
     }
@@ -130,6 +131,7 @@ class PublicActionController extends Controller
     private function recordAttendance(SecureActionToken $actionToken): void
     {
         abort_unless($actionToken->actionable instanceof Assignment, 422);
+        abort_unless($actionToken->isEligibleForPurpose(), 403);
         $field = $actionToken->purpose === 'attendance_seven_day'
             ? 'seven_day_confirmation'
             : 'same_day_confirmation';
@@ -141,6 +143,7 @@ class PublicActionController extends Controller
     private function recordReport(SecureActionToken $actionToken, array $values): void
     {
         abort_unless($actionToken->actionable instanceof Assignment, 422);
+        abort_unless($actionToken->isEligibleForPurpose(), 403);
         $submission = ReportSubmission::query()->updateOrCreate(
             ['event_id' => $actionToken->actionable->event_id, 'user_id' => $actionToken->actionable->user_id],
             ['answers' => ['completion' => $values['completion']] + ($values['answers'] ?? []), 'submitted_at' => now()],
@@ -181,7 +184,7 @@ class PublicActionController extends Controller
     private function recordPassword(SecureActionToken $actionToken, string $password): void
     {
         abort_unless($actionToken->user instanceof User, 422);
-        abort_if($actionToken->user->role === 'temporary', 422);
+        abort_unless($actionToken->isEligibleForPurpose(), 403);
         $actionToken->user->update(['password' => Hash::make($password), 'account_status' => 'active']);
         $this->auditService->record($actionToken->user, 'public_first_password_setup');
     }

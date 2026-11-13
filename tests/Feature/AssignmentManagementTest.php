@@ -21,7 +21,14 @@ class AssignmentManagementTest extends TestCase
         $event = Event::factory()->create();
         $matching = User::factory()->create(['name' => '候補 太郎', 'role' => 'staff', 'account_status' => 'active']);
         User::factory()->create(['name' => '対象外 花子', 'role' => 'staff', 'account_status' => 'active']);
-        Availability::query()->create(['user_id' => $matching->id, 'weekday' => $event->event_date->dayOfWeek, 'time_slot' => 'morning', 'availability' => 'available']);
+        foreach (['8〜10時', '10〜12時', '12〜13時', '13〜15時', '15〜17時', '17〜19時'] as $timeSlot) {
+            Availability::query()->create([
+                'user_id' => $matching->id,
+                'weekday' => $event->event_date->dayOfWeek,
+                'time_slot' => $timeSlot,
+                'availability' => 'available',
+            ]);
+        }
 
         $this->actingAs($employee)
             ->get(route('events.assignments.index', ['event' => $event, 'keyword' => '候補', 'available' => 1]))
@@ -108,7 +115,7 @@ class AssignmentManagementTest extends TestCase
         $this->assertDatabaseHas('assignments', ['event_id' => $event->id, 'seven_day_confirmation' => 'not_applicable']);
     }
 
-    public function test_only_confirmed_employee_or_semi_employee_can_be_leader(): void
+    public function test_any_confirmed_assignee_can_be_leader_or_report_representative(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
         $event = Event::factory()->create(['required_staff' => 3]);
@@ -128,7 +135,14 @@ class AssignmentManagementTest extends TestCase
 
         $this->actingAs($employee)->patch(route('events.assignments.leaders', $event), [
             'day_leader_assignment_id' => $staff->id,
-        ])->assertSessionHasErrors('day_leader_assignment_id');
+            'representative_same_as_leader' => 1,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('assignments', [
+            'id' => $staff->id,
+            'is_day_leader' => true,
+            'is_report_representative' => true,
+        ]);
     }
 
     public function test_shortage_page_only_lists_upcoming_understaffed_events(): void

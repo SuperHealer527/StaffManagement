@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUiActionRequest;
-use App\Models\Assignment;
 use App\Models\Availability;
 use App\Models\NotificationLog;
 use App\Models\PhoneLog;
@@ -40,14 +39,6 @@ class UiActionController extends Controller
                     ['user_id' => $request->user()->id, 'weekday' => $values['weekday'], 'time_slot' => $values['time_slot']],
                     ['availability' => $values['availability']],
                 ),
-                'assignment-status' => Assignment::query()->findOrFail($values['assignment_id'])->update([
-                    'status' => $values['status'],
-                    'responded_at' => now(),
-                ]),
-                'payment-paid' => Assignment::query()->whereIn('id', $values['assignment_ids'])->update([
-                    'payment_status' => 'paid',
-                    'paid_at' => today(),
-                ]),
                 default => abort(404),
             };
         });
@@ -63,6 +54,8 @@ class UiActionController extends Controller
         $user = User::query()->findOrFail($values['user_id']);
         if ($user->role === 'temporary') {
             abort_unless(in_array($values['account_status'], ['no_login', 'suspended'], true), 422, '単発の方は利用停止またはログインなしに設定してください。');
+        } else {
+            abort_if($values['account_status'] === 'no_login', 422, 'ログイン対象の方をログインなしには設定できません。');
         }
 
         $user->update([

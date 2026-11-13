@@ -16,8 +16,12 @@ class StoreOwnReportRequest extends FormRequest
 
         return $assignment !== null
             && $this->user()?->id === $assignment->user_id
+            && in_array($assignment->status, ['confirmed', 'completed'], true)
             && $assignment->is_report_representative
-            && $assignment->event()->where('report_required', true)->exists();
+            && $assignment->event()
+                ->where('report_required', true)
+                ->whereBetween('event_date', [today()->subDays(7), today()])
+                ->exists();
     }
 
     /**

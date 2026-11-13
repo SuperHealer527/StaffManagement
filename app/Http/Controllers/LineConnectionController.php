@@ -23,10 +23,11 @@ class LineConnectionController extends Controller
     public function startPublic(Request $request, string $token): RedirectResponse
     {
         $actionToken = SecureActionToken::query()
+            ->with('user')
             ->where('token_hash', hash('sha256', $token))
             ->where('purpose', 'line_connect')
             ->firstOrFail();
-        abort_unless($actionToken->isUsable() && $actionToken->user_id !== null, 410);
+        abort_unless($actionToken->isUsable() && $actionToken->isEligibleForPurpose() && $actionToken->user_id !== null, 410);
 
         return $this->authorizationRedirect($request, $actionToken->user_id, $actionToken->id);
     }
@@ -38,8 +39,8 @@ class LineConnectionController extends Controller
         abort_unless(is_string($request->query('state')) && hash_equals($connection['state'], $request->query('state')), 419);
 
         if (isset($connection['action_token_id'])) {
-            $actionToken = SecureActionToken::query()->find($connection['action_token_id']);
-            if ($actionToken === null || ! $actionToken->isUsable()) {
+            $actionToken = SecureActionToken::query()->with('user')->find($connection['action_token_id']);
+            if ($actionToken === null || ! $actionToken->isUsable() || ! $actionToken->isEligibleForPurpose()) {
                 return $this->failureRedirect($connection, '連携リンクの操作時間が終了しました。社員に再送を依頼してください。');
             }
         }

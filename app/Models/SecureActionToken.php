@@ -32,6 +32,49 @@ class SecureActionToken extends Model
             && ($this->opened_at === null || $this->opened_at->copy()->addMinutes(30)->isFuture());
     }
 
+    public function isEligibleForPurpose(): bool
+    {
+        if ($this->purpose === 'first_password') {
+            return $this->user?->account_status === 'invited' && $this->user?->role !== 'temporary';
+        }
+
+        if ($this->purpose === 'temporary_profile') {
+            return $this->user?->role === 'temporary' && $this->user?->account_status === 'no_login';
+        }
+
+        if ($this->purpose === 'line_connect') {
+            if ($this->user === null) {
+                return false;
+            }
+
+            return $this->user->role === 'temporary'
+                ? $this->user->account_status === 'no_login'
+                : in_array($this->user->account_status, ['active', 'invited'], true);
+        }
+
+        if (! $this->actionable instanceof Assignment) {
+            return true;
+        }
+
+        if ($this->purpose === 'assignment_response') {
+            return true;
+        }
+
+        if (in_array($this->purpose, ['attendance_confirmation', 'attendance_seven_day', 'attendance_same_day'], true)) {
+            return in_array($this->actionable->status, ['confirmed', 'completed'], true);
+        }
+
+        if ($this->purpose === 'report_submission') {
+            $this->actionable->loadMissing('event');
+
+            return in_array($this->actionable->status, ['confirmed', 'completed'], true)
+                && $this->actionable->is_report_representative
+                && $this->actionable->event->report_required;
+        }
+
+        return true;
+    }
+
     protected function casts(): array
     {
         return ['expires_at' => 'datetime', 'opened_at' => 'datetime', 'used_at' => 'datetime'];

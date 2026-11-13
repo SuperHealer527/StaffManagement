@@ -34,4 +34,29 @@ class AuthenticationTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertGuest();
     }
+
+    public function test_temporary_worker_cannot_log_in_even_if_account_is_active(): void
+    {
+        $temporary = User::factory()->create([
+            'role' => 'temporary',
+            'password' => 'password123',
+            'account_status' => 'active',
+        ]);
+
+        $this->post('/login', ['email' => $temporary->email, 'password' => 'password123'])
+            ->assertSessionHasErrors('email');
+
+        $this->assertGuest();
+    }
+
+    public function test_suspended_authenticated_user_is_logged_out_on_the_next_request(): void
+    {
+        $user = User::factory()->create(['account_status' => 'active']);
+        $this->actingAs($user);
+        $user->update(['account_status' => 'suspended']);
+
+        $this->get(route('dashboard'))->assertRedirect(route('login'));
+
+        $this->assertGuest();
+    }
 }

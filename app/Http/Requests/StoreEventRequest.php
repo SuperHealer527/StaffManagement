@@ -48,7 +48,13 @@ class StoreEventRequest extends FormRequest
             'other_item' => ['nullable', 'string', 'max:255'],
             'emergency_contacts' => ['nullable', 'array'],
             'emergency_contacts.line' => ['nullable', 'boolean'],
-            'emergency_contacts.employee_id' => ['nullable', 'integer', 'exists:users,id'],
+            'emergency_contacts.employee_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')->where(fn ($query) => $query
+                    ->where('role', 'employee')
+                    ->where('account_status', 'active')),
+            ],
             'emergency_contacts.leader' => ['nullable', 'boolean'],
             'emergency_contacts.other' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:5000'],

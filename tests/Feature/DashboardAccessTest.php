@@ -38,6 +38,22 @@ class DashboardAccessTest extends TestCase
             ->assertSee('回答が来ていない依頼');
     }
 
+    public function test_dashboard_shortages_exclude_draft_cancelled_and_completed_events(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        Event::factory()->create(['name' => '表示対象の不足イベント', 'status' => 'recruiting']);
+        Event::factory()->create(['name' => '下書き不足イベント', 'status' => 'draft']);
+        Event::factory()->create(['name' => '中止不足イベント', 'status' => 'cancelled']);
+        Event::factory()->create(['name' => '完了不足イベント', 'status' => 'completed']);
+
+        $this->actingAs($employee)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('表示対象の不足イベント')
+            ->assertDontSee('下書き不足イベント')
+            ->assertDontSee('中止不足イベント')
+            ->assertDontSee('完了不足イベント');
+    }
+
     public function test_unknown_screen_returns_not_found(): void
     {
         $user = User::factory()->create(['account_status' => 'active']);

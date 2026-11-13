@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUiActionRequest extends FormRequest
 {
@@ -20,7 +21,7 @@ class StoreUiActionRequest extends FormRequest
             return true;
         }
 
-        if (in_array($this->route('action'), ['phone-log-create', 'phone-log-complete', 'assignment-status'], true)) {
+        if (in_array($this->route('action'), ['phone-log-create', 'phone-log-complete'], true)) {
             return $this->user()->canManageAssignments();
         }
 
@@ -47,7 +48,13 @@ class StoreUiActionRequest extends FormRequest
                 'phone' => ['nullable', 'string', 'max:30'],
                 'purpose' => ['required', 'string', 'max:255'],
                 'content' => ['required', 'string', 'max:5000'],
-                'recipient_id' => ['nullable', 'integer', 'exists:users,id'],
+                'recipient_id' => [
+                    'nullable',
+                    'integer',
+                    Rule::exists('users', 'id')->where(fn ($query) => $query
+                        ->whereIn('role', ['employee', 'semi_employee'])
+                        ->where('account_status', 'active')),
+                ],
                 'status' => ['required', 'in:callback_required,message_only,completed'],
             ],
             'phone-log-complete' => ['phone_log_id' => ['required', 'integer', 'exists:phone_logs,id']],
@@ -64,14 +71,6 @@ class StoreUiActionRequest extends FormRequest
                 'weekday' => ['required', 'integer', 'between:0,6'],
                 'time_slot' => ['required', 'string', 'max:50'],
                 'availability' => ['required', 'in:available,unknown,unavailable'],
-            ],
-            'assignment-status' => [
-                'assignment_id' => ['required', 'integer', 'exists:assignments,id'],
-                'status' => ['required', 'in:requested,accepted,unknown,declined,confirmed,cancelled'],
-            ],
-            'payment-paid' => [
-                'assignment_ids' => ['required', 'array', 'min:1'],
-                'assignment_ids.*' => ['integer', 'exists:assignments,id'],
             ],
             default => ['action' => ['required', 'prohibited']],
         };

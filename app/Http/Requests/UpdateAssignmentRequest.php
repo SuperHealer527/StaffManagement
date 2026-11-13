@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateAssignmentRequest extends FormRequest
 {
@@ -22,6 +23,17 @@ class UpdateAssignmentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return ['status' => ['required', 'in:requested,unknown,accepted,declined,confirmed,rejected,cancelled,absent,completed'], 'special_notes' => ['nullable', 'string', 'max:2000'], 'fee' => ['nullable', 'integer', 'min:0', 'max:1000000'], 'transportation' => ['nullable', 'integer', 'min:0', 'max:1000000']];
+        $assignment = $this->route('assignment');
+        $allowedStatuses = ['confirmed', 'rejected', 'cancelled', 'absent'];
+        if ($assignment !== null) {
+            $allowedStatuses[] = $assignment->status;
+        }
+
+        return [
+            'status' => ['required', Rule::in(array_unique($allowedStatuses))],
+            'special_notes' => ['nullable', 'string', 'max:2000'],
+            'fee' => ['nullable', 'integer', 'min:0', 'max:1000000'],
+            'transportation' => ['nullable', 'integer', 'min:0', 'max:1000000'],
+        ];
     }
 }

@@ -50,13 +50,14 @@ class AssignmentController extends Controller
         $event->load(['client', 'assignments.user.qualifications']);
         $assignedUserIds = $event->assignments->pluck('user_id');
         $weekday = $event->event_date->dayOfWeek;
+        $requiredTimeSlots = $this->eventTimeSlots($event);
 
         $candidateQuery = User::query()
             ->where(fn ($query) => $query->where('account_status', 'active')->orWhere(fn ($temporaryQuery) => $temporaryQuery->where('role', 'temporary')->where('account_status', 'no_login')))
             ->whereIn('role', ['employee', 'semi_employee', 'staff', 'trainer', 'temporary'])
             ->whereNotIn('id', $assignedUserIds)
             ->with(['qualifications', 'availabilities', 'assignments' => fn ($query) => $query
-                ->where('status', 'confirmed')
+                ->whereIn('status', ['requested', 'unknown', 'accepted', 'confirmed'])
                 ->whereHas('event', fn (Builder $eventQuery) => $eventQuery->whereDate('event_date', $event->event_date))
                 ->with('event')])
             ->withCount([
@@ -71,10 +72,7 @@ class AssignmentController extends Controller
             ->when($request->filled('qualification'), fn ($query) => $query->whereHas('qualifications', fn ($qualificationQuery) => $qualificationQuery->where('name', $request->string('qualification'))))
             ->when($request->filled('gender'), fn ($query) => $query->where('gender', $request->string('gender')))
             ->when($request->boolean('student'), fn ($query) => $query->where('is_student', true))
-            ->when($request->boolean('has_car'), fn ($query) => $query->where('has_car', true))
-            ->when($request->boolean('available'), fn ($query) => $query->whereHas('availabilities', fn ($availabilityQuery) => $availabilityQuery
-                ->where('weekday', $weekday)
-                ->where('availability', 'available')));
+            ->when($request->boolean('has_car'), fn ($query) => $query->where('has_car', true));
 
         match ($request->input('sort', 'client_count')) {
             'year_count' => $candidateQuery->orderBy('year_work_count')->orderBy('name'),
@@ -83,6 +81,17 @@ class AssignmentController extends Controller
         };
 
         $candidates = $candidateQuery->get();
+        if ($request->boolean('available')) {
+            $candidates = $candidates->filter(function (User $candidate) use ($requiredTimeSlots, $weekday): bool {
+                $availabilityBySlot = $candidate->availabilities
+                    ->where('weekday', $weekday)
+                    ->keyBy('time_slot');
+
+                return collect($requiredTimeSlots)->every(
+                    fn (string $timeSlot): bool => $availabilityBySlot->get($timeSlot)?->availability === 'available',
+                );
+            })->values();
+        }
         if ($request->boolean('exclude_overlap')) {
             $candidates = $candidates->filter(fn (User $candidate): bool => $this->overlappingAssignment($candidate, $event) === null)->values();
         }
@@ -111,11 +120,11 @@ class AssignmentController extends Controller
         $assignment = DB::transaction(function () use ($event, $candidate, $values, $confirmedDirectly): Assignment {
             $assignment = $event->assignments()->create([
                 'user_id' => $candidate->id,
-                'status' => $confirmedDirectly ? 'confirmed' : 'requested',
+                'status' => $confirmedDirectly ? 'accepted' : 'requested',
                 'special_notes' => $values['special_notes'] ?? null,
                 'fee' => $values['fee'],
                 'transportation' => $values['transportation'],
-                'payment_status' => $confirmedDirectly ? 'unconfirmed' : 'waiting',
+                'payment_status' => 'waiting',
                 'requested_at' => $confirmedDirectly ? null : now(),
                 'responded_at' => $confirmedDirectly ? now() : null,
             ]);
@@ -148,11 +157,11 @@ class AssignmentController extends Controller
     public function updateLeaders(UpdateEventAssignmentLeadersRequest $request, Event $event): RedirectResponse
     {
         $values = $request->validated();
-        $leader = $this->confirmedManagerAssignment($event, $values['day_leader_assignment_id'] ?? null, 'day_leader_assignment_id');
+        $leader = $this->confirmedAssignment($event, $values['day_leader_assignment_id'] ?? null, 'day_leader_assignment_id');
         $representativeId = $request->boolean('representative_same_as_leader')
             ? $leader?->id
             : ($values['report_representative_assignment_id'] ?? null);
-        $representative = $this->confirmedManagerAssignment($event, $representativeId, 'report_representative_assignment_id');
+        $representative = $this->confirmedAssignment($event, $representativeId, 'report_representative_assignment_id');
 
         DB::transaction(function () use ($event, $leader, $representative): void {
             $event->assignments()->update(['is_day_leader' => false, 'is_report_representative' => false]);
@@ -200,15 +209,15 @@ class AssignmentController extends Controller
         }
     }
 
-    private function confirmedManagerAssignment(Event $event, ?int $assignmentId, string $field): ?Assignment
+    private function confirmedAssignment(Event $event, ?int $assignmentId, string $field): ?Assignment
     {
         if ($assignmentId === null) {
             return null;
         }
 
-        $assignment = $event->assignments()->with('user')->find($assignmentId);
-        if ($assignment === null || $assignment->status !== 'confirmed' || ! in_array($assignment->user->role, ['employee', 'semi_employee'], true)) {
-            throw ValidationException::withMessages([$field => '確定済みの社員または準社員を選択してください。']);
+        $assignment = $event->assignments()->find($assignmentId);
+        if ($assignment === null || $assignment->status !== 'confirmed') {
+            throw ValidationException::withMessages([$field => 'このイベントで確定済みの担当者を選択してください。']);
         }
 
         return $assignment;
@@ -225,5 +234,35 @@ class AssignmentController extends Controller
                 && $other->meeting_time < $event->dismissal_time
                 && $other->dismissal_time > $event->meeting_time;
         });
+    }
+
+    /** @return list<string> */
+    private function eventTimeSlots(Event $event): array
+    {
+        $meetingMinutes = $this->minutesSinceMidnight($event->meeting_time);
+        $dismissalMinutes = $this->minutesSinceMidnight($event->dismissal_time);
+        $slots = [
+            '8時前' => [0, 480],
+            '8〜10時' => [480, 600],
+            '10〜12時' => [600, 720],
+            '12〜13時' => [720, 780],
+            '13〜15時' => [780, 900],
+            '15〜17時' => [900, 1020],
+            '17〜19時' => [1020, 1140],
+            '19時以降' => [1140, 1440],
+        ];
+
+        return collect($slots)
+            ->filter(fn (array $range): bool => $meetingMinutes < $range[1] && $dismissalMinutes > $range[0])
+            ->keys()
+            ->values()
+            ->all();
+    }
+
+    private function minutesSinceMidnight(string $time): int
+    {
+        [$hours, $minutes] = array_map('intval', explode(':', $time));
+
+        return ($hours * 60) + $minutes;
     }
 }

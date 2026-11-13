@@ -34,6 +34,7 @@ class DashboardController extends Controller
             ->get();
         $shortageEvents = $events
             ->where('event_date', '<=', today()->addDays(14))
+            ->whereNotIn('status', ['draft', 'cancelled', 'completed'])
             ->filter(fn (Event $event): bool => $event->confirmed_count < $event->required_staff);
         $todayAssignments = Assignment::query()
             ->with(['event', 'user'])

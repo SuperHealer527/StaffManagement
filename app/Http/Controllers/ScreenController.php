@@ -100,6 +100,11 @@ class ScreenController extends Controller
         'staff-detail', 'shortages', 'phone-log',
     ];
 
+    /** @var list<string> */
+    private const SELF_SERVICE = [
+        'staff-home', 'payment-statement', 'profile', 'my-requests', 'mobile-areas',
+    ];
+
     public function show(string $screen): View
     {
         abort_unless(isset(self::TITLES[$screen]), 404);
@@ -112,6 +117,25 @@ class ScreenController extends Controller
         }
         if (in_array($screen, self::MANAGEMENT, true)) {
             abort_unless($user->canManageAssignments(), 403);
+        }
+        if (! $user->isEmployee()) {
+            abort_unless(in_array($screen, [...self::MANAGEMENT, ...self::SELF_SERVICE], true), 403);
+        }
+
+        if ($screen === 'payments') {
+            return app(FinanceController::class)->payments(request());
+        }
+        if ($screen === 'staff-home') {
+            return app(StaffPortalController::class)->home(request());
+        }
+        if ($screen === 'payment-statement') {
+            return app(StaffPortalController::class)->payments(request());
+        }
+        if ($screen === 'my-requests') {
+            return app(StaffPortalController::class)->requests(request());
+        }
+        if ($screen === 'profile') {
+            return app(StaffController::class)->profile(request());
         }
 
         $events = Event::query()
@@ -138,7 +162,9 @@ class ScreenController extends Controller
             'clients' => $clients,
             'client' => $clients->first(),
             'staffMembers' => $staffMembers,
-            'staffMember' => $staffMembers->firstWhere('role', 'staff') ?? $staffMembers->first(),
+            'staffMember' => in_array($screen, self::SELF_SERVICE, true)
+                ? $user
+                : ($staffMembers->firstWhere('role', 'staff') ?? $staffMembers->first()),
             'assignments' => $assignments,
             'myAssignments' => $assignments->where('user_id', $user->id),
             'notificationLogs' => NotificationLog::query()->with('user')->latest()->get(),

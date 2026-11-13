@@ -32,7 +32,7 @@
               @if (isset($candidates))
               @php
                 $confirmedAssignments = $event->assignments->where('status', 'confirmed');
-                $confirmedManagers = $confirmedAssignments->filter(fn ($assignment) => in_array($assignment->user->role, ['employee', 'semi_employee'], true));
+                $confirmedManagers = $confirmedAssignments;
                 $leader = $confirmedAssignments->firstWhere('is_day_leader', true);
                 $representative = $confirmedAssignments->firstWhere('is_report_representative', true);
                 $shortage = max(0, $event->required_staff - $confirmedAssignments->count());
@@ -56,7 +56,7 @@
                 <div class="space-012"><div class="layout-043"><span class="text-007">確定 / 必要人数</span><span class="text-088">{{ $confirmedAssignments->count() }}<span class="text-032"> / {{ $event->required_staff }}人</span></span></div><div role="img" aria-label="必要{{ $event->required_staff }}人のうち{{ $confirmedAssignments->count() }}人確定" class="surface-040"><div class="space-013" style="width: {{ min(100, $event->required_staff ? $confirmedAssignments->count() / $event->required_staff * 100 : 0) }}%"></div></div><div class="text-089">あと{{ $shortage }}人必要</div></div>
               </section>
               <section aria-labelledby="h-lead" class="surface-006">
-                <h2 id="h-lead" class="text-020">当日責任者と報告書の代表者</h2><div class="text-033">どちらも「確定」の社員・準社員から選びます。当日責任者はスタッフのホームと出勤確認の緊急連絡先に表示されます。</div>
+                <h2 id="h-lead" class="text-020">当日責任者と報告書の代表者</h2><div class="text-033">どちらも「確定」の担当者から選びます。当日責任者はスタッフのホームと出勤確認の緊急連絡先に表示されます。</div>
                 <form method="POST" action="{{ route('events.assignments.leaders', $event) }}" class="layout-085">@csrf @method('PATCH')
                   <label class="layout-044">当日責任者 <select name="day_leader_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_day_leader)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
                   <label class="layout-044">報告書の代表者 <select name="report_representative_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_report_representative)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
@@ -72,7 +72,12 @@
                   <td class="cell-032"><input form="{{ $formId }}" name="special_notes" value="{{ $assignment->special_notes }}" class="text-100" aria-label="{{ $assignment->user->name }}の備考"></td><td class="cell-005"><span class="{{ $statusClasses[$assignment->status] ?? 'surface-016' }}">{{ $statusLabels[$assignment->status] ?? $assignment->status }}</span></td>
                   <td class="cell-004">@if(auth()->user()->isEmployee())<input form="{{ $formId }}" name="fee" type="number" min="0" value="{{ $assignment->fee }}" class="text-094">@else<span>{{ number_format($assignment->fee) }}</span>@endif</td><td class="cell-004">@if(auth()->user()->isEmployee())<input form="{{ $formId }}" name="transportation" type="number" min="0" value="{{ $assignment->transportation }}" class="text-095">@else<span>{{ number_format($assignment->transportation) }}</span>@endif</td>
                   <td class="cell-012">{{ ['not_sent' => '未送信', 'sent' => '送信済み', 'confirmed' => '確認済み', 'not_applicable' => '対象外'][$assignment->seven_day_confirmation] ?? $assignment->seven_day_confirmation }}</td><td class="cell-012">{{ ['not_sent' => '未送信', 'sent' => '送信済み', 'confirmed' => '確認済み'][$assignment->same_day_confirmation] ?? $assignment->same_day_confirmation }}</td>
-                  <td class="cell-013"><form id="{{ $formId }}" method="POST" action="{{ route('assignments.update', $assignment) }}">@csrf @method('PATCH')<select name="status" class="surface-017">@foreach($statusLabels as $status => $label)<option value="{{ $status }}" @selected($assignment->status === $status)>{{ $label }}</option>@endforeach</select><button type="submit" class="control-024">更新</button></form></td></tr>
+                  <td class="cell-013">@php
+                    $editableStatusKeys = [$assignment->status];
+                    if (in_array($assignment->status, ['requested', 'unknown', 'accepted'], true)) { $editableStatusKeys = [...$editableStatusKeys, 'confirmed', 'rejected', 'cancelled']; }
+                    if ($assignment->status === 'confirmed') { $editableStatusKeys[] = 'cancelled'; }
+                    if (in_array($assignment->status, ['confirmed', 'completed'], true) && ! $event->event_date->isFuture()) { $editableStatusKeys[] = 'absent'; }
+                  @endphp<form id="{{ $formId }}" method="POST" action="{{ route('assignments.update', $assignment) }}">@csrf @method('PATCH')<select name="status" class="surface-017">@foreach(array_unique($editableStatusKeys) as $status)<option value="{{ $status }}" @selected($assignment->status === $status)>{{ $statusLabels[$status] ?? $status }}</option>@endforeach</select><button type="submit" class="control-024">更新</button></form></td></tr>
                 @empty<tr><td colspan="8" class="cell-011">アサインはまだありません。</td></tr>@endforelse
                 </tbody></table></div>
               </section>

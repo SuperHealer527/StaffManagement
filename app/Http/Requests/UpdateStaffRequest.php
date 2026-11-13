@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStaffRequest extends FormRequest
 {
@@ -22,9 +23,14 @@ class UpdateStaffRequest extends FormRequest
      */
     public function rules(): array
     {
+        $staff = $this->route('staff');
+        $allowedStatuses = $staff?->role === 'temporary'
+            ? ['no_login', 'suspended']
+            : ['invited', 'active', 'suspended'];
+
         return [
             'base_fee' => ['required', 'integer', 'min:0', 'max:1000000'],
-            'account_status' => ['required', 'in:invited,active,suspended'],
+            'account_status' => ['required', Rule::in($allowedStatuses)],
         ];
     }
 }

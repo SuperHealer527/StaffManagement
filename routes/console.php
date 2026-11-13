@@ -14,6 +14,6 @@ Schedule::command('staff-management:synchronize-statuses')
     ->withoutOverlapping();
 
 Schedule::command('staff-management:send-due-notifications')
-    ->hourly()
+    ->everyMinute()
     ->timezone('Asia/Tokyo')
     ->withoutOverlapping();

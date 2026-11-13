@@ -21,7 +21,12 @@ class PaymentController extends Controller
     {
         abort_unless(in_array($assignment->status, ['confirmed', 'completed'], true), 422);
         $oldValues = $assignment->only(['fee', 'transportation', 'reimbursement', 'withholding_tax', 'payment_status', 'payment_source', 'paid_at']);
-        $assignment->update($request->validated());
+        $values = $request->validated();
+        if ($values['payment_status'] !== 'paid') {
+            $values['payment_source'] = null;
+            $values['paid_at'] = null;
+        }
+        $assignment->update($values);
         $this->auditService->record($assignment, 'update_payment', $oldValues, $assignment->only(array_keys($oldValues)));
         if ($oldValues['payment_status'] !== 'paid' && $assignment->payment_status === 'paid') {
             $this->sendPaymentNotice($assignment);

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreClientRequest extends FormRequest
 {
@@ -33,7 +34,13 @@ class StoreClientRequest extends FormRequest
             'proposal_status' => ['sometimes', 'required', 'in:uncontacted,approaching,proposing,won,lost,on_hold'],
             'next_action_date' => ['nullable', 'date'],
             'proposal_notes' => ['nullable', 'string', 'max:5000'],
-            'sales_owner_id' => ['nullable', 'integer', 'exists:users,id'],
+            'sales_owner_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')->where(fn ($query) => $query
+                    ->where('role', 'employee')
+                    ->where('account_status', 'active')),
+            ],
             'contacts' => ['nullable', 'array'],
             'contacts.*.id' => ['nullable', 'integer', 'exists:client_contacts,id'],
             'contacts.*.position' => ['nullable', 'string', 'max:255'],

@@ -30,7 +30,7 @@ class FirstPasswordTest extends TestCase
         $this->post(route('public-actions.update', 'first-password-token'), [
             'password' => 'password123',
             'password_confirmation' => 'password123',
-        ])->assertRedirect(route('screens.show', 'profile'));
+        ])->assertRedirect(route('profile.edit'));
 
         $this->assertAuthenticatedAs($user);
         $this->assertSame('active', $user->fresh()->account_status);

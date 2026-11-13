@@ -23,7 +23,11 @@ class StaffPortalController extends Controller
         $openRequests = $assignments->whereIn('status', ['requested', 'unknown', 'accepted'])->sortBy(fn ($item) => $item->event->event_date);
         $upcomingAssignments = $assignments->where('status', 'confirmed')->filter(fn ($item) => $item->event->event_date->greaterThanOrEqualTo(today()))->sortBy(fn ($item) => $item->event->event_date);
         $attendanceAssignment = $upcomingAssignments->first(fn ($item) => $item->event->event_date->lessThanOrEqualTo(today()->addDays(7)) && in_array($item->seven_day_confirmation, ['not_sent', 'sent'], true));
-        $reportAssignment = $assignments->first(fn ($item) => $item->is_report_representative && $item->event->report_required && $item->event->event_date->lessThanOrEqualTo(today()) && ! ReportSubmission::query()->where('event_id', $item->event_id)->where('user_id', $user->id)->whereNotNull('submitted_at')->exists());
+        $reportAssignment = $assignments->first(fn ($item) => in_array($item->status, ['confirmed', 'completed'], true)
+            && $item->is_report_representative
+            && $item->event->report_required
+            && $item->event->event_date->betweenIncluded(today()->subDays(7), today())
+            && ! ReportSubmission::query()->where('event_id', $item->event_id)->where('user_id', $user->id)->whereNotNull('submitted_at')->exists());
         $yearWorkCount = $assignments->whereIn('status', ['confirmed', 'completed'])->filter(fn ($item) => $item->event->event_date->year === today()->year)->count();
 
         return view('static-pages.Staff', compact('user', 'openRequests', 'upcomingAssignments', 'attendanceAssignment', 'reportAssignment', 'yearWorkCount'));
@@ -79,7 +83,14 @@ class StaffPortalController extends Controller
     public function report(Request $request, Assignment $assignment): View
     {
         $assignment->load(['event.client', 'event.reportQuestions']);
-        abort_unless($request->user()?->id === $assignment->user_id && $assignment->is_report_representative && $assignment->event->report_required, 403);
+        abort_unless(
+            $request->user()?->id === $assignment->user_id
+            && in_array($assignment->status, ['confirmed', 'completed'], true)
+            && $assignment->is_report_representative
+            && $assignment->event->report_required
+            && $assignment->event->event_date->betweenIncluded(today()->subDays(7), today()),
+            403,
+        );
         $reportSubmission = ReportSubmission::query()->where('event_id', $assignment->event_id)->where('user_id', $assignment->user_id)->first();
 
         return view('static-pages.Report', ['assignment' => $assignment, 'event' => $assignment->event, 'user' => $request->user(), 'reportSubmission' => $reportSubmission, 'authenticatedReport' => true]);

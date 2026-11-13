@@ -96,7 +96,11 @@ class StaffController extends Controller
     public function update(UpdateStaffRequest $request, User $staff): RedirectResponse
     {
         $oldValues = $staff->only(['base_fee', 'account_status']);
-        $staff->update($request->validated());
+        $values = $request->validated();
+        $staff->update([
+            ...$values,
+            'suspended_at' => $values['account_status'] === 'suspended' ? now() : null,
+        ]);
         $this->auditService->record($staff, 'update_staff_management', $oldValues, $staff->only(['base_fee', 'account_status']));
 
         return back()->with('status', 'スタッフ管理情報を更新しました。');

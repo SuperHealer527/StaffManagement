@@ -17,6 +17,10 @@ class UpdatePublicActionRequest extends FormRequest
             return false;
         }
 
+        if (! $actionToken->isEligibleForPurpose()) {
+            return false;
+        }
+
         return $actionToken->purpose !== 'assignment_response'
             || ($actionToken->actionable instanceof Assignment
                 && in_array($actionToken->actionable->status, ['requested', 'unknown', 'accepted'], true));

@@ -26,7 +26,7 @@ class ScreenDesignAndAuthorizationTest extends TestCase
 
         $this->actingAs($employee)->get('/screens/payments')
             ->assertOk()
-            ->assertSeeInOrder(['実施日', 'イベント名', 'スタッフ名', '謝金(円)', '交通費(円)', '立替(円)', '源泉税(円)', '総支払額', '支払ステータス', '支払元', '支払日']);
+            ->assertSeeInOrder(['実施日', 'イベント名', 'スタッフ名', '謝金', '交通費', '立替', '源泉税', '総支払額', '支払状態', '支払元', '支払日']);
 
         $this->actingAs($employee)->get('/screens/staff')
             ->assertOk()
@@ -39,6 +39,30 @@ class ScreenDesignAndAuthorizationTest extends TestCase
 
         $this->actingAs($staff)->get('/screens/payments')->assertForbidden();
         $this->actingAs($staff)->get('/screens/assignments')->assertForbidden();
+        $this->actingAs($staff)->get('/screens/assignment-response')->assertForbidden();
+        $this->actingAs($staff)->get('/screens/temporary-bank')->assertForbidden();
+    }
+
+    public function test_staff_mock_profile_is_scoped_to_the_authenticated_user(): void
+    {
+        User::factory()->create([
+            'name' => '別のスタッフ',
+            'role' => 'staff',
+            'account_status' => 'active',
+            'address' => '東京都他人区1-1',
+        ]);
+        $staff = User::factory()->create([
+            'name' => '本人スタッフ',
+            'role' => 'staff',
+            'account_status' => 'active',
+            'address' => '東京都本人区2-2',
+        ]);
+
+        $this->actingAs($staff)->get(route('screens.show', 'profile'))
+            ->assertOk()
+            ->assertSee('本人スタッフ')
+            ->assertSee('東京都本人区2-2')
+            ->assertDontSee('東京都他人区1-1');
     }
 
     public function test_client_mockup_workflows_are_present_on_their_matching_screens(): void
@@ -48,7 +72,7 @@ class ScreenDesignAndAuthorizationTest extends TestCase
         $expectedScreenContent = [
             'assignments' => ['社員として見る', '実施前(10/19)', '候補を探して依頼する', '当日の交代を追加する'],
             'event-form' => ['基本情報', '場所・持ち物・緊急連絡先・備考', '報告書', '請求と収支'],
-            'profile' => ['LINE連携・通知方法', '対応可能時間', '保有資格', '振込先口座', '契約書'],
+            'profile' => ['LINE連携・通知方法', '対応可能時間', '資格', '振込先口座', '契約書'],
             'reports' => ['イベント一覧', '防災フェア', '依頼先への報告用'],
             'client-detail' => ['基本情報', '提案状況', '担当者', '打合せ・イベント履歴'],
             'staff-detail' => ['社員として見る', '対応可能時間', '基本の謝金', '振込先口座', '勤務・依頼の履歴'],

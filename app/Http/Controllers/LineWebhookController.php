@@ -50,7 +50,7 @@ class LineWebhookController extends Controller
             ->with(['user', 'actionable'])
             ->where('token_hash', hash('sha256', $plainToken))
             ->first();
-        if ($actionToken === null || ! $actionToken->isUsable() || ! $actionToken->actionable instanceof Assignment) {
+        if ($actionToken === null || ! $actionToken->isUsable() || ! $actionToken->isEligibleForPurpose() || ! $actionToken->actionable instanceof Assignment) {
             return 'リンクの有効期限が切れています。担当者にご連絡ください。';
         }
 

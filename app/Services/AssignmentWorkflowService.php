@@ -24,6 +24,10 @@ class AssignmentWorkflowService
 
     public function changeStatus(Assignment $assignment, string $newStatus): Assignment
     {
+        if ($assignment->status === $newStatus) {
+            return $assignment->fresh(['event', 'user']);
+        }
+
         $updatedAssignment = DB::transaction(function () use ($assignment, $newStatus): Assignment {
             $lockedAssignment = Assignment::query()->lockForUpdate()->findOrFail($assignment->id);
             $event = Event::query()->lockForUpdate()->findOrFail($lockedAssignment->event_id);
@@ -40,6 +44,10 @@ class AssignmentWorkflowService
             }
             if ($newStatus === 'completed' && $lockedAssignment->payment_status !== 'paid') {
                 $updates['payment_status'] = 'waiting';
+            }
+            if (! in_array($newStatus, self::PAYMENT_ELIGIBLE_STATUSES, true)) {
+                $updates['is_day_leader'] = false;
+                $updates['is_report_representative'] = false;
             }
 
             $lockedAssignment->update($updates);
@@ -127,6 +135,23 @@ class AssignmentWorkflowService
 
         if ($newStatus === 'confirmed' && in_array($assignment->status, ['declined', 'rejected', 'cancelled', 'absent', 'completed'], true)) {
             throw ValidationException::withMessages(['status' => '終了済みのアサインを確定には戻せません。']);
+        }
+
+        if ($newStatus === 'confirmed' && ! in_array($assignment->status, self::OPEN_RESPONSE_STATUSES, true)) {
+            throw ValidationException::withMessages(['status' => '依頼中・未定・承諾のアサインだけを確定できます。']);
+        }
+
+        if ($newStatus === 'rejected' && ! in_array($assignment->status, self::OPEN_RESPONSE_STATUSES, true)) {
+            throw ValidationException::withMessages(['status' => '回答待ちのアサインだけを見送りにできます。']);
+        }
+
+        if ($newStatus === 'cancelled' && ! in_array($assignment->status, [...self::OPEN_RESPONSE_STATUSES, 'confirmed'], true)) {
+            throw ValidationException::withMessages(['status' => '依頼中または確定済みのアサインだけを取り消せます。']);
+        }
+
+        if ($newStatus === 'absent'
+            && (! in_array($assignment->status, self::PAYMENT_ELIGIBLE_STATUSES, true) || $event->event_date->isFuture())) {
+            throw ValidationException::withMessages(['status' => 'イベント当日以降の確定済み担当者だけを欠勤にできます。']);
         }
 
         if ($newStatus === 'completed' && $assignment->status !== 'confirmed') {

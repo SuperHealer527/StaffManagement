@@ -19,6 +19,7 @@ use App\Http\Controllers\ScreenController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffPortalController;
 use App\Http\Controllers\UiActionController;
+use App\Http\Middleware\EnsureAccountCanLogIn;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
@@ -36,7 +37,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', EnsureAccountCanLogIn::class])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/screens/{screen}', [ScreenController::class, 'show'])->name('screens.show');
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');

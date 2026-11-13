@@ -22,8 +22,10 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'メールアドレスまたはパスワードが正しくありません。'])->onlyInput('email');
         }
 
-        if ($request->user()?->account_status !== 'active') {
+        if ($request->user()?->account_status !== 'active' || $request->user()?->role === 'temporary') {
             Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return back()->withErrors(['email' => 'このアカウントは現在利用できません。']);
         }

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePhoneLogRequest extends FormRequest
 {
@@ -29,7 +30,13 @@ class StorePhoneLogRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:30'],
             'purpose' => ['required', 'in:お仕事の依頼・相談,問い合わせ,スタッフからの連絡,営業・売り込み,その他'],
             'content' => ['required', 'string', 'max:10000'],
-            'recipient_id' => ['nullable', 'integer', 'exists:users,id'],
+            'recipient_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')->where(fn ($query) => $query
+                    ->whereIn('role', ['employee', 'semi_employee'])
+                    ->where('account_status', 'active')),
+            ],
             'status' => ['required', 'in:callback_required,message_only,completed'],
         ];
     }
