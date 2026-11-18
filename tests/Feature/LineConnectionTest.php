@@ -24,8 +24,10 @@ class LineConnectionTest extends TestCase
             ->assertSee('LINE連携・通知方法')
             ->assertSee('LINEと連携する');
 
-        $this->actingAs($user)->post(route('line.connect.start'))
+        $response = $this->actingAs($user)->post(route('line.connect.start'))
             ->assertRedirectContains('https://access.line.me/oauth2/v2.1/authorize');
+        parse_str((string) parse_url((string) $response->headers->get('Location'), PHP_URL_QUERY), $authorizationQuery);
+        $this->assertSame('aggressive', $authorizationQuery['bot_prompt']);
         $connection = session('line_connection');
 
         Http::fakeSequence()

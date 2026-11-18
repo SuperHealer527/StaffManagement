@@ -126,6 +126,7 @@ class LineConnectionController extends Controller
             'redirect_uri' => route('line.connect.callback'),
             'state' => $state,
             'scope' => 'profile openid',
+            'bot_prompt' => 'aggressive',
         ]));
     }
 
