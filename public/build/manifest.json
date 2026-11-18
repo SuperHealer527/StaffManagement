@@ -1,0 +1,32 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-DRSHmd4l.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/static-design.css": {
+    "file": "assets/static-design-By1JN94l.css",
+    "name": "static-design",
+    "names": [
+      "static-design.css"
+    ],
+    "src": "resources/css/static-design.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BvRk9kiK.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/static-design.js": {
+    "file": "assets/static-design-ZYTpwDOn.js",
+    "name": "static-design",
+    "src": "resources/js/static-design.js",
+    "isEntry": true
+  }
+}

@@ -1,6 +1,7 @@
 *.log
 .DS_Store
 .env
+.env_server
 .env.backup
 .env.production
 .phpactor.json
@@ -14,7 +15,6 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
