@@ -91,3 +91,106 @@
     grid-template-columns: 1fr;
   }
 }
+
+/*
+ * The client supplied these workflows as 390px mobile canvases. Keep that
+ * compact presentation on phones, but frame and center it on wider screens so
+ * it does not remain attached to the left edge of a desktop viewport.
+ */
+:is(
+  .page--login,
+  .page--staff,
+  .page--myrequests,
+  .page--payslip,
+  .page--areaswitch,
+  .page--attendancecomplete,
+  .page--interviewschedule,
+  .page--lineconnect,
+  .page--paymentdetails,
+  .page--profile,
+  .page--report,
+  .page--respond,
+  .page--setpassword
+) > .app-root > .screen {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+@media (min-width: 641px) {
+  :is(
+    .page--staff,
+    .page--myrequests,
+    .page--payslip,
+    .page--areaswitch,
+    .page--attendancecomplete,
+    .page--interviewschedule,
+    .page--lineconnect,
+    .page--paymentdetails,
+    .page--profile,
+    .page--report,
+    .page--respond
+  ) > .app-root > .screen {
+    align-items: flex-start;
+    padding: 32px;
+  }
+
+  :is(
+    .page--staff,
+    .page--myrequests,
+    .page--payslip,
+    .page--areaswitch,
+    .page--attendancecomplete,
+    .page--interviewschedule,
+    .page--lineconnect,
+    .page--paymentdetails,
+    .page--profile,
+    .page--report,
+    .page--respond
+  ) > .app-root > .screen > div {
+    width: min(100%, 480px);
+    height: auto;
+    min-height: calc(100vh - 64px);
+    overflow: hidden;
+    border: 1px solid rgb(227, 230, 235);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgb(22 33 58 / 12%);
+  }
+
+  :is(.page--login, .page--setpassword) > .app-root > .screen {
+    align-items: center;
+    padding: 32px;
+  }
+
+  :is(.page--login, .page--setpassword) > .app-root > .screen > .layout-072 {
+    width: min(100%, 440px);
+    height: min(844px, calc(100vh - 64px));
+    min-height: min(680px, calc(100vh - 64px));
+    overflow-y: auto;
+    border: 1px solid rgb(227, 230, 235);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgb(22 33 58 / 12%);
+  }
+}
+
+@media (max-width: 640px) {
+  :is(
+    .page--login,
+    .page--staff,
+    .page--myrequests,
+    .page--payslip,
+    .page--areaswitch,
+    .page--attendancecomplete,
+    .page--interviewschedule,
+    .page--lineconnect,
+    .page--paymentdetails,
+    .page--profile,
+    .page--report,
+    .page--respond,
+    .page--setpassword
+  ) > .app-root > .screen > div {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+  }
+}
