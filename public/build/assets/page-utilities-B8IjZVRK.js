@@ -1,0 +1,1 @@
+var e=document.querySelector(`[data-scroll-to-top]`);if(e){let t=()=>{e.hidden=window.scrollY<320};e.addEventListener(`click`,()=>{let e=window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;window.scrollTo({top:0,behavior:e?`auto`:`smooth`})}),window.addEventListener(`scroll`,t,{passive:!0}),t()}

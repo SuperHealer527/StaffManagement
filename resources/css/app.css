@@ -25,6 +25,16 @@
 }
 
 @layer components {
+    .page-utilities { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(20px, env(safe-area-inset-bottom)); z-index: 1100; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: none; }
+    .page-utilities > * { margin: 0; pointer-events: auto; }
+    .page-utilities__button { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 7px; border: 1px solid #d2d7e0; border-radius: 999px; padding: 10px 15px; background: #fff; color: #9b2c1a; font-size: 13px; font-weight: 700; box-shadow: 0 8px 24px rgb(22 33 58 / 18%); }
+    .page-utilities__button:hover { background: #fff6f4; transform: translateY(-1px); }
+    .page-utilities__button:focus-visible { outline: 3px solid rgb(31 91 216 / 28%); outline-offset: 2px; }
+    .page-utilities__button svg { width: 18px; height: 18px; flex: 0 0 18px; }
+    .page-utilities__button--top { border-color: #16213a; background: #16213a; color: #fff; }
+    .page-utilities__button--top:hover { background: #253658; }
+    .page-utilities__button[hidden] { display: none; }
+
     .app-shell { min-height: 100vh; display: flex; align-items: stretch; }
     .area-rail { position: sticky; top: 0; z-index: 30; display: flex; width: 76px; height: 100vh; flex: 0 0 76px; flex-direction: column; align-items: center; gap: 6px; background: #16213a; padding: 16px 0; }
     .brand-mark { display: grid; width: 40px; height: 40px; margin-bottom: 14px; place-items: center; border-radius: 10px; background: #fff; color: #16213a; font-size: 15px; font-weight: 700; text-decoration: none; }

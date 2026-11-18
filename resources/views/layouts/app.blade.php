@@ -96,5 +96,6 @@
         </nav>
     @endif
 </div>
+<x-page-utilities :show-logout="false" />
 </body>
 </html>

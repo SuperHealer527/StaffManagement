@@ -12,7 +12,11 @@ class AuthenticationTest extends TestCase
 
     public function test_login_page_renders(): void
     {
-        $this->get('/login')->assertOk()->assertSee('ハイクラス業務管理システム');
+        $this->get('/login')
+            ->assertOk()
+            ->assertSee('ハイクラス業務管理システム')
+            ->assertDontSee('ログアウト')
+            ->assertSee('data-scroll-to-top', false);
     }
 
     public function test_active_user_can_log_in(): void
@@ -23,6 +27,17 @@ class AuthenticationTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_authenticated_user_can_log_out(): void
+    {
+        $user = User::factory()->create(['account_status' => 'active']);
+
+        $this->actingAs($user)
+            ->post(route('logout'))
+            ->assertRedirect(route('login'));
+
+        $this->assertGuest();
     }
 
     public function test_suspended_user_cannot_log_in(): void

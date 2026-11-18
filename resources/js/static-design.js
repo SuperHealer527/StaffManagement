@@ -1,3 +1,5 @@
+import './page-utilities';
+
 const routeMap = {
     'Main.dc.html': '/dashboard',
     'Staff.dc.html': '/my/home',

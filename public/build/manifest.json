@@ -1,6 +1,10 @@
 {
+  "_page-utilities-B8IjZVRK.js": {
+    "file": "assets/page-utilities-B8IjZVRK.js",
+    "name": "page-utilities"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-DRSHmd4l.css",
+    "file": "assets/app-ZFz8BWW0.css",
     "name": "app",
     "names": [
       "app.css"
@@ -9,7 +13,7 @@
     "isEntry": true
   },
   "resources/css/static-design.css": {
-    "file": "assets/static-design-By1JN94l.css",
+    "file": "assets/static-design-CmRlcHLv.css",
     "name": "static-design",
     "names": [
       "static-design.css"
@@ -18,15 +22,21 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BvRk9kiK.js",
+    "file": "assets/app-CCFY59zd.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_page-utilities-B8IjZVRK.js"
+    ]
   },
   "resources/js/static-design.js": {
-    "file": "assets/static-design-ZYTpwDOn.js",
+    "file": "assets/static-design-8C7DVaKa.js",
     "name": "static-design",
     "src": "resources/js/static-design.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_page-utilities-B8IjZVRK.js"
+    ]
   }
 }

@@ -23,7 +23,9 @@ class StaffPortalTest extends TestCase
         $this->actingAs($staff)->get(route('my.home'))
             ->assertOk()
             ->assertSee('本人向け依頼')
-            ->assertSee('未回答の依頼');
+            ->assertSee('未回答の依頼')
+            ->assertSee('ログアウト')
+            ->assertSee('data-scroll-to-top', false);
     }
 
     public function test_staff_can_answer_and_change_open_assignment_response(): void
