@@ -43,6 +43,14 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+.app-root,
+.app-root > .screen,
+.app-root > .screen > :first-child {
+  min-height: 100vh;
+}
+
 .layout-012,
 .layout-040 {
   width: 100%;
