@@ -899,6 +899,552 @@ body,
   }
 }
 
+/* Sales workspace lists */
+:is(.page--clients, .page--meetings) .layout-040,
+.page--salesboard .layout-200 {
+  display: grid;
+  gap: 20px;
+  margin: 0 auto;
+  max-width: 1560px;
+  width: 100%;
+}
+
+:is(.page--clients, .page--salesboard, .page--meetings) .sales-page-header {
+  align-items: center;
+  background: linear-gradient(135deg, #fff 0%, #f4f8ff 100%);
+  border: 1px solid #dbe3ef;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgb(22 33 58 / 6%);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding: 24px 26px;
+}
+
+:is(.page--clients, .page--salesboard, .page--meetings) .sales-page-header .text-060 {
+  line-height: 1.7;
+  margin-top: 6px;
+}
+
+:is(.page--clients, .page--salesboard, .page--meetings) .sales-data-panel {
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgb(22 33 58 / 5%);
+  min-width: 0;
+  padding: 22px 24px;
+}
+
+:is(.page--clients, .page--meetings) .sales-filter-form {
+  display: grid;
+  gap: 18px;
+}
+
+:is(.page--clients, .page--meetings) .layout-069 {
+  background: #f1f4f9;
+  border: 1px solid #e1e7f0;
+  border-radius: 12px;
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 5px;
+  scrollbar-width: thin;
+}
+
+:is(.page--clients, .page--meetings) .layout-069 :is(.control-006, .control-007) {
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 16px;
+  text-decoration: none;
+  transition: background-color 150ms ease, box-shadow 150ms ease, color 150ms ease;
+}
+
+:is(.page--clients, .page--meetings) .layout-069 .control-006 {
+  background: #fff;
+  box-shadow: 0 3px 10px rgb(22 33 58 / 9%);
+  color: #1f5bd8;
+}
+
+:is(.page--clients, .page--meetings) .layout-069 .control-007 {
+  background: transparent;
+  color: #596273;
+}
+
+:is(.page--clients, .page--meetings) .layout-069 .control-007:hover {
+  background: rgb(255 255 255 / 72%);
+  color: #1f5bd8;
+}
+
+:is(.page--clients, .page--meetings) .layout-041 {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+:is(.page--clients, .page--meetings) .sales-search-controls {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+:is(.page--clients, .page--meetings) .sales-search-controls :is(input, select, button),
+.page--salesboard .sales-board-search :is(input, select, button) {
+  min-height: 42px;
+}
+
+.page--clients .sales-search-controls .text-119,
+.page--meetings .sales-search-controls .text-071,
+.page--salesboard .sales-board-search .text-047 {
+  min-width: 240px;
+  width: min(320px, 100%);
+}
+
+:is(.page--clients, .page--meetings, .page--salesboard) :is(.text-119, .text-071, .text-047, .surface-017) {
+  background: #fff;
+  border: 1px solid #cbd5e3;
+  border-radius: 9px;
+  font-family: inherit;
+  padding-inline: 12px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+:is(.page--clients, .page--meetings, .page--salesboard) :is(.text-119, .text-071, .text-047, .surface-017):focus {
+  border-color: #2b65da;
+  box-shadow: 0 0 0 3px rgb(43 101 218 / 14%);
+  outline: 0;
+}
+
+:is(.page--clients, .page--meetings, .page--salesboard) :is(.control-024, .sales-search-controls .control-006) {
+  align-items: center;
+  background: #245fda;
+  border: 1px solid #245fda;
+  border-radius: 9px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-weight: 700;
+  justify-content: center;
+  min-width: 78px;
+  padding: 0 16px;
+  transition: background-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+:is(.page--clients, .page--meetings, .page--salesboard) :is(.control-024, .sales-search-controls .control-006):hover {
+  background: #194eb8;
+  box-shadow: 0 7px 16px rgb(31 91 216 / 18%);
+  transform: translateY(-1px);
+}
+
+.page--clients .layout-107 {
+  align-items: flex-start;
+  background: #f8fafc;
+  border: 1px solid #e2e8f1;
+  border-radius: 9px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 8px;
+  position: relative;
+}
+
+.page--clients .layout-107 .surface-056 {
+  position: absolute;
+  right: 7px;
+  top: 5px;
+}
+
+.page--clients .layout-107 .surface-017 {
+  border: 0;
+  min-height: 25px;
+  padding: 0 28px 0 0;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 {
+  border: 1px solid #e1e7f0;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 table {
+  border-collapse: collapse;
+  min-width: 980px;
+  width: 100%;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 thead {
+  background: #f6f8fb;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 :is(th, td) {
+  border-bottom: 1px solid #e8edf4;
+  padding: 13px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 th {
+  color: #596273;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 tbody tr {
+  transition: background-color 150ms ease;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 tbody tr:hover {
+  background: #f8fbff;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+:is(.page--clients, .page--meetings) .utility-001 .text-067 {
+  color: #1756cf;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.page--clients .utility-001 .text-070 {
+  align-items: center;
+  border: 1px solid #bfd0ef;
+  border-radius: 8px;
+  color: #1756cf;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 35px;
+  padding: 0 11px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.page--clients .utility-001 .text-070:hover {
+  background: #edf4ff;
+}
+
+:is(.page--clients, .page--meetings) .sales-empty-state {
+  color: #687285;
+  padding: 34px 18px !important;
+  text-align: center !important;
+}
+
+.page--clients .sales-data-panel > .text-058 {
+  background: #f7f9fc;
+  border-radius: 9px;
+  color: #687285;
+  line-height: 1.65;
+  margin-top: 16px;
+  padding: 11px 13px;
+}
+
+.sales-pagination:empty {
+  display: none;
+}
+
+.sales-pagination nav {
+  margin-top: 18px;
+}
+
+.sales-pagination nav > div:first-child {
+  display: none;
+}
+
+.sales-pagination nav > div:last-child {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.sales-pagination nav > div:last-child > div:last-child > span {
+  border-radius: 9px;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.sales-pagination nav a,
+.sales-pagination nav span[aria-current="page"] > span,
+.sales-pagination nav span[aria-disabled="true"] > span {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #d5deeb;
+  color: #485366;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.sales-pagination nav span[aria-current="page"] > span {
+  background: #245fda;
+  border-color: #245fda;
+  color: #fff;
+  font-weight: 700;
+}
+
+.sales-pagination nav a:hover {
+  background: #edf4ff;
+  color: #1756cf;
+}
+
+.sales-pagination nav svg {
+  height: 18px;
+  width: 18px;
+}
+
+/* Proposal board */
+.page--salesboard .sales-page-header {
+  align-items: flex-end;
+}
+
+.page--salesboard .sales-board-search {
+  align-items: center;
+  background: rgb(255 255 255 / 80%);
+  border: 1px solid #dfe6f0;
+  border-radius: 12px;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 8px;
+}
+
+.page--salesboard .utility-021 {
+  background: #fff;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgb(22 33 58 / 5%);
+  overflow-x: auto;
+  padding: 16px;
+}
+
+.page--salesboard .layout-201 {
+  gap: 13px;
+  grid-template-columns: repeat(6, minmax(225px, 1fr));
+  min-width: 1430px;
+}
+
+.page--salesboard .layout-202 {
+  background: #f5f7fa;
+  border: 1px solid #e0e6ef;
+  border-radius: 13px;
+  gap: 11px;
+  min-height: 320px;
+  padding: 12px;
+  position: relative;
+}
+
+.page--salesboard .layout-202::before {
+  background: #8791a2;
+  border-radius: 13px 13px 0 0;
+  content: '';
+  height: 4px;
+  inset: 0 0 auto;
+  position: absolute;
+}
+
+.page--salesboard .layout-202:nth-child(2)::before { background: #3970d8; }
+.page--salesboard .layout-202:nth-child(3)::before { background: #d99a22; }
+.page--salesboard .layout-202:nth-child(4)::before { background: #23936a; }
+.page--salesboard .layout-202:nth-child(5)::before { background: #747f90; }
+.page--salesboard .layout-202:nth-child(6)::before { background: #805ab5; }
+
+.page--salesboard .layout-203 {
+  padding: 7px 3px 3px;
+}
+
+.page--salesboard .layout-203 .text-210 {
+  background: #fff;
+  border-radius: 999px;
+  min-width: 36px;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+.page--salesboard .surface-106 {
+  border: 1px solid #dfe5ee;
+  box-shadow: 0 3px 10px rgb(22 33 58 / 4%);
+  padding: 14px;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.page--salesboard a.surface-106:hover {
+  border-color: #b9caea;
+  box-shadow: 0 8px 18px rgb(22 33 58 / 10%);
+  transform: translateY(-2px);
+}
+
+.page--salesboard .surface-106 .text-017 {
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.page--salesboard .surface-106 .text-059 {
+  color: #687285;
+  line-height: 1.55;
+  margin-top: 5px;
+  min-height: 40px;
+}
+
+.page--salesboard .surface-106 .utility-002 {
+  background: #edf1f6;
+  border-radius: 999px;
+  color: #505b6d;
+  padding: 3px 7px;
+}
+
+.page--salesboard .sales-board-empty {
+  align-items: center;
+  background: transparent;
+  border-style: dashed;
+  box-shadow: none;
+  color: #828b99;
+  display: flex;
+  justify-content: center;
+  min-height: 82px;
+}
+
+.page--salesboard .layout-200 > .text-002 {
+  background: #f7f9fc;
+  border: 1px solid #e1e7ef;
+  border-radius: 10px;
+  color: #687285;
+  line-height: 1.65;
+  padding: 11px 14px;
+}
+
+/* Meeting history */
+.page--meetings .meeting-inbox-panel {
+  background: linear-gradient(135deg, #fff9e8 0%, #fffdf7 100%);
+  border-color: #efd589;
+  border-radius: 15px;
+  box-shadow: 0 7px 20px rgb(122 82 0 / 6%);
+  padding: 18px 20px;
+}
+
+.page--meetings .pending-email-list {
+  display: grid;
+  flex-basis: 100%;
+  gap: 10px;
+  width: 100%;
+}
+
+.page--meetings .pending-email-row {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #eadcae;
+  border-radius: 11px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) auto;
+  padding: 13px;
+}
+
+.page--meetings .pending-email-content {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.page--meetings .pending-email-content span {
+  color: #665b3e;
+  overflow-wrap: anywhere;
+}
+
+.page--meetings .pending-email-row .surface-017 {
+  width: 100%;
+}
+
+.page--meetings .surface-082 {
+  color: #1756cf;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.page--meetings .surface-082:hover {
+  background: #edf4ff;
+}
+
+.page--meetings .utility-001 .cell-052 {
+  line-height: 1.55;
+  min-width: 260px;
+  white-space: normal;
+}
+
+:is(.page--clients, .page--salesboard, .page--meetings) :is(a, button, input, select):focus-visible {
+  outline: 3px solid rgb(31 91 216 / 25%);
+  outline-offset: 2px;
+}
+
+@media (max-width: 960px) {
+  :is(.page--clients, .page--salesboard, .page--meetings) .sales-page-header {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .page--salesboard .sales-board-search {
+    width: 100%;
+  }
+
+  .page--meetings .pending-email-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :is(.page--clients, .page--meetings) .layout-041 {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  :is(.page--clients, .page--meetings) .sales-search-controls {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  :is(.page--clients, .page--salesboard, .page--meetings) .sales-data-panel,
+  .page--salesboard .utility-021 {
+    padding: 15px;
+  }
+
+  :is(.page--clients, .page--meetings) .sales-search-controls > *,
+  .page--salesboard .sales-board-search > * {
+    width: 100% !important;
+  }
+
+  .page--clients .layout-107 {
+    width: 100%;
+  }
+
+  .page--clients .layout-107 .surface-017 {
+    width: 100%;
+  }
+
+  .sales-pagination nav > div:first-child {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .sales-pagination nav > div:last-child {
+    display: none;
+  }
+}
+
 /* Staff detail */
 .page--staffdetail .layout-040 {
   display: grid;

@@ -25,17 +25,17 @@
                 <div class="text-002">ハイクラス業務管理システム</div>
                 <div class="text-003">営業</div>
               </div>
-              <a href="SalesHome.dc.html" class="layout-010"><span>営業ホーム</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="SalesBoard.dc.html" class="layout-010"><span>提案状況</span></a><a href="#" aria-current="page" class="layout-009"><span>打合せ履歴</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="{{ route('sales.home') }}" class="layout-010"><span>営業ホーム</span></a><a href="{{ route('clients.index') }}" class="layout-010"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="{{ route('sales.proposals') }}" class="layout-010"><span>提案状況</span></a><a href="{{ route('meetings.index') }}" aria-current="page" class="layout-009"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">
-              <div class="layout-013">
+              <div class="layout-013 sales-page-header">
                 <div>
                   <h1 class="text-044">打合せ履歴</h1>
                   <div class="text-060">すべての依頼先の打合せとメールの記録を、新しい順に並べます。登録・編集は各依頼先の詳細から行います。社員だけが開けます。</div>
                 </div>
               </div>
-              <section aria-labelledby="mt-wait" class="layout-160">
+              <section aria-labelledby="mt-wait" class="layout-160 meeting-inbox-panel">
                 <div>
                   <h2 id="mt-wait" class="text-159">振り分け待ちのメール {{ isset($pendingEmails) ? $pendingEmails->count() : 2 }}件</h2>
                   <div class="text-160">送信先から依頼先を判定できなかった営業メールです。</div>
@@ -73,14 +73,14 @@
                 $meetingTypeLabels = ['sales'=>'営業','consultation'=>'相談','preparation'=>'事前準備','day_of'=>'当日','follow_up'=>'事後フォロー','other'=>'その他'];
                 $meetingMethodLabels = ['visit'=>'訪問','phone'=>'電話','online'=>'オンライン','email'=>'メール','other'=>'その他'];
               @endphp
-              <section aria-labelledby="mt-list" class="surface-006">
-                <form method="get" action="{{ route('meetings.index') }}">
+              <section aria-labelledby="mt-list" class="surface-006 sales-data-panel">
+                <form method="get" action="{{ route('meetings.index') }}" class="sales-filter-form">
                   <div role="group" aria-label="種別で絞り込み" class="layout-069"><a href="{{ route('meetings.index', request()->except('type', 'page')) }}" class="{{ request('type') ? 'control-007' : 'control-006' }}"><span>すべて</span></a>@foreach($meetingTypeLabels as $value=>$label)<a href="{{ route('meetings.index', [...request()->except('page'), 'type'=>$value]) }}" class="{{ request('type') === $value ? 'control-006' : 'control-007' }}"><span>{{ $label }}</span></a>@endforeach</div>
-                  <div class="layout-041"><h2 id="mt-list" class="text-020">打合せ・メール(<span>{{ $meetingsPage->total() }}</span>件)</h2><div class="layout-070"><input name="keyword" value="{{ request('keyword') }}" type="search" aria-label="依頼先名・内容で探す" placeholder="依頼先名・内容で探す" class="text-071"><select name="period" aria-label="期間" class="surface-017"><option value="three_months">直近3か月</option><option value="year" @selected(request('period') === 'year')>今年</option><option value="all" @selected(request('period') === 'all')>すべて</option></select><button class="control-006">検索</button></div></div>
+                  <div class="layout-041"><h2 id="mt-list" class="text-020">打合せ・メール(<span>{{ $meetingsPage->total() }}</span>件)</h2><div class="layout-070 sales-search-controls"><input name="keyword" value="{{ request('keyword') }}" type="search" aria-label="依頼先名・内容で探す" placeholder="依頼先名・内容で探す" class="text-071"><select name="period" aria-label="期間" class="surface-017"><option value="three_months">直近3か月</option><option value="year" @selected(request('period') === 'year')>今年</option><option value="all" @selected(request('period') === 'all')>すべて</option></select><button class="control-006">検索</button></div></div>
                 </form>
                 <div class="utility-001"><table class="text-078"><thead><tr class="text-023"><th class="cell-001">日付</th><th class="cell-002">依頼先</th><th class="cell-002">種別</th><th class="cell-002">方法</th><th class="cell-002">先方の参加者</th><th class="cell-002">内容</th><th class="cell-002">記録者</th></tr></thead><tbody>
-                  @forelse($meetingsPage as $meeting)<tr><td class="cell-003">{{ $meeting->meeting_date->isoFormat('M/D(ddd)') }}</td><td class="cell-004"><a href="{{ route('clients.edit', $meeting->client) }}" class="text-067">{{ $meeting->client->name }}</a></td><td class="cell-005"><span class="surface-028">{{ $meetingTypeLabels[$meeting->type] ?? $meeting->type }}</span></td><td class="cell-005">{{ $meetingMethodLabels[$meeting->method] ?? $meeting->method }}</td><td class="cell-004">{{ $meeting->participants ?: '—' }}</td><td class="cell-052">{{ $meeting->content }}</td><td class="cell-008">{{ $meeting->recorder?->name ?? '自動' }}</td></tr>@empty<tr><td colspan="7" class="cell-052">条件に一致する打合せ・メールはありません。</td></tr>@endforelse
-                </tbody></table></div>{{ $meetingsPage->links() }}
+                  @forelse($meetingsPage as $meeting)<tr><td class="cell-003">{{ $meeting->meeting_date->isoFormat('M/D(ddd)') }}</td><td class="cell-004"><a href="{{ route('clients.edit', $meeting->client) }}" class="text-067">{{ $meeting->client->name }}</a></td><td class="cell-005"><span class="surface-028">{{ $meetingTypeLabels[$meeting->type] ?? $meeting->type }}</span></td><td class="cell-005">{{ $meetingMethodLabels[$meeting->method] ?? $meeting->method }}</td><td class="cell-004">{{ $meeting->participants ?: '—' }}</td><td class="cell-052">{{ $meeting->content }}</td><td class="cell-008">{{ $meeting->recorder?->name ?? '自動' }}</td></tr>@empty<tr><td colspan="7" class="cell-052 sales-empty-state">条件に一致する打合せ・メールはありません。</td></tr>@endforelse
+                </tbody></table></div><div class="sales-pagination">{{ $meetingsPage->links() }}</div>
               </section>
               @else
               <section aria-labelledby="mt-list" class="surface-006">

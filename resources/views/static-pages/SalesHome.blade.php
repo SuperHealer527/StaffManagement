@@ -11,6 +11,19 @@
   @vite(['resources/css/static-design.css', 'resources/js/static-design.js'])
 </head>
 <body class="page page--saleshome" data-static-screen="SalesHome">
+    @php
+      $salesStatusCounts ??= collect([
+        'uncontacted' => 0,
+        'approaching' => 0,
+        'proposing' => 0,
+        'won' => 0,
+        'lost' => 0,
+        'on_hold' => 0,
+      ]);
+      $yearlyOutcomeCounts ??= collect(['won' => 0, 'lost' => 0]);
+      $thisWeekActionCount ??= 0;
+      $overdueActionCount ??= 0;
+    @endphp
     <div class="app-root">
       <div class="screen">
         <div class="layout-056">

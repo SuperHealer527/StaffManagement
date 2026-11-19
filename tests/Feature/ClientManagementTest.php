@@ -25,6 +25,17 @@ class ClientManagementTest extends TestCase
             ->assertDontSee('表示されない会社');
     }
 
+    public function test_client_list_displays_pagination_for_more_than_twenty_five_clients(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        Client::factory()->count(26)->create();
+
+        $this->actingAs($employee)->get(route('clients.index'))
+            ->assertOk()
+            ->assertViewHas('clients', fn ($clients): bool => $clients->total() === 26 && $clients->lastPage() === 2)
+            ->assertSee('page=2', false);
+    }
+
     public function test_employee_creates_client_with_contacts_and_proposal_data(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
