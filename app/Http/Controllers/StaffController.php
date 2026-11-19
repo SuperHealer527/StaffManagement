@@ -9,11 +9,13 @@ use App\Http\Requests\UpdateStaffRequest;
 use App\Models\Qualification;
 use App\Models\User;
 use App\Services\AuditService;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -53,15 +55,29 @@ class StaffController extends Controller
 
         $staff->load(['qualifications', 'availabilities', 'assignments.event.client']);
         $this->auditService->record($staff, $request->user()->isEmployee() ? 'view_sensitive_staff_profile' : 'view_staff_profile');
+        $bankState = $request->user()->isEmployee()
+            ? $this->resolveBankDetails($staff)
+            : ['details' => [], 'unavailable' => false];
 
-        return view('static-pages.StaffDetail', ['staffMember' => $staff, 'dynamicStaffDetail' => true]);
+        return view('static-pages.StaffDetail', [
+            'staffMember' => $staff,
+            'dynamicStaffDetail' => true,
+            'bankDetails' => $bankState['details'],
+            'bankDetailsUnavailable' => $bankState['unavailable'],
+        ]);
     }
 
     public function profile(Request $request): View
     {
         $staffMember = $request->user()->load(['qualifications', 'availabilities']);
+        $bankState = $this->resolveBankDetails($staffMember);
 
-        return view('static-pages.Profile', ['staffMember' => $staffMember, 'dynamicProfile' => true]);
+        return view('static-pages.Profile', [
+            'staffMember' => $staffMember,
+            'dynamicProfile' => true,
+            'bankDetails' => $bankState['details'],
+            'bankDetailsUnavailable' => $bankState['unavailable'],
+        ]);
     }
 
     public function updateProfile(UpdateProfileRequest $request): RedirectResponse
@@ -161,5 +177,25 @@ class StaffController extends Controller
         $this->auditService->record($staff, 'download_contract');
 
         return Storage::download($staff->contract_path, basename($staff->contract_path));
+    }
+
+    /**
+     * @return array{details: array<string, mixed>, unavailable: bool}
+     */
+    private function resolveBankDetails(User $staff): array
+    {
+        try {
+            return [
+                'details' => $staff->bank_details ?? [],
+                'unavailable' => false,
+            ];
+        } catch (DecryptException) {
+            Log::warning('Unable to decrypt staff bank details.', ['staff_id' => $staff->getKey()]);
+
+            return [
+                'details' => [],
+                'unavailable' => true,
+            ];
+        }
     }
 }

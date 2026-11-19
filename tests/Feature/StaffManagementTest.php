@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -79,6 +80,27 @@ class StaffManagementTest extends TestCase
 
         $this->assertDatabaseHas('users', ['id' => $staff->id, 'base_fee' => 15000, 'account_status' => 'suspended']);
         $this->assertDatabaseHas('audit_logs', ['auditable_id' => $staff->id, 'action' => 'update_staff_management']);
+    }
+
+    public function test_staff_detail_remains_available_when_bank_details_cannot_be_decrypted(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $staff = User::factory()->create(['role' => 'staff', 'account_status' => 'active']);
+        DB::table('users')->where('id', $staff->id)->update(['bank_details' => 'invalid-encrypted-value']);
+
+        $this->actingAs($employee)->get(route('staff.show', $staff))
+            ->assertOk()
+            ->assertSee('暗号化キーの変更により口座情報を読み取れません。');
+    }
+
+    public function test_profile_remains_available_when_bank_details_cannot_be_decrypted(): void
+    {
+        $staff = User::factory()->create(['role' => 'staff', 'account_status' => 'active']);
+        DB::table('users')->where('id', $staff->id)->update(['bank_details' => 'invalid-encrypted-value']);
+
+        $this->actingAs($staff->fresh())->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('すべての口座項目を再入力して保存してください。');
     }
 
     public function test_user_updates_profile_bank_and_availability(): void
