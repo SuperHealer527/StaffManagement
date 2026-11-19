@@ -110,7 +110,10 @@ class OperationsManagementTest extends TestCase
         ])->assertRedirect();
         $phoneLog = PhoneLog::query()->firstOrFail();
 
-        $this->actingAs($recipient)->get(route('phone-logs.index', ['filter' => 'mine']))->assertOk()->assertSee('確認会社');
+        $this->actingAs($recipient)->get(route('phone-logs.index', ['filter' => 'mine']))
+            ->assertOk()
+            ->assertSee('確認会社')
+            ->assertDontSee('必要な機能をここに追加');
         $this->actingAs($semi)->patch(route('phone-logs.complete', $phoneLog))->assertRedirect();
         $this->assertDatabaseHas('phone_logs', ['id' => $phoneLog->id, 'status' => 'completed']);
     }
