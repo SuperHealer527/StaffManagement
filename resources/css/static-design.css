@@ -203,6 +203,132 @@ body,
   }
 }
 
+/* Authenticated staff pages share a responsive desktop shell. */
+.page--myrequests .layout-162 > :is(a, button) {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  body:is(.page--staff, .page--myrequests, .page--payslip) > .app-root > .screen > div {
+    border: 1px solid rgb(227, 230, 235);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgb(22 33 58 / 12%);
+    height: auto;
+    min-height: calc(100vh - 64px);
+    overflow: hidden;
+    width: min(100%, 980px);
+  }
+
+  :is(.page--staff, .page--myrequests, .page--payslip) .layout-030 {
+    padding: 18px 32px;
+  }
+
+  :is(.page--staff, .page--myrequests, .page--payslip) .layout-036 {
+    padding: 2px 18px;
+  }
+
+  :is(.page--staff, .page--myrequests, .page--payslip) .layout-037,
+  :is(.page--staff, .page--myrequests, .page--payslip) .layout-038 {
+    border-radius: 10px;
+    height: 64px;
+  }
+
+  :is(.page--staff, .page--myrequests, .page--payslip) .layout-037 {
+    background: rgb(242, 246, 255);
+  }
+
+  .page--staff .layout-031 {
+    align-items: stretch;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding: 28px 32px 36px;
+  }
+
+  .page--staff .layout-031 > :first-child,
+  .page--staff .layout-031 > [role="status"],
+  .page--staff .layout-031 > [aria-label="今年の勤務回数"] {
+    grid-column: 1 / -1;
+  }
+
+  .page--staff .layout-031 > section {
+    height: 100%;
+  }
+
+  .page--staff .surface-010,
+  .page--staff .surface-131,
+  .page--staff .layout-221 {
+    padding: 20px 22px;
+  }
+
+  .page--staff .text-036,
+  .page--myrequests .text-036,
+  .page--payslip .text-036 {
+    font-size: 26px;
+  }
+
+  .page--myrequests .layout-161 {
+    gap: 18px;
+    overflow: visible;
+    padding: 28px 32px 36px;
+  }
+
+  .page--myrequests .layout-161 > :is(h1, .layout-162, .text-002, .surface-083, [role="status"]) {
+    align-self: center;
+    width: min(100%, 820px);
+  }
+
+  .page--myrequests .layout-162 {
+    gap: 6px;
+    padding: 5px;
+  }
+
+  .page--myrequests .layout-162 > :is(a, button) {
+    font-size: 14px;
+    height: 44px;
+  }
+
+  .page--myrequests .surface-083 {
+    padding: 20px 22px;
+  }
+
+  .page--myrequests .text-161 {
+    display: inline-block;
+    font-size: 17px;
+    margin-top: 8px;
+  }
+
+  .page--payslip .layout-031 {
+    align-items: start;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+    overflow: visible;
+    padding: 28px 32px 36px;
+  }
+
+  .page--payslip .layout-031 > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .page--payslip .surface-010 {
+    padding: 20px 22px;
+  }
+
+  .page--payslip .layout-031 > [aria-labelledby="ps-list"] {
+    min-width: 0;
+  }
+
+  .page--payslip .layout-167 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Profile keeps the supplied mobile workflow and expands into a readable PC form. */
 .page--profile .layout-174 {
   height: auto;
