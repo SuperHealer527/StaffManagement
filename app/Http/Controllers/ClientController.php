@@ -17,10 +17,27 @@ class ClientController extends Controller
     {
         abort_unless(request()->user()?->isEmployee(), 403);
 
-        $statusCounts = Client::query()
+        $proposalStatuses = ['uncontacted', 'approaching', 'proposing', 'won', 'lost', 'on_hold'];
+        $storedStatusCounts = Client::query()
             ->selectRaw('proposal_status, count(*) as aggregate')
             ->groupBy('proposal_status')
             ->pluck('aggregate', 'proposal_status');
+        $statusCounts = collect($proposalStatuses)
+            ->mapWithKeys(fn (string $status): array => [$status => (int) $storedStatusCounts->get($status, 0)]);
+        $storedYearlyOutcomeCounts = Client::query()
+            ->whereIn('proposal_status', ['won', 'lost'])
+            ->where(function ($query): void {
+                $query->whereYear('proposal_status_changed_at', today()->year)
+                    ->orWhere(function ($fallbackQuery): void {
+                        $fallbackQuery->whereNull('proposal_status_changed_at')
+                            ->whereYear('created_at', today()->year);
+                    });
+            })
+            ->selectRaw('proposal_status, count(*) as aggregate')
+            ->groupBy('proposal_status')
+            ->pluck('aggregate', 'proposal_status');
+        $yearlyOutcomeCounts = collect(['won', 'lost'])
+            ->mapWithKeys(fn (string $status): array => [$status => (int) $storedYearlyOutcomeCounts->get($status, 0)]);
         $upcomingActions = Client::query()
             ->whereNotNull('next_action_date')
             ->whereDate('next_action_date', '<=', today()->addDays(14))
@@ -30,6 +47,7 @@ class ClientController extends Controller
 
         return view('static-pages.SalesHome', [
             'salesStatusCounts' => $statusCounts,
+            'yearlyOutcomeCounts' => $yearlyOutcomeCounts,
             'upcomingActions' => $upcomingActions,
             'recentMeetings' => Meeting::query()->with('client')->latest('meeting_date')->limit(5)->get(),
             'thisWeekActionCount' => Client::query()->whereBetween('next_action_date', [today()->startOfWeek(), today()->endOfWeek()])->count(),
@@ -98,6 +116,9 @@ class ClientController extends Controller
     {
         $client = DB::transaction(function () use ($request): Client {
             $values = $request->validated();
+            if (($values['proposal_status'] ?? 'uncontacted') !== 'uncontacted') {
+                $values['proposal_status_changed_at'] = now();
+            }
             $client = Client::query()->create(Arr::except($values, 'contacts'));
             $this->synchronizeContacts($client, $values['contacts'] ?? []);
 

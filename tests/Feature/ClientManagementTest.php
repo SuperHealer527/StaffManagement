@@ -46,6 +46,7 @@ class ClientManagementTest extends TestCase
 
         $client = Client::query()->where('name', '新規法人')->firstOrFail();
         $response->assertRedirect(route('clients.edit', $client));
+        $this->assertNotNull($client->proposal_status_changed_at);
         $this->assertDatabaseHas('clients', [
             'id' => $client->id,
             'proposal_status' => 'proposing',
@@ -55,6 +56,44 @@ class ClientManagementTest extends TestCase
             'client_id' => $client->id,
             'name' => '担当 花子',
         ]);
+    }
+
+    public function test_sales_home_uses_database_status_counts_and_current_year_outcomes(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+
+        Client::factory()->count(2)->create(['proposal_status' => 'proposing']);
+        Client::factory()->create(['proposal_status' => 'approaching']);
+        Client::factory()->create([
+            'proposal_status' => 'won',
+            'proposal_status_changed_at' => now()->startOfYear()->addMonth(),
+        ]);
+        Client::factory()->create([
+            'proposal_status' => 'won',
+            'proposal_status_changed_at' => now()->subYear(),
+        ]);
+        Client::factory()->create([
+            'proposal_status' => 'lost',
+            'proposal_status_changed_at' => null,
+            'created_at' => now()->startOfYear()->addMonths(2),
+        ]);
+
+        $this->actingAs($employee)->get(route('sales.home'))
+            ->assertOk()
+            ->assertViewHas('salesStatusCounts', fn ($counts): bool => $counts->all() === [
+                'uncontacted' => 0,
+                'approaching' => 1,
+                'proposing' => 2,
+                'won' => 2,
+                'lost' => 1,
+                'on_hold' => 0,
+            ])
+            ->assertViewHas('yearlyOutcomeCounts', fn ($counts): bool => $counts->all() === [
+                'won' => 1,
+                'lost' => 1,
+            ])
+            ->assertSee(route('sales.proposals'), false)
+            ->assertSee(route('meetings.index'), false);
     }
 
     public function test_proposal_status_change_records_change_date_and_updates_contacts(): void

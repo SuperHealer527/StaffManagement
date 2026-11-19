@@ -25,7 +25,7 @@
                 <div class="text-002">ハイクラス業務管理システム</div>
                 <div class="text-003">営業</div>
               </div>
-              <a href="#" aria-current="page" class="layout-009"><span>営業ホーム</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="SalesBoard.dc.html" class="layout-010"><span>提案状況</span></a><a href="Meetings.dc.html" class="layout-010"><span>打合せ履歴</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="{{ route('sales.home') }}" aria-current="page" class="layout-009"><span>営業ホーム</span></a><a href="{{ route('clients.index') }}" class="layout-010"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="{{ route('sales.proposals') }}" class="layout-010"><span>提案状況</span></a><a href="{{ route('meetings.index') }}" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">
@@ -38,25 +38,25 @@
               <section aria-label="営業の数字" class="layout-039">
                 <div class="surface-002">
                   <div class="text-007"><span>提案中の依頼先</span></div>
-                  <div class="text-009"><span>{{ $salesStatusCounts['proposing'] ?? 4 }}</span><span class="text-010"><span>社</span></span></div>
-                  <div class="text-018"><span>アプローチ中は {{ $salesStatusCounts['approaching'] ?? 6 }}社</span></div>
+                  <div class="text-009"><span>{{ $salesStatusCounts['proposing'] }}</span><span class="text-010"><span>社</span></span></div>
+                  <div class="text-018"><span>アプローチ中は {{ $salesStatusCounts['approaching'] }}社</span></div>
                 </div>
                 <div class="surface-002">
                   <div class="text-007"><span>今週の次回アクション</span></div>
-                  <div class="text-009"><span>{{ $thisWeekActionCount ?? 3 }}</span><span class="text-010"><span>件</span></span></div>
-                  <div class="text-018"><span>期限切れ {{ $overdueActionCount ?? 1 }}件</span></div>
+                  <div class="text-009"><span>{{ $thisWeekActionCount }}</span><span class="text-010"><span>件</span></span></div>
+                  <div class="text-018"><span>期限切れ {{ $overdueActionCount }}件</span></div>
                 </div>
                 <div class="surface-002">
                   <div class="text-007"><span>今年の受注</span></div>
-                  <div class="text-009"><span>{{ $salesStatusCounts['won'] ?? 2 }}</span><span class="text-010"><span>社</span></span></div>
-                  <div class="text-018"><span>失注 {{ $salesStatusCounts['lost'] ?? 1 }}社</span></div>
+                  <div class="text-009"><span>{{ $yearlyOutcomeCounts['won'] }}</span><span class="text-010"><span>社</span></span></div>
+                  <div class="text-018"><span>失注 {{ $yearlyOutcomeCounts['lost'] }}社</span></div>
                 </div>
               </section>
               <section aria-labelledby="sh-stage" class="surface-006">
                 <div class="layout-021">
                   <h2 id="sh-stage" class="text-020">提案状況ごとの件数</h2>
-                  <a href="SalesBoard.dc.html" class="text-021">提案状況ボードを開く</a></div>
-                <div class="layout-205">@foreach(['uncontacted'=>['未接触','surface-112'],'approaching'=>['アプローチ中','surface-113'],'proposing'=>['提案中','surface-114'],'won'=>['受注','surface-115'],'lost'=>['失注','surface-116'],'on_hold'=>['保留','surface-117']] as $status => [$label,$class])<a href="{{ route('sales.proposals', ['status' => $status]) }}" class="{{ $class }}"><span>{{ $label }}</span><span class="text-214"><span>{{ $salesStatusCounts[$status] ?? ['uncontacted'=>15,'approaching'=>6,'proposing'=>4,'won'=>3,'lost'=>1,'on_hold'=>2][$status] }}</span></span></a>@endforeach</div>
+                  <a href="{{ route('sales.proposals') }}" class="text-021">提案状況ボードを開く</a></div>
+                <div class="layout-205">@foreach(['uncontacted'=>['未接触','surface-112'],'approaching'=>['アプローチ中','surface-113'],'proposing'=>['提案中','surface-114'],'won'=>['受注','surface-115'],'lost'=>['失注','surface-116'],'on_hold'=>['保留','surface-117']] as $status => [$label,$class])<a href="{{ route('sales.proposals', ['status' => $status]) }}" class="{{ $class }}"><span>{{ $label }}</span><span class="text-214"><span>{{ $salesStatusCounts[$status] }}</span></span></a>@endforeach</div>
               </section>
               <div class="layout-066">
                 <section aria-labelledby="sh-next" class="surface-118">
@@ -113,7 +113,7 @@
                 <section aria-labelledby="sh-meet" class="surface-120">
                   <div class="layout-021">
                     <h2 id="sh-meet" class="text-020">最近の打合せ</h2>
-                    <a href="Meetings.dc.html" class="text-021">すべて見る</a></div>
+                    <a href="{{ route('meetings.index') }}" class="text-021">すべて見る</a></div>
                   <div class="layout-035">
                     @isset($recentMeetings)
                     @php($meetingTypeLabels = ['sales'=>'営業','consultation'=>'相談','preparation'=>'事前準備','day_of'=>'当日','follow_up'=>'事後フォロー','other'=>'その他'])
