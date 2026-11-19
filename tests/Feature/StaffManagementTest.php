@@ -14,6 +14,16 @@ class StaffManagementTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
+    public function test_profile_renders_availability_as_a_grid(): void
+    {
+        $staff = User::factory()->create(['role' => 'staff', 'account_status' => 'active']);
+
+        $this->actingAs($staff)->get(route('profile.edit'))
+            ->assertOk()
+            ->assertSee('profile-availability-grid', false)
+            ->assertSee('aria-label="月曜 8時前"', false);
+    }
+
     public function test_management_user_can_filter_staff_list(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);

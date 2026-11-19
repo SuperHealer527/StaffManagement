@@ -203,6 +203,164 @@ body,
   }
 }
 
+/* Profile keeps the supplied mobile workflow and expands into a readable PC form. */
+.page--profile .layout-174 {
+  height: auto;
+}
+
+.page--profile .profile-availability-grid {
+  display: grid;
+  gap: 3px;
+  grid-template-columns: 66px repeat(7, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.page--profile .profile-availability-grid > * {
+  min-width: 0;
+  width: 100%;
+}
+
+.page--profile .profile-availability-grid > .text-183 {
+  align-items: center;
+  background: rgb(245, 246, 248);
+  border: 0;
+  display: flex;
+  font-size: 11px;
+  font-weight: 700;
+  justify-content: center;
+  padding: 0 2px;
+}
+
+.page--profile .profile-availability-grid > .text-183:nth-child(8n + 1) {
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+.page--profile .profile-availability-grid > select {
+  appearance: auto;
+  font-size: 10.5px;
+  padding: 0 2px;
+}
+
+.page--profile .layout-183,
+.page--profile .layout-183 > * {
+  min-width: 0;
+}
+
+.page--profile input[type="file"] {
+  max-width: 100%;
+}
+
+@media (min-width: 900px) {
+  body.page--profile > .app-root > .screen > div.layout-174 {
+    border: 1px solid rgb(227, 230, 235);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgb(22 33 58 / 12%);
+    min-height: calc(100vh - 64px);
+    overflow: hidden;
+    width: min(100%, 1120px);
+  }
+
+  .page--profile .layout-030 {
+    padding: 18px 32px;
+  }
+
+  .page--profile .layout-057 {
+    gap: 20px;
+    padding: 28px 32px 36px;
+  }
+
+  .page--profile .layout-063 {
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .page--profile .text-036 {
+    font-size: 26px;
+  }
+
+  .page--profile form.layout-175 {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-basic"] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-contact"] {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-line"] {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-car"] {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-time"],
+  .page--profile form.layout-175 > [aria-labelledby="pf-bank"],
+  .page--profile form.layout-175 > .control-004 {
+    grid-column: 1 / -1;
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-bank"] {
+    display: grid;
+    gap: 12px 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page--profile form.layout-175 > [aria-labelledby="pf-bank"] > h2 {
+    grid-column: 1 / -1;
+  }
+
+  .page--profile form.layout-175 > .control-004 {
+    justify-self: end;
+    min-width: 320px;
+    padding: 0 28px;
+  }
+
+  .page--profile .profile-availability-grid {
+    gap: 6px;
+    grid-template-columns: minmax(96px, 1.25fr) repeat(7, minmax(0, 1fr));
+  }
+
+  .page--profile .profile-availability-grid > .text-183 {
+    font-size: 13px;
+    height: 40px;
+  }
+
+  .page--profile .profile-availability-grid > select {
+    border-radius: 7px;
+    font-size: 12px;
+    height: 40px;
+    padding: 0 6px;
+  }
+
+  .page--profile [aria-labelledby="pf-qual"] > form.layout-183 {
+    align-items: end;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: minmax(180px, 1fr) minmax(160px, 220px) minmax(220px, 1.2fr) auto;
+  }
+
+  .page--profile [aria-labelledby="pf-qual"] > form.layout-183 > input {
+    width: 100%;
+  }
+
+  .page--profile [aria-labelledby="pf-qual"] > form.layout-183 > .control-060 {
+    padding: 0 18px;
+    white-space: nowrap;
+  }
+}
+
 .page-utilities {
   position: fixed;
   right: max(16px, env(safe-area-inset-right));
