@@ -63,6 +63,11 @@ body,
   min-width: 0;
 }
 
+/* Keep desktop workspaces comfortably inset without wasting smaller screens. */
+.page main.space-005 {
+  padding: 28px clamp(20px, 2.2vw, 40px) 56px;
+}
+
 .pending-email-list {
   display: grid;
   flex-basis: 100%;
@@ -2586,6 +2591,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2622,6 +2628,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2640,6 +2647,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2658,6 +2666,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2673,6 +2682,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2693,6 +2703,41 @@ body,
 }
 
 :is(
+  .page--main,
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table :is(th, td) {
+  padding: 12px 14px !important;
+  vertical-align: middle;
+}
+
+:is(
+  .page--main,
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table tbody td[colspan] {
+  color: #667085;
+  padding-block: 18px !important;
+}
+
+:is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2708,6 +2753,7 @@ body,
 }
 
 :is(
+  .page--main,
   .page--eventlist,
   .page--eventdetail,
   .page--assign,
@@ -2842,7 +2888,7 @@ body,
 
 .page--main :is(.surface-004, .surface-006) {
   overflow: hidden;
-  padding: 0;
+  padding: 20px 22px;
 }
 
 .page--main :is(.layout-020, .layout-025) {
@@ -2851,7 +2897,20 @@ body,
 
 .page--main .layout-021 {
   border-bottom: 1px solid #e5e9f0;
-  padding: 18px 20px;
+  padding: 0 0 14px;
+}
+
+.page--main .layout-022 {
+  margin-top: 0;
+}
+
+.page--main .layout-023 {
+  min-height: 48px;
+  padding: 14px 0;
+}
+
+.page--main .utility-001 {
+  margin-top: 16px;
 }
 
 .page--main :is(.layout-159, .layout-017, .layout-018) {
@@ -2930,6 +2989,11 @@ body,
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.page--stafflist .layout-235 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 760px;
 }
 
 .page--stafflist :is(.surface-030, .surface-031),
@@ -3103,6 +3167,10 @@ body,
 }
 
 @media (max-width: 760px) {
+  .page main.space-005 {
+    padding: 20px 16px 96px;
+  }
+
   :is(
     .page--eventlist,
     .page--eventdetail,
