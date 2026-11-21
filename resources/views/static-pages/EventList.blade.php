@@ -36,8 +36,8 @@
                 </div>
                 @if (auth()->user()->isEmployee())<a href="{{ route('events.create') }}" class="surface-021">+ イベントを登録</a>@endif</div>
               <form method="GET" action="{{ route('events.index') }}" aria-label="絞り込み" class="layout-151" data-auto-filter-form>
-                @php $selectedPeriod = request('period', 'month'); @endphp
-                <div role="group" aria-label="期間" class="layout-152"><span class="text-147">期間</span>@foreach (['today' => '今日', 'week' => '今週', 'month' => '今月', 'next_month' => '来月', 'custom' => '日付を指定'] as $value => $label)<button type="submit" name="period" value="{{ $value }}" aria-pressed="{{ $selectedPeriod === $value ? 'true' : 'false' }}" class="{{ $selectedPeriod === $value ? 'control-009' : 'control-008' }}"><span>{{ $label }}</span></button>@endforeach</div>
+                @php $selectedPeriod = request('period', 'upcoming'); @endphp
+                <div role="group" aria-label="期間" class="layout-152"><span class="text-147">期間</span>@foreach (['upcoming' => '今後すべて', 'today' => '今日', 'week' => '今週', 'month' => '今月', 'next_month' => '来月', 'custom' => '日付を指定'] as $value => $label)<button type="submit" name="period" value="{{ $value }}" aria-pressed="{{ $selectedPeriod === $value ? 'true' : 'false' }}" class="{{ $selectedPeriod === $value ? 'control-009' : 'control-008' }}"><span>{{ $label }}</span></button>@endforeach</div>
                 <div class="layout-071">
                   <div class="layout-051"><label for="el-q" class="text-002">キーワード</label><input id="el-q" name="q" value="{{ request('q') }}" type="search" placeholder="イベント名・事業名で探す" class="text-071"></div>
                   <div class="layout-051"><label for="el-client" class="text-002">依頼先</label><select id="el-client" name="client_id" class="surface-017"><option value="">すべて</option>@foreach ($clients as $clientOption)<option value="{{ $clientOption->id }}" @selected((string) request('client_id') === (string) $clientOption->id)>{{ $clientOption->name }}</option>@endforeach</select></div>

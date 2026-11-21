@@ -40,7 +40,7 @@
               <section aria-labelledby="sec-basic" class="layout-049">
                 <h2 id="sec-basic" class="text-020">基本情報</h2>
                 <div class="layout-050">
-                  <div class="layout-051"><label for="ev-client" class="text-042">依頼先<span class="text-050">必須</span></label><select id="ev-client" name="client_id" required class="surface-070">@foreach($clients as $clientOption)<option value="{{ $clientOption->id }}" @selected((string) old('client_id', $event?->client_id) === (string) $clientOption->id)>{{ $clientOption->name }}</option>@endforeach</select><span class="text-002">依頼先一覧に登録した中から選びます。<a href="{{ route('clients.create') }}">新しい依頼先を登録</a></span></div>
+                  <div class="layout-051"><label for="ev-client" class="text-042">依頼先<span class="text-050">必須</span></label><select id="ev-client" name="client_id" required class="surface-070">@foreach($clients as $clientOption)<option value="{{ $clientOption->id }}" @selected((string) old('client_id', $event?->client_id ?? request('client_id')) === (string) $clientOption->id)>{{ $clientOption->name }}</option>@endforeach</select><span class="text-002">依頼先一覧に登録した中から選びます。<a href="{{ route('clients.create') }}">新しい依頼先を登録</a></span></div>
                   <div class="layout-051"><label for="ev-biz" class="text-042">事業名<span class="text-050">必須</span></label><input id="ev-biz" name="business_name" type="text" value="{{ old('business_name', $event?->business_name) }}" required maxlength="255" class="text-051"></div>
                 </div>
                 <div class="layout-051"><label for="ev-name" class="text-042">イベント名</label><input id="ev-name" name="name" type="text" value="{{ old('name', $event?->name) }}" maxlength="255" class="text-051"></div>

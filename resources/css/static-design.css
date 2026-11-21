@@ -377,6 +377,20 @@ body,
   max-width: 100%;
 }
 
+.page--profile .profile-password-card,
+.page--profile .profile-password-form {
+  display: grid;
+  gap: 16px;
+}
+
+.page--profile .profile-password-card {
+  margin-top: 20px;
+}
+
+.page--profile .profile-password-form > .control-004 {
+  width: 100%;
+}
+
 @media (min-width: 900px) {
   body.page--profile > .app-root > .screen > div.layout-174 {
     border: 1px solid rgb(227, 230, 235);
@@ -468,6 +482,23 @@ body,
     font-size: 12px;
     height: 40px;
     padding: 0 6px;
+  }
+
+  .page--profile .profile-password-card {
+    gap: 18px;
+  }
+
+  .page--profile .profile-password-form {
+    align-items: end;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .page--profile .profile-password-form > .control-004 {
+    grid-column: 1 / -1;
+    justify-self: end;
+    min-width: 260px;
   }
 
   .page--profile [aria-labelledby="pf-qual"] > form.layout-183 {

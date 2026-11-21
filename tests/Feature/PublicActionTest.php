@@ -42,6 +42,35 @@ class PublicActionTest extends TestCase
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'unknown']);
     }
 
+    public function test_assignment_request_does_not_show_sample_event_details_when_values_are_empty(): void
+    {
+        $assignment = Assignment::factory()->create(['status' => 'requested']);
+        $assignment->event->update([
+            'meeting_place' => null,
+            'venue' => null,
+            'details' => null,
+            'work_content' => null,
+            'notes' => null,
+            'items' => [],
+        ]);
+        $plainToken = 'empty-details-token';
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'assignment_response',
+            'token_hash' => hash('sha256', $plainToken),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        $this->get(route('public-actions.show', $plainToken))
+            ->assertOk()
+            ->assertDontSee('サンプル公民館')
+            ->assertDontSee('市民向けの健康イベント。')
+            ->assertDontSee('体力測定4種目＋骨密度測定')
+            ->assertDontSee('駐車場はありません。');
+    }
+
     public function test_expired_public_action_link_is_rejected(): void
     {
         $assignment = Assignment::factory()->create();

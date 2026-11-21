@@ -29,15 +29,15 @@
           </div>
           <main class="space-005">
             <div class="layout-040">
-              <div class="text-007"><a href="Clients.dc.html">依頼先</a> / サンプル商事 株式会社</div>
+              <div class="text-007"><a href="{{ route('clients.index') }}">依頼先</a> / {{ $client?->name ?? '新規登録' }}</div>
               <div class="layout-013">
                 <div>
                   <div class="layout-042">
-                    <h1 class="text-044">サンプル商事 株式会社</h1>
-                    <span class="surface-029">法人</span><span class="surface-047">提案中</span></div>
-                  <div class="text-060">地域連携部 ・ 最終更新 2026/10/15 山田 太郎 ・ この詳細ページは社員のみ閲覧できます</div>
+                    <h1 class="text-044">{{ $client?->name ?? '依頼先の新規登録' }}</h1>
+                    @if($client)<span class="surface-029">{{ ['corporation' => '法人', 'government' => '行政', 'individual' => '個人', 'organization' => '団体', 'other' => 'その他'][$client->type] ?? $client->type }}</span><span class="surface-047">{{ ['uncontacted' => '未接触', 'approaching' => 'アプローチ中', 'proposing' => '提案中', 'won' => '受注', 'lost' => '失注', 'on_hold' => '保留'][$client->proposal_status] ?? $client->proposal_status }}</span>@endif</div>
+                  <div class="text-060">{{ $client?->department ?: '部署未登録' }}@if($client) ・ 最終更新 {{ $client->updated_at->timezone('Asia/Tokyo')->format('Y/m/d') }}@endif ・ この詳細ページは社員のみ閲覧できます</div>
                 </div>
-                <a href="#" class="text-109">+ この依頼先でイベントを登録</a></div>
+                @if($client)<a href="{{ route('events.create', ['client_id' => $client->id]) }}" class="text-109">+ この依頼先でイベントを登録</a>@endif</div>
               <form method="POST" action="{{ $client ? route('clients.update', $client) : route('clients.store') }}">
                 @csrf
                 @if($client) @method('PATCH') @endif
@@ -92,11 +92,11 @@
               </section>
               <div class="layout-104"><a href="{{ route('clients.index') }}" class="text-057">一覧に戻る</a><button type="submit" class="control-003">保存する</button></div>
               </form>
+              @if($client)
               <section aria-labelledby="ce-meet" class="surface-022">
                 <div class="layout-021">
                   <h2 id="ce-meet" class="text-020">打合せ・イベント履歴(<span>{{ ($client?->meetings->count() ?? 0) + ($client?->events->count() ?? 0) }}</span>件)</h2>
                   @if ($client)<button type="button" data-add-meeting class="control-028">+ 打合せを登録</button>@endif</div>
-                <div class="surface-048">営業メールの宛先(CCまたはBCC)に <strong>log@example.co.jp</strong> を入れると、この依頼先の履歴にメールとして自動で登録されます。この依頼先のイベントも自動で履歴に並びます。</div>
                 <div class="layout-047">
                   @if ($client)
                     @php
@@ -178,6 +178,7 @@
                   @endif
                 </div>
               </section>
+              @endif
               @if ($client)
               <dialog id="meeting-dialog" class="surface-006">
                 <form method="POST" action="{{ route('clients.meetings.store', $client) }}" data-meeting-form data-client-id="{{ $client->id }}" class="layout-158">

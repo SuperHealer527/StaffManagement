@@ -58,6 +58,7 @@ Route::middleware(['auth', EnsureAccountCanLogIn::class])->group(function () {
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
     Route::get('/profile', [StaffController::class, 'profile'])->name('profile.edit');
     Route::patch('/profile', [StaffController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [StaffController::class, 'updatePassword'])->middleware('throttle:6,1')->name('profile.password.update');
     Route::post('/profile/line-connect', [LineConnectionController::class, 'start'])->name('line.connect.start');
     Route::delete('/profile/line-connect', [LineConnectionController::class, 'disconnect'])->name('line.connect.disconnect');
     Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');

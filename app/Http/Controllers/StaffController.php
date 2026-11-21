@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContractRequest;
 use App\Http\Requests\StoreQualificationRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Models\Qualification;
@@ -107,6 +108,15 @@ class StaffController extends Controller
         $this->auditService->record($staff, 'update_own_profile', $oldValues, $staff->fresh()->only(array_keys($oldValues)));
 
         return back()->with('status', 'プロフィールを更新しました。');
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request): RedirectResponse
+    {
+        $staff = $request->user();
+        $staff->update(['password' => $request->validated('password')]);
+        $this->auditService->record($staff, 'update_own_password');
+
+        return back()->with('password_status', 'パスワードを変更しました。');
     }
 
     public function update(UpdateStaffRequest $request, User $staff): RedirectResponse

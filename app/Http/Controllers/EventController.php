@@ -65,7 +65,7 @@ class EventController extends Controller
             $eventsQuery->where('status', $status);
         }
 
-        $this->applyDateFilter($eventsQuery, request()->string('period', 'month')->toString());
+        $this->applyDateFilter($eventsQuery, request()->string('period', 'upcoming')->toString());
         if (request()->boolean('shortage')) {
             $eventsQuery->whereNotIn('status', ['draft', 'cancelled'])
                 ->whereRaw("(select count(*) from assignments where assignments.event_id = events.id and assignments.status = 'confirmed') < events.required_staff");
@@ -329,6 +329,12 @@ class EventController extends Controller
 
     private function applyDateFilter(Builder $query, string $period): void
     {
+        if ($period === 'upcoming') {
+            $query->whereDate('event_date', '>=', today()->toDateString());
+
+            return;
+        }
+
         [$from, $to] = match ($period) {
             'today' => [today(), today()],
             'week' => [today()->startOfWeek(), today()->endOfWeek()],

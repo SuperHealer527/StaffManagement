@@ -77,6 +77,41 @@ class EventManagementTest extends TestCase
         ]))->assertOk()->assertSee('不足対象イベント')->assertDontSee('表示対象外イベント');
     }
 
+    public function test_event_list_shows_all_upcoming_events_by_default(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $client = Client::factory()->create();
+        $nextMonthEvent = Event::factory()->create([
+            'client_id' => $client->id,
+            'name' => '翌月以降のイベント',
+            'event_date' => today()->addMonths(2),
+            'status' => 'recruiting',
+        ]);
+        Event::factory()->create([
+            'client_id' => $client->id,
+            'name' => '過去のイベント',
+            'event_date' => today()->subDay(),
+            'status' => 'recruiting',
+        ]);
+
+        $this->actingAs($employee)->get(route('events.index'))
+            ->assertOk()
+            ->assertSee($nextMonthEvent->name)
+            ->assertDontSee('過去のイベント')
+            ->assertSee('今後すべて');
+    }
+
+    public function test_event_create_page_selects_client_from_query_string(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $selectedClient = Client::factory()->create(['name' => '選択済み依頼先']);
+        Client::factory()->create(['name' => '別の依頼先']);
+
+        $this->actingAs($employee)->get(route('events.create', ['client_id' => $selectedClient->id]))
+            ->assertOk()
+            ->assertSee('value="'.$selectedClient->id.'" selected', false);
+    }
+
     public function test_employee_duplicates_event_for_multiple_dates_without_assignments(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);

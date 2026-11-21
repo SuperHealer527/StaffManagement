@@ -69,6 +69,18 @@ class ClientManagementTest extends TestCase
         ]);
     }
 
+    public function test_client_detail_links_to_event_creation_with_the_client_selected(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $client = Client::factory()->create(['name' => 'イベント登録元の依頼先']);
+
+        $this->actingAs($employee)->get(route('clients.edit', $client))
+            ->assertOk()
+            ->assertSee($client->name)
+            ->assertSee(route('events.create', ['client_id' => $client->id]), false)
+            ->assertDontSee('log@example.co.jp');
+    }
+
     public function test_sales_home_uses_database_status_counts_and_current_year_outcomes(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);

@@ -51,25 +51,25 @@
               </div>
               <div class="cell-015">
                 <div class="text-002">集合場所</div>
-                <div class="text-061">{{ $event?->meeting_place ?? 'サンプル公民館 1階ロビー' }}</div>
+                <div class="text-061">{{ isset($event) ? ($event->meeting_place ?: '—') : 'サンプル公民館 1階ロビー' }}</div>
                 <div class="text-058">実施場所</div>
-                <div class="text-061">{{ $event?->venue ?? 'サンプル公民館 2階 大ホール' }}</div>
+                <div class="text-061">{{ isset($event) ? ($event->venue ?: '—') : 'サンプル公民館 2階 大ホール' }}</div>
               </div>
               <div class="cell-015">
                 <div class="text-002">イベント詳細</div>
-                <div class="text-208">{{ $event?->details ?? '市民向けの健康イベント。' }}</div>
+                <div class="text-208">{{ isset($event) ? ($event->details ?: '—') : '市民向けの健康イベント。' }}</div>
               </div>
               <div class="cell-015">
                 <div class="text-002">実施内容</div>
-                <div class="text-208">{{ $event?->work_content ?? '体力測定4種目＋骨密度測定' }}</div>
+                <div class="text-208">{{ isset($event) ? ($event->work_content ?: '—') : '体力測定4種目＋骨密度測定' }}</div>
               </div>
               <div class="cell-015">
                 <div class="text-002">備考</div>
-                <div class="text-208">{{ $event?->notes ?? '駐車場はありません。公共交通機関でお越しください。' }}</div>
+                <div class="text-208">{{ isset($event) ? ($event->notes ?: '—') : '駐車場はありません。公共交通機関でお越しください。' }}</div>
               </div>
               <div class="cell-015">
                 <div class="text-002">持ち物</div>
-                <div class="layout-059">@forelse($event?->items ?? ['昼食', '室内履き', 'ハイクラスTシャツ', '筆記用具'] as $item)<span class="text-045">{{ ['lunch' => '昼食', 'dinner' => '夕食', 'indoor_shoes' => '室内履き', 'highclass_shirt' => 'ハイクラスTシャツ'][$item] ?? $item }}</span>@empty<span>なし</span>@endforelse</div>
+                <div class="layout-059">@forelse(isset($event) ? ($event->items ?? []) : ['昼食', '室内履き', 'ハイクラスTシャツ', '筆記用具'] as $item)<span class="text-045">{{ ['lunch' => '昼食', 'dinner' => '夕食', 'indoor_shoes' => '室内履き', 'highclass_shirt' => 'ハイクラスTシャツ'][$item] ?? $item }}</span>@empty<span>なし</span>@endforelse</div>
               </div>
             </section>
             @if(!isset($assignment) || in_array($assignment->status, ['requested', 'unknown', 'accepted'], true))

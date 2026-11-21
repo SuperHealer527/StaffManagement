@@ -54,6 +54,10 @@ class LineConnectionTest extends TestCase
 
     public function test_line_connection_shows_configuration_error_when_credentials_are_missing(): void
     {
+        config([
+            'services.line.login_channel_id' => null,
+            'services.line.login_channel_secret' => null,
+        ]);
         $user = User::factory()->create(['role' => 'staff', 'account_status' => 'active']);
 
         $this->actingAs($user)->from(route('profile.edit'))->post(route('line.connect.start'))

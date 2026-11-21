@@ -166,6 +166,7 @@ class StaffManagementTest extends TestCase
         $this->actingAs($employee)->get(route('staff.show', $staff))
             ->assertOk()
             ->assertSee('勤務履歴イベント')
-            ->assertSee('実施済み');
+            ->assertSee('実施済み')
+            ->assertSeeInOrder(['イベント', '総支払額', 'アサイン', '出勤確認']);
     }
 }
