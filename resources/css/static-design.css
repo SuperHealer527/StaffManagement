@@ -2564,6 +2564,614 @@ body,
   }
 }
 
+/* Unified management workspace */
+:is(
+  .page--main,
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) main > .layout-040,
+.page--main main > .layout-012 {
+  box-sizing: border-box;
+  margin-inline: auto;
+  max-width: 1580px;
+  width: 100%;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) main > .layout-040 {
+  display: grid;
+  gap: 20px;
+}
+
+:is(
+  .page--main,
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(.surface-004, .surface-006, .surface-125) {
+  background: #fff;
+  border: 1px solid #dfe5ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgb(24 39 75 / 5%);
+  box-sizing: border-box;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(.utility-001, .utility-003, .utility-024) {
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  overflow-x: auto;
+  scrollbar-color: #bac5d6 #f4f6f9;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(.utility-001, .utility-003, .utility-024) table {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 760px;
+  width: 100%;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table thead tr {
+  background: #f4f7fb;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table thead th {
+  border-bottom: 1px solid #dfe5ef;
+  color: #526079;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table tbody tr {
+  transition: background-color 140ms ease;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) table tbody tr:hover {
+  background: #f8faff;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea) {
+  border-color: #cbd4e1;
+  border-radius: 9px;
+  box-sizing: border-box;
+  min-height: 42px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea):focus {
+  border-color: #2563dc;
+  box-shadow: 0 0 0 3px rgb(37 99 220 / 12%);
+  outline: none;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(.control-014, .control-024, .control-026, .control-051, .control-069, .control-071, .surface-021, .surface-080) {
+  align-items: center;
+  border-radius: 9px;
+  box-sizing: border-box;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 42px;
+  transition: box-shadow 140ms ease, transform 140ms ease, background-color 140ms ease;
+}
+
+:is(
+  .page--eventlist,
+  .page--eventdetail,
+  .page--assign,
+  .page--shortage,
+  .page--stafflist,
+  .page--coaching,
+  .page--sendlog,
+  .page--accounts,
+  .page--paymanage,
+  .page--profit
+) :is(.control-014, .control-024, .control-026, .control-051, .control-069, .control-071, .surface-021, .surface-080):hover {
+  box-shadow: 0 7px 18px rgb(31 91 216 / 20%);
+  transform: translateY(-1px);
+}
+
+/* Dashboard */
+.page--main .layout-012 {
+  display: grid;
+  gap: 22px;
+}
+
+.page--main .layout-013 {
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.page--main .layout-014 {
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.page--main :is(.surface-002, .surface-003) {
+  background: linear-gradient(145deg, #fff 0%, #f8faff 100%);
+  border: 1px solid #dfe5ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgb(24 39 75 / 5%);
+  min-height: 126px;
+  padding: 22px;
+}
+
+.page--main .surface-003 {
+  background: linear-gradient(145deg, #fff 0%, #fff8f2 100%);
+  border-color: #f1d8c2;
+}
+
+.page--main .layout-015 {
+  background: linear-gradient(90deg, #edf4ff, #f8fbff);
+  border: 1px solid #cfe0fa;
+  border-radius: 14px;
+  box-sizing: border-box;
+  padding: 16px 20px;
+}
+
+.page--main .layout-019 {
+  align-items: start;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.8fr);
+}
+
+.page--main :is(.surface-004, .surface-006) {
+  overflow: hidden;
+  padding: 0;
+}
+
+.page--main :is(.layout-020, .layout-025) {
+  gap: 18px;
+}
+
+.page--main .layout-021 {
+  border-bottom: 1px solid #e5e9f0;
+  padding: 18px 20px;
+}
+
+.page--main :is(.layout-159, .layout-017, .layout-018) {
+  border-radius: 10px;
+}
+
+/* Event list and shared search panels */
+.page--eventlist .layout-013,
+.page--accounts .layout-013,
+.page--profit .layout-013 {
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.page--eventlist .layout-151,
+.page--stafflist .layout-071,
+.page--sendlog .layout-208,
+.page--profit .layout-189,
+.page--paymanage .layout-046,
+.page--assign .layout-087 {
+  background: #fff;
+  border: 1px solid #dfe5ef;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgb(24 39 75 / 5%);
+  box-sizing: border-box;
+  padding: 18px 20px;
+}
+
+.page--eventlist .layout-151 {
+  display: grid;
+  gap: 16px;
+}
+
+.page--eventlist .layout-152,
+.page--profit .layout-190 {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.page--eventlist .layout-071,
+.page--stafflist .layout-071,
+.page--sendlog .layout-208 {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page--eventlist .surface-006,
+.page--stafflist .surface-006,
+.page--shortage .surface-006,
+.page--accounts .surface-006,
+.page--sendlog .surface-125,
+.page--paymanage .surface-006,
+.page--profit .surface-006 {
+  padding: 20px 22px;
+}
+
+.page--eventlist .text-148,
+.page--stafflist .text-069,
+.page--shortage .text-069,
+.page--accounts .text-081,
+.page--sendlog .text-217,
+.page--paymanage .text-165,
+.page--profit .text-195 {
+  font-size: 13px;
+}
+
+/* Metric cards */
+.page--stafflist .layout-235,
+.page--shortage .layout-216,
+.page--paymanage .layout-039,
+.page--profit .layout-014 {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.page--stafflist :is(.surface-030, .surface-031),
+.page--shortage :is(.surface-030, .surface-031),
+.page--paymanage :is(.surface-024, .surface-025),
+.page--profit :is(.surface-024, .surface-025, .surface-095) {
+  background: linear-gradient(145deg, #fff, #f8faff);
+  border: 1px solid #dfe5ef;
+  border-radius: 15px;
+  box-shadow: 0 7px 20px rgb(24 39 75 / 5%);
+  box-sizing: border-box;
+  min-height: 116px;
+  padding: 20px;
+}
+
+.page--stafflist .surface-031,
+.page--shortage .surface-031,
+.page--paymanage .surface-025,
+.page--profit .surface-095 {
+  background: linear-gradient(145deg, #fff, #fff8f2);
+  border-color: #f0d7c0;
+}
+
+/* Assignment workspace */
+.page--assign .layout-083 {
+  background: linear-gradient(135deg, #17213a, #253b68);
+  border: 0;
+  border-radius: 17px;
+  box-shadow: 0 12px 28px rgb(20 35 65 / 18%);
+  color: #fff;
+  padding: 22px 24px;
+}
+
+.page--assign .layout-083 :is(.text-044, .text-084, .text-085, .text-086) {
+  color: #fff;
+}
+
+.page--assign .layout-083 .text-087 {
+  color: #cfe0ff;
+}
+
+.page--assign .surface-006 {
+  padding: 22px;
+}
+
+.page--assign :is(.layout-085, .layout-046, .layout-089, .layout-090) {
+  gap: 12px;
+}
+
+.page--assign .layout-085 {
+  align-items: end;
+  background: #f6f8fc;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-top: 14px;
+  padding: 14px;
+}
+
+.page--assign .layout-047 {
+  display: grid;
+  gap: 12px;
+}
+
+.page--assign .cell-014 {
+  border: 1px solid #e2e7ef;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgb(24 39 75 / 4%);
+  padding: 16px;
+}
+
+/* Send log, account management and finance */
+.page--sendlog .layout-207 {
+  background: linear-gradient(135deg, #fff7ed, #fff);
+  border: 1px solid #fed7aa;
+  border-radius: 15px;
+  box-sizing: border-box;
+  padding: 18px 20px;
+}
+
+.page--sendlog .layout-211,
+.page--accounts .layout-041,
+.page--paymanage .layout-013 {
+  align-items: center;
+  border-bottom: 1px solid #e5e9f0;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+}
+
+.page--accounts .layout-024 {
+  background: #f4f7fb;
+  border-radius: 10px;
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+}
+
+.page--accounts dialog.surface-006 {
+  border: 0;
+  max-width: 620px;
+  padding: 26px;
+  width: min(calc(100% - 32px), 620px);
+}
+
+.page--accounts dialog.surface-006::backdrop {
+  background: rgb(15 23 42 / 52%);
+  backdrop-filter: blur(3px);
+}
+
+.page--accounts .layout-158 {
+  display: grid;
+  gap: 16px;
+}
+
+.page--paymanage .layout-164 {
+  background: #17213a;
+  border-radius: 15px;
+  box-shadow: 0 12px 28px rgb(20 35 65 / 16%);
+  color: #fff;
+  padding: 18px 20px;
+}
+
+.page--paymanage .layout-165 {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page--profit .control-063 {
+  margin-left: auto;
+}
+
+/* Detail and interview pages */
+.page--eventdetail .layout-083,
+.page--coaching .layout-083 {
+  background: linear-gradient(145deg, #fff, #f8faff);
+  border: 1px solid #dfe5ef;
+  border-radius: 17px;
+  box-shadow: 0 9px 26px rgb(24 39 75 / 6%);
+  box-sizing: border-box;
+  padding: 22px 24px;
+}
+
+.page--eventdetail .surface-006,
+.page--coaching .surface-006 {
+  padding: 22px;
+}
+
+.page--eventdetail :is(.layout-041, .layout-045),
+.page--coaching :is(.layout-041, .layout-045) {
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .page--main .layout-014 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page--main .layout-019 {
+    grid-template-columns: 1fr;
+  }
+
+  .page--stafflist .layout-235,
+  .page--shortage .layout-216,
+  .page--paymanage .layout-039,
+  .page--profit .layout-014 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  :is(
+    .page--eventlist,
+    .page--eventdetail,
+    .page--assign,
+    .page--shortage,
+    .page--stafflist,
+    .page--coaching,
+    .page--sendlog,
+    .page--accounts,
+    .page--paymanage,
+    .page--profit
+  ) main > .layout-040,
+  .page--main main > .layout-012 {
+    gap: 14px;
+  }
+
+  .page--main .layout-014,
+  .page--stafflist .layout-235,
+  .page--shortage .layout-216,
+  .page--paymanage .layout-039,
+  .page--profit .layout-014 {
+    grid-template-columns: 1fr;
+  }
+
+  .page--main .layout-013,
+  .page--eventlist .layout-013,
+  .page--accounts .layout-013,
+  .page--profit .layout-013 {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page--eventlist .layout-071,
+  .page--stafflist .layout-071,
+  .page--sendlog .layout-208,
+  .page--assign :is(.layout-046, .layout-085, .layout-090),
+  .page--paymanage .layout-165 {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .page--eventlist .layout-071 > *,
+  .page--stafflist .layout-071 > *,
+  .page--sendlog .layout-208 > *,
+  .page--assign :is(.layout-046, .layout-085, .layout-090) > *,
+  .page--paymanage .layout-165 > * {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .page--eventlist .surface-006,
+  .page--stafflist .surface-006,
+  .page--shortage .surface-006,
+  .page--accounts .surface-006,
+  .page--sendlog .surface-125,
+  .page--paymanage .surface-006,
+  .page--profit .surface-006,
+  .page--assign .surface-006,
+  .page--eventdetail .surface-006,
+  .page--coaching .surface-006 {
+    padding: 16px;
+  }
+
+  .page--profit .control-063 {
+    margin-left: 0;
+  }
+}
+
 .page-utilities {
   position: fixed;
   right: max(16px, env(safe-area-inset-right));
