@@ -412,6 +412,7 @@ function updateMoneyTotals() {
     const margin = invoiceTotal > 0 ? (profit / invoiceTotal) * 100 : 0;
     if (document.querySelector('[data-invoice-total]')) document.querySelector('[data-invoice-total]').textContent = formatYen(invoiceTotal);
     if (document.querySelector('[data-expense-total]')) document.querySelector('[data-expense-total]').textContent = formatYen(expenseTotal);
+    if (document.querySelector('[data-cost-total]')) document.querySelector('[data-cost-total]').textContent = formatYen(totalCost);
     if (document.querySelector('[data-profit-invoice]')) document.querySelector('[data-profit-invoice]').textContent = formatYen(invoiceTotal);
     if (costElement) costElement.textContent = formatYen(totalCost);
     if (document.querySelector('[data-profit-expense]')) document.querySelector('[data-profit-expense]').textContent = formatYen(expenseTotal);

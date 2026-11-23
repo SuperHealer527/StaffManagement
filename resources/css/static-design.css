@@ -2505,12 +2505,80 @@ body,
 
 .page--eventedit .layout-142,
 .page--eventedit .layout-143 {
-  grid-template-columns: 132px minmax(200px, 1fr) 132px 68px;
+  grid-template-columns: 132px 132px minmax(200px, 1fr) 68px;
 }
 
 .page--eventedit .layout-145,
 .page--eventedit .layout-146 {
-  grid-template-columns: 132px minmax(200px, 1fr) 132px 132px 68px;
+  grid-template-columns: 132px 132px minmax(200px, 1fr) 132px 68px;
+}
+
+.page--eventedit .money-fixed-costs {
+  background: #f7f9fc;
+  border: 1px solid #dfe5ef;
+  border-radius: 12px;
+  display: grid;
+  gap: 0;
+  padding: 12px;
+}
+
+.page--eventedit .money-fixed-costs .layout-145 {
+  border-bottom: 1px solid #dfe5ef;
+  padding: 0 8px 8px;
+}
+
+.page--eventedit .money-fixed-row {
+  border-bottom: 1px solid #e7ebf1;
+  min-height: 48px;
+  padding: 8px;
+}
+
+.page--eventedit .money-fixed-row:last-child {
+  border-bottom: 0;
+}
+
+.page--eventedit .money-readonly-amount {
+  font-size: 14px;
+  text-align: right;
+}
+
+.page--eventedit .money-readonly-type {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.page--eventedit .money-readonly-note {
+  color: #566176;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.page--eventedit .money-auto-badge {
+  background: #eaf0fc;
+  border-radius: 999px;
+  color: #16449f;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 700;
+  justify-content: center;
+  justify-self: start;
+  padding: 4px 10px;
+}
+
+.page--eventedit .money-withholding-row {
+  background: #fffaf0;
+  border-radius: 8px;
+}
+
+.page--eventedit .money-auto-badge--tax {
+  background: #fff0d6;
+  color: #855300;
+}
+
+.page--eventedit .money-subsection-heading {
+  border-top: 1px solid #e3e8f0;
+  margin-top: 8px;
+  padding-top: 18px;
 }
 
 .page--eventedit .layout-150 {
@@ -2566,6 +2634,16 @@ body,
 
   .page--eventedit .layout-129 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page--eventedit .layout-142,
+  .page--eventedit .layout-143 {
+    grid-template-columns: 120px 120px minmax(180px, 1fr) 68px;
+  }
+
+  .page--eventedit .layout-145,
+  .page--eventedit .layout-146 {
+    grid-template-columns: 120px 120px minmax(180px, 1fr) 112px 68px;
   }
 }
 
@@ -2989,6 +3067,14 @@ body,
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.page--profit .layout-014 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.page--profit .text-195 {
+  min-width: 1180px !important;
 }
 
 .page--stafflist .layout-235 {

@@ -101,19 +101,29 @@ class FinanceManagementTest extends TestCase
         $this->actingAs($employee)->get(route('finance.profit', ['month' => '2026-11']))
             ->assertOk()
             ->assertSee('収支テスト')
+            ->assertSeeInOrder(['売上', '報酬', '源泉税', '交通費'])
             ->assertSee('30,000')
             ->assertSee('12,500')
-            ->assertSee('17,500');
+            ->assertSee('17,500')
+            ->assertSee('999');
     }
 
     public function test_profit_csv_download_contains_real_event(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        Event::factory()->create(['name' => 'CSV対象イベント', 'event_date' => '2026-11-10']);
+        $event = Event::factory()->create(['name' => 'CSV対象イベント', 'event_date' => '2026-11-10']);
+        Assignment::factory()->create([
+            'event_id' => $event->id,
+            'status' => 'confirmed',
+            'withholding_tax' => 777,
+        ]);
 
         $response = $this->actingAs($employee)->get(route('finance.profit.csv', ['month' => '2026-11']));
         $response->assertOk()->assertDownload('profit-2026-11.csv');
-        $this->assertStringContainsString('CSV対象イベント', $response->streamedContent());
+        $csv = $response->streamedContent();
+        $this->assertStringContainsString('CSV対象イベント', $csv);
+        $this->assertStringContainsString('源泉税', $csv);
+        $this->assertStringContainsString('777', $csv);
     }
 
     public function test_semi_employee_cannot_access_finance_pages(): void

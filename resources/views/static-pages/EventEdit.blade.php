@@ -138,19 +138,33 @@
                 <div class="layout-136">
                   <h2 id="sec-money" class="text-020">請求と収支</h2>
                   <span class="surface-074">社員だけに表示</span></div>
-                <div class="text-130">依頼先に請求する額と、アサイン以外にかかった経費を入れると、利益を自動で計算します。金額はすべて税抜です。請求書はこれまでどおり会計ソフトで作ります。</div>
+                <div class="text-130">依頼先への売上と、報酬・交通費・立替・その他経費から利益を自動で計算します。金額はすべて税抜です。請求書はこれまでどおり会計ソフトで作ります。</div>
                 <div class="layout-140">
-                  @php $invoiceRows = $event?->invoiceItems ?? collect(); $invoiceTotal = $invoiceRows->sum('amount'); $expenseRows = $event?->expenses ?? collect(); $expenseTotal = $expenseRows->sum('amount'); @endphp
+                  @php
+                    $invoiceRows = $event?->invoiceItems ?? collect();
+                    $invoiceTotal = $invoiceRows->sum('amount');
+                    $expenseRows = $event?->expenses ?? collect();
+                    $expenseTotal = $expenseRows->sum('amount');
+                    $eligibleAssignments = $event?->assignments?->whereIn('status', ['confirmed', 'completed']) ?? collect();
+                    $feeCost = $eligibleAssignments->sum('fee');
+                    $transportCost = $eligibleAssignments->sum('transportation');
+                    $reimbursementCost = $eligibleAssignments->sum('reimbursement');
+                    $withholdingTax = $eligibleAssignments->sum('withholding_tax');
+                    $baseCost = $feeCost + $transportCost + $reimbursementCost;
+                    $totalCost = $baseCost + $expenseTotal;
+                    $profit = $invoiceTotal - $totalCost;
+                    $margin = $invoiceTotal > 0 ? ($profit / $invoiceTotal) * 100 : 0;
+                  @endphp
                   <div class="layout-141">
-                    <h3 class="text-137">請求の内訳</h3>
+                    <h3 class="text-137">売上</h3>
                     <span class="text-053">合計<strong class="text-139"><span data-invoice-total>¥{{ number_format($invoiceTotal) }}</span></strong></span></div>
-                  <div aria-hidden="true" class="layout-142"><span>項目</span><span>メモ</span><span class="utility-012">金額(円)</span><span></span></div>
+                  <div aria-hidden="true" class="layout-142"><span class="utility-012">金額(円)</span><span>項目</span><span>メモ</span><span></span></div>
                   <div data-invoice-rows>
                   @foreach ($invoiceRows as $invoiceItem)
-                    <div class="layout-143" data-money-row>@if ($invoiceItem->id)<input type="hidden" name="invoice_items[{{ $loop->index }}][id]" value="{{ $invoiceItem->id }}">@endif<select name="invoice_items[{{ $loop->index }}][type]" class="surface-017">@foreach (['work' => '作業費', 'transportation' => '交通費', 'fuel' => '燃料費', 'other' => 'その他'] as $value => $label)<option value="{{ $value }}" @selected($invoiceItem->type === $value || ($invoiceItem->type === 'work_fee' && $value === 'work'))>{{ $label }}</option>@endforeach</select><input name="invoice_items[{{ $loop->index }}][memo]" type="text" maxlength="255" value="{{ $invoiceItem->memo }}" class="text-140"><input name="invoice_items[{{ $loop->index }}][amount]" type="number" min="0" max="100000000" value="{{ $invoiceItem->amount }}" required data-money-amount class="text-141"><button type="button" data-remove-money-row class="control-042">削除</button></div>
+                    <div class="layout-143" data-money-row>@if ($invoiceItem->id)<input type="hidden" name="invoice_items[{{ $loop->index }}][id]" value="{{ $invoiceItem->id }}">@endif<input name="invoice_items[{{ $loop->index }}][amount]" type="number" min="0" max="100000000" value="{{ $invoiceItem->amount }}" required data-money-amount class="text-141"><select name="invoice_items[{{ $loop->index }}][type]" class="surface-017">@foreach (['work' => '作業費', 'transportation' => '交通費', 'fuel' => '燃料費', 'other' => 'その他'] as $value => $label)<option value="{{ $value }}" @selected($invoiceItem->type === $value || ($invoiceItem->type === 'work_fee' && $value === 'work'))>{{ $label }}</option>@endforeach</select><input name="invoice_items[{{ $loop->index }}][memo]" type="text" maxlength="255" value="{{ $invoiceItem->memo }}" class="text-140"><button type="button" data-remove-money-row class="control-042">削除</button></div>
                   @endforeach
                   </div>
-                  <template id="invoice-row-template"><div class="layout-143" data-money-row><select name="invoice_items[__INDEX__][type]" class="surface-017"><option value="work">作業費</option><option value="transportation">交通費</option><option value="fuel">燃料費</option><option value="other">その他</option></select><input name="invoice_items[__INDEX__][memo]" type="text" maxlength="255" class="text-140"><input name="invoice_items[__INDEX__][amount]" type="number" min="0" max="100000000" value="0" required data-money-amount class="text-141"><button type="button" data-remove-money-row class="control-042">削除</button></div></template>
+                  <template id="invoice-row-template"><div class="layout-143" data-money-row><input name="invoice_items[__INDEX__][amount]" type="number" min="0" max="100000000" value="0" required data-money-amount class="text-141"><select name="invoice_items[__INDEX__][type]" class="surface-017"><option value="work">作業費</option><option value="transportation">交通費</option><option value="fuel">燃料費</option><option value="other">その他</option></select><input name="invoice_items[__INDEX__][memo]" type="text" maxlength="255" class="text-140"><button type="button" data-remove-money-row class="control-042">削除</button></div></template>
                   @if (false)
                   <div class="layout-143"><select aria-label="請求1の項目" class="surface-017"><option>作業費</option><option>交通費</option><option>燃料費</option><option>その他</option></select><input type="text" aria-label="請求1のメモ" placeholder="例:リーダー1人・受付4人" value="リーダー1人・受付4人" class="text-140"><input type="number" min="0" aria-label="請求1の金額" value="72000" class="text-141"><button type="button" aria-label="請求1を削除" class="control-042"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg></button></div>
                   <div class="layout-143"><select aria-label="請求2の項目" class="surface-017"><option>作業費</option><option>交通費</option><option>燃料費</option><option>その他</option></select><input type="text" aria-label="請求2のメモ" placeholder="例:リーダー1人・受付4人" value="スタッフの交通費" class="text-140"><input type="number" min="0" aria-label="請求2の金額" value="3600" class="text-141"><button type="button" aria-label="請求2を削除" class="control-042"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg></button></div>
@@ -159,15 +173,23 @@
                   <button type="button" data-add-invoice class="control-043">+ 行を追加</button></div>
                 <div class="layout-144">
                   <div class="layout-141">
-                    <h3 class="text-137">経費<span class="text-055">アサイン(謝金・交通費・立替)以外にかかった費用</span></h3>
-                    <span class="text-053">合計<strong class="text-139"><span data-expense-total>¥{{ number_format($expenseTotal) }}</span></strong></span></div>
-                  <div aria-hidden="true" class="layout-145"><span>種類</span><span>メモ</span><span>領収書</span><span class="utility-012">金額(円)</span><span></span></div>
+                    <h3 class="text-137">報酬・経費<span class="text-055">アサインとその他経費をまとめて表示</span></h3>
+                    <span class="text-053">原価合計<strong class="text-139"><span data-cost-total>¥{{ number_format($totalCost) }}</span></strong></span></div>
+                  <div class="money-fixed-costs" aria-label="アサインから自動集計した報酬と経費">
+                    <div aria-hidden="true" class="layout-145"><span class="utility-012">金額(円)</span><span>種類</span><span>内訳</span><span>集計方法</span><span></span></div>
+                    <div class="layout-146 money-fixed-row"><strong class="money-readonly-amount">¥{{ number_format($feeCost) }}</strong><span class="money-readonly-type">報酬</span><span class="money-readonly-note">確定・実施済みのアサイン {{ $eligibleAssignments->count() }}名分</span><span class="money-auto-badge">自動集計</span><span></span></div>
+                    <div class="layout-146 money-fixed-row"><strong class="money-readonly-amount">¥{{ number_format($transportCost) }}</strong><span class="money-readonly-type">交通費</span><span class="money-readonly-note">スタッフごとの交通費合計</span><span class="money-auto-badge">自動集計</span><span></span></div>
+                    <div class="layout-146 money-fixed-row"><strong class="money-readonly-amount">¥{{ number_format($reimbursementCost) }}</strong><span class="money-readonly-type">立替</span><span class="money-readonly-note">スタッフごとの立替金合計</span><span class="money-auto-badge">自動集計</span><span></span></div>
+                    <div class="layout-146 money-fixed-row money-withholding-row"><strong class="money-readonly-amount">¥{{ number_format($withholdingTax) }}</strong><span class="money-readonly-type">源泉税</span><span class="money-readonly-note">スタッフの報酬から預かる税額。原価には含めません</span><span class="money-auto-badge money-auto-badge--tax">別集計</span><span></span></div>
+                  </div>
+                  <div class="layout-141 money-subsection-heading"><h4 class="text-137">その他経費</h4><span class="text-053">小計<strong class="text-139"><span data-expense-total>¥{{ number_format($expenseTotal) }}</span></strong></span></div>
+                  <div aria-hidden="true" class="layout-145"><span class="utility-012">金額(円)</span><span>種類</span><span>メモ</span><span>領収書</span><span></span></div>
                   <div data-expense-rows>
                   @foreach ($expenseRows as $expense)
-                    <div class="layout-146" data-money-row>@if ($expense->id)<input type="hidden" name="expenses[{{ $loop->index }}][id]" value="{{ $expense->id }}">@endif<select name="expenses[{{ $loop->index }}][type]" class="surface-017">@foreach (['fuel' => '燃料費', 'transportation' => '運送費', 'supplies' => '消耗品', 'other' => 'その他'] as $value => $label)<option value="{{ $value }}" @selected($expense->type === $value)>{{ $label }}</option>@endforeach</select><input name="expenses[{{ $loop->index }}][memo]" type="text" maxlength="255" value="{{ $expense->memo }}" class="text-140"><div class="layout-147">@if ($expense->receipt_path)<a href="{{ route('events.expenses.receipt', [$event, $expense]) }}" class="text-142">写真を見る</a>@endif<label class="control-044">{{ $expense->receipt_path ? '変更' : '+ 写真を付ける' }}<input name="expenses[{{ $loop->index }}][receipt]" type="file" accept="image/jpeg,image/png,application/pdf" hidden></label></div><input name="expenses[{{ $loop->index }}][amount]" type="number" min="0" max="100000000" value="{{ $expense->amount }}" required data-money-amount class="text-141"><button type="button" data-remove-money-row class="control-042">削除</button></div>
+                    <div class="layout-146" data-money-row>@if ($expense->id)<input type="hidden" name="expenses[{{ $loop->index }}][id]" value="{{ $expense->id }}">@endif<input name="expenses[{{ $loop->index }}][amount]" type="number" min="0" max="100000000" value="{{ $expense->amount }}" required data-money-amount class="text-141"><select name="expenses[{{ $loop->index }}][type]" class="surface-017">@foreach (['fuel' => '燃料費', 'transportation' => '運送費', 'supplies' => '消耗品', 'other' => 'その他'] as $value => $label)<option value="{{ $value }}" @selected($expense->type === $value)>{{ $label }}</option>@endforeach</select><input name="expenses[{{ $loop->index }}][memo]" type="text" maxlength="255" value="{{ $expense->memo }}" class="text-140"><div class="layout-147">@if ($expense->receipt_path)<a href="{{ route('events.expenses.receipt', [$event, $expense]) }}" class="text-142">写真を見る</a>@endif<label class="control-044">{{ $expense->receipt_path ? '変更' : '+ 写真を付ける' }}<input name="expenses[{{ $loop->index }}][receipt]" type="file" accept="image/jpeg,image/png,application/pdf" hidden></label></div><button type="button" data-remove-money-row class="control-042">削除</button></div>
                   @endforeach
                   </div>
-                  <template id="expense-row-template"><div class="layout-146" data-money-row><select name="expenses[__INDEX__][type]" class="surface-017"><option value="fuel">燃料費</option><option value="transportation">運送費</option><option value="supplies">消耗品</option><option value="other">その他</option></select><input name="expenses[__INDEX__][memo]" type="text" maxlength="255" class="text-140"><div class="layout-147"><label class="control-044">+ 写真を付ける<input name="expenses[__INDEX__][receipt]" type="file" accept="image/jpeg,image/png,application/pdf" hidden></label></div><input name="expenses[__INDEX__][amount]" type="number" min="0" max="100000000" value="0" required data-money-amount class="text-141"><button type="button" data-remove-money-row class="control-042">削除</button></div></template>
+                  <template id="expense-row-template"><div class="layout-146" data-money-row><input name="expenses[__INDEX__][amount]" type="number" min="0" max="100000000" value="0" required data-money-amount class="text-141"><select name="expenses[__INDEX__][type]" class="surface-017"><option value="fuel">燃料費</option><option value="transportation">運送費</option><option value="supplies">消耗品</option><option value="other">その他</option></select><input name="expenses[__INDEX__][memo]" type="text" maxlength="255" class="text-140"><div class="layout-147"><label class="control-044">+ 写真を付ける<input name="expenses[__INDEX__][receipt]" type="file" accept="image/jpeg,image/png,application/pdf" hidden></label></div><button type="button" data-remove-money-row class="control-042">削除</button></div></template>
                   @if (false)
                   <div class="layout-146"><select aria-label="経費1の種類" class="surface-017"><option>燃料費</option><option>運送費</option><option>消耗品</option><option>その他</option></select><input type="text" aria-label="経費1のメモ" placeholder="例:社用車で備品を運搬" value="社用車で備品を運搬(往復)" class="text-140">
                     <div class="layout-147"><button type="button" class="control-044">+ 写真を付ける</button></div>
@@ -178,19 +200,18 @@
                   @endif
                   <button type="button" data-add-expense class="control-043">+ 行を追加</button></div>
                 <div class="layout-148">
-                  @php $eligibleAssignments = $event?->assignments?->whereIn('status', ['confirmed', 'completed']) ?? collect(); $feeCost = $eligibleAssignments->sum('fee'); $transportCost = $eligibleAssignments->sum('transportation'); $reimbursementCost = $eligibleAssignments->sum('reimbursement'); $totalCost = $feeCost + $transportCost + $reimbursementCost + $expenseTotal; $profit = $invoiceTotal - $totalCost; $margin = $invoiceTotal > 0 ? ($profit / $invoiceTotal) * 100 : 0; @endphp
                   <div class="layout-016">
                     <h3 class="text-137">収支</h3>
                     <a href="Profit.dc.html" class="text-143">収支一覧で月ごとに見る ›</a></div>
                   <div class="layout-149">
                     <div class="surface-075">
-                      <div class="text-002">請求の合計</div>
+                      <div class="text-002">売上合計</div>
                       <div class="text-030"><span data-profit-invoice>¥{{ number_format($invoiceTotal) }}</span></div>
                     </div>
                     <div class="surface-075">
-                      <div class="text-002">原価</div>
-                      <div class="text-030"><span data-profit-cost data-base-cost="{{ $feeCost + $transportCost + $reimbursementCost }}">¥{{ number_format($totalCost) }}</span></div>
-                      <div class="text-144">謝金 <span>¥{{ number_format($feeCost) }}</span> ・ 交通費 <span>¥{{ number_format($transportCost) }}</span><br>立替 <span>¥{{ number_format($reimbursementCost) }}</span> ・ 経費 <span data-profit-expense>¥{{ number_format($expenseTotal) }}</span></div>
+                      <div class="text-002">報酬・経費</div>
+                      <div class="text-030"><span data-profit-cost data-base-cost="{{ $baseCost }}">¥{{ number_format($totalCost) }}</span></div>
+                      <div class="text-144">報酬 <span>¥{{ number_format($feeCost) }}</span> ・ 交通費 <span>¥{{ number_format($transportCost) }}</span><br>立替 <span>¥{{ number_format($reimbursementCost) }}</span> ・ その他経費 <span data-profit-expense>¥{{ number_format($expenseTotal) }}</span><br>源泉税 <span>¥{{ number_format($withholdingTax) }}</span> <small>（原価外）</small></div>
                     </div>
                     <div class="surface-076">
                       <div class="text-002">利益</div>
@@ -198,7 +219,7 @@
                       <div class="text-146">利益率 <strong class="utility-013"><span data-profit-margin>{{ number_format($margin, 1) }}%</span></strong></div>
                     </div>
                   </div>
-                  <div class="text-056">謝金・交通費・立替は、このイベントの「確定」「実施済み」のアサインの合計です(支払管理と同じ金額)。源泉税は謝金から預かって納めるものなので、原価からは引きません。いまは必要人数5人のうち確定が2人なので、残りの人が確定すると原価が増え、利益は下がります。</div>
+                  <div class="text-056">報酬・交通費・立替・源泉税は、このイベントの「確定」「実施済み」のアサインから自動集計します。源泉税は報酬から預かって納めるものなので、原価には含めません。残りの人が確定すると報酬・経費が増え、利益は下がります。</div>
                 </div>
               </section>
               @if ($errors->any())<div role="alert" class="text-050">{{ $errors->first() }}</div>@endif

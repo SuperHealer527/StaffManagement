@@ -165,6 +165,15 @@ class EventManagementTest extends TestCase
         ]);
         $event->reportQuestions()->create(['type' => 'text', 'question' => 'DB設問', 'display_order' => 0]);
         $event->invoiceItems()->create(['type' => 'work', 'memo' => 'DB請求', 'amount' => 10000]);
+        $event->expenses()->create(['type' => 'supplies', 'memo' => '備品', 'amount' => 1000]);
+        Assignment::factory()->create([
+            'event_id' => $event->id,
+            'status' => 'confirmed',
+            'fee' => 12000,
+            'transportation' => 800,
+            'reimbursement' => 500,
+            'withholding_tax' => 1000,
+        ]);
 
         $this->actingAs($employee)->get(route('events.edit', $event))
             ->assertOk()
@@ -173,6 +182,10 @@ class EventManagementTest extends TestCase
             ->assertSee('DB設問')
             ->assertSee('name="report_questions[0][question]"', false)
             ->assertSee('name="invoice_items[0][amount]"', false)
+            ->assertSeeInOrder(['売上', '金額(円)', '項目', 'メモ'])
+            ->assertSeeInOrder(['報酬・経費', '報酬', '交通費', '立替', '源泉税', 'その他経費'])
+            ->assertSee('¥12,000')
+            ->assertSee('¥1,000')
             ->assertSee('data-cancel-event-url', false);
     }
 

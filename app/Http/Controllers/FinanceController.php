@@ -57,9 +57,9 @@ class FinanceController extends Controller
         return response()->streamDownload(function () use ($rows): void {
             $output = fopen('php://output', 'w');
             fwrite($output, "\xEF\xBB\xBF");
-            fputcsv($output, ['実施日', 'イベント', '依頼先', '請求', '謝金', '交通費', '立替', '経費', '原価', '利益', '利益率']);
+            fputcsv($output, ['実施日', 'イベント', '依頼先', '売上', '報酬', '源泉税', '交通費', '立替', 'その他経費', '報酬・経費', '利益', '利益率']);
             foreach ($rows as $row) {
-                fputcsv($output, [$row['date'], $row['event']->name ?: $row['event']->business_name, $row['event']->client->name, $row['invoice'], $row['fee'], $row['transportation'], $row['reimbursement'], $row['expense'], $row['cost'], $row['profit'], $row['margin']]);
+                fputcsv($output, [$row['date'], $row['event']->name ?: $row['event']->business_name, $row['event']->client->name, $row['invoice'], $row['fee'], $row['withholding'], $row['transportation'], $row['reimbursement'], $row['expense'], $row['cost'], $row['profit'], $row['margin']]);
             }
             fclose($output);
         }, 'profit-'.$month->format('Y-m').'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
@@ -73,7 +73,7 @@ class FinanceController extends Controller
         return Carbon::createFromFormat('Y-m', $value)->startOfMonth();
     }
 
-    /** @return Collection<int, array{event: Event, date: string, invoice: int|null, fee: int, transportation: int, reimbursement: int, expense: int, cost: int, profit: int|null, margin: float|null}> */
+    /** @return Collection<int, array{event: Event, date: string, invoice: int|null, fee: int, withholding: int, transportation: int, reimbursement: int, expense: int, cost: int, profit: int|null, margin: float|null}> */
     private function profitRows(Carbon $month): Collection
     {
         return Event::query()
@@ -84,6 +84,7 @@ class FinanceController extends Controller
             ->map(function (Event $event): array {
                 $invoice = $event->invoiceItems->isEmpty() ? null : (int) $event->invoiceItems->sum('amount');
                 $fee = (int) $event->assignments->sum('fee');
+                $withholding = (int) $event->assignments->sum('withholding_tax');
                 $transportation = (int) $event->assignments->sum('transportation');
                 $reimbursement = (int) $event->assignments->sum('reimbursement');
                 $expense = (int) $event->expenses->sum('amount');
@@ -95,6 +96,7 @@ class FinanceController extends Controller
                     'date' => $event->event_date->format('Y-m-d'),
                     'invoice' => $invoice,
                     'fee' => $fee,
+                    'withholding' => $withholding,
                     'transportation' => $transportation,
                     'reimbursement' => $reimbursement,
                     'expense' => $expense,
