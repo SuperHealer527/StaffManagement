@@ -45,18 +45,20 @@ class SendDueStaffNotifications extends Command
                 }
 
                 foreach ($interviews as $interview) {
-                    if ($this->alreadyLogged($interview, 'interview_reminder')) {
+                    if ($this->alreadyDelivered($interview, 'interview_reminder')) {
                         continue;
                     }
 
-                    $delivery->deliver(
+                    $log = $delivery->deliver(
                         $interview->subject,
                         $interview,
                         'interview_reminder',
                         '面談の前日のお知らせ',
                         sprintf('明日 %s から面談があります。方法：%s%s', $interview->scheduled_at->format('H:i'), $interview->method, $interview->location ? '／'.$interview->location : ''),
                     );
-                    $sentCount++;
+                    if ($log->status === 'sent') {
+                        $sentCount++;
+                    }
                 }
             });
 
@@ -76,25 +78,34 @@ class SendDueStaffNotifications extends Command
         $daysUntilEvent = (int) round($now->copy()->startOfDay()->diffInDays($eventDate, false));
         $sentCount = 0;
 
-        if (in_array($daysUntilEvent, [7, 5, 3], true)
+        $reminderDay = match (true) {
+            $daysUntilEvent >= 6 && $daysUntilEvent <= 7 => 7,
+            $daysUntilEvent >= 4 && $daysUntilEvent <= 5 => 5,
+            $daysUntilEvent >= 1 && $daysUntilEvent <= 3 => 3,
+            default => null,
+        };
+
+        if ($reminderDay !== null
             && $now->hour >= 9
             && in_array($assignment->seven_day_confirmation, ['not_sent', 'sent'], true)) {
-            $type = 'attendance_'.$daysUntilEvent.'_day';
-            if (! $this->alreadyLogged($assignment, $type)) {
+            $type = 'attendance_'.$reminderDay.'_day';
+            if (! $this->alreadyDelivered($assignment, $type)) {
                 $token = $links->createUntil($assignment->user, 'attendance_seven_day', $assignment, $event->event_date->copy()->endOfDay());
-                $delivery->deliver(
+                $log = $delivery->deliver(
                     $assignment->user,
                     $assignment,
                     $type,
-                    $daysUntilEvent === 7 ? '1週間前の出勤確認' : $daysUntilEvent.'日前の出勤確認（未回答）',
+                    $reminderDay === 7 ? '1週間前の出勤確認' : $reminderDay.'日前の出勤確認（未回答）',
                     sprintf('%s（%s）の出勤確認をお願いします。集合 %s', $event->name ?: $event->business_name, $event->event_date->isoFormat('M/D(ddd)'), substr($event->meeting_time, 0, 5)),
                     route('public-actions.show', $token),
                     '出勤を確認する',
                 );
-                if ($assignment->seven_day_confirmation === 'not_sent') {
-                    $assignment->update(['seven_day_confirmation' => 'sent']);
+                if ($log->status === 'sent') {
+                    if ($assignment->seven_day_confirmation === 'not_sent') {
+                        $assignment->update(['seven_day_confirmation' => 'sent']);
+                    }
+                    $sentCount++;
                 }
-                $sentCount++;
             }
         }
 
@@ -102,9 +113,9 @@ class SendDueStaffNotifications extends Command
         if ($daysUntilEvent === 0
             && $now->greaterThanOrEqualTo($meetingAt->copy()->subHours(4))
             && $assignment->same_day_confirmation === 'not_sent'
-            && ! $this->alreadyLogged($assignment, 'attendance_same_day')) {
+            && ! $this->alreadyDelivered($assignment, 'attendance_same_day')) {
             $token = $links->createUntil($assignment->user, 'attendance_same_day', $assignment, $event->event_date->copy()->endOfDay());
-            $delivery->deliver(
+            $log = $delivery->deliver(
                 $assignment->user,
                 $assignment,
                 'attendance_same_day',
@@ -113,8 +124,10 @@ class SendDueStaffNotifications extends Command
                 route('public-actions.show', $token),
                 '出勤を確認する',
             );
-            $assignment->update(['same_day_confirmation' => 'sent']);
-            $sentCount++;
+            if ($log->status === 'sent') {
+                $assignment->update(['same_day_confirmation' => 'sent']);
+                $sentCount++;
+            }
         }
 
         return $sentCount;
@@ -138,12 +151,12 @@ class SendDueStaffNotifications extends Command
             ->whereNotNull('submitted_at')
             ->exists();
 
-        if ($now->lessThan($dismissalAt) || $submitted || $this->alreadyLogged($assignment, 'report_request')) {
+        if ($now->lessThan($dismissalAt) || $submitted || $this->alreadyDelivered($assignment, 'report_request')) {
             return 0;
         }
 
         $token = $links->createUntil($assignment->user, 'report_submission', $assignment, $event->event_date->copy()->addDays(7)->endOfDay());
-        $delivery->deliver(
+        $log = $delivery->deliver(
             $assignment->user,
             $assignment,
             'report_request',
@@ -153,15 +166,16 @@ class SendDueStaffNotifications extends Command
             '報告書を提出する',
         );
 
-        return 1;
+        return $log->status === 'sent' ? 1 : 0;
     }
 
-    private function alreadyLogged(Assignment|Interview $context, string $type): bool
+    private function alreadyDelivered(Assignment|Interview $context, string $type): bool
     {
         return NotificationLog::query()
             ->where('notifiable_context_type', $context->getMorphClass())
             ->where('notifiable_context_id', $context->getKey())
             ->where('type', $type)
+            ->whereIn('status', ['pending', 'sent'])
             ->exists();
     }
 }

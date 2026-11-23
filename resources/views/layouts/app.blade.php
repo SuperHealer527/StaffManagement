@@ -49,7 +49,7 @@
 
     <aside class="side-menu">
         <div class="side-heading">
-            <p>ハイクラス業務管理システム</p>
+            <p>HIKARAS 業務管理システム</p>
             <strong>{{ $section }}{{ $section === '事業' ? '（イベント運営）' : '' }}</strong>
         </div>
         <nav class="side-links">
@@ -81,7 +81,7 @@
 
     <div class="app-content">
         <header class="mobile-header">
-            <a href="{{ route('dashboard') }}"><span class="mobile-logo">HC</span><strong>ハイクラス業務管理</strong></a>
+            <a href="{{ route('dashboard') }}"><span class="mobile-logo">H</span><strong>HIKARAS</strong></a>
             <a href="{{ route('screens.show', 'profile') }}" class="mobile-user">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
         </header>
         <main class="page-container">@yield('content')</main>

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>ログイン</title>
+  <title>HIKARAS | ログイン</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,8 +15,9 @@
       <div class="screen">
         <div class="layout-072">
           <div class="utility-006">
-            <div class="text-075">HIGHCLASS</div>
-            <h1 class="text-155">ハイクラス業務管理システム</h1>
+            <img src="{{ asset('images/hikaras-logo.jpeg') }}" alt="HIKARAS 業務管理システム" class="hikaras-login-logo">
+            <h1 class="text-155">HIKARAS</h1>
+            <div class="text-075">業務管理システム</div>
           </div>
           <form method="POST" action="{{ route('login.store') }}" class="layout-158">
             @csrf

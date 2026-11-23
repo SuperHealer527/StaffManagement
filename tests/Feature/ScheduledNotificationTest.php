@@ -55,6 +55,50 @@ class ScheduledNotificationTest extends TestCase
         ]);
     }
 
+    public function test_missed_seven_day_notification_is_caught_up_and_failed_delivery_is_retried(): void
+    {
+        Carbon::setTestNow('2026-11-06 10:00:00 Asia/Tokyo');
+        config(['services.line.channel_access_token' => 'test-token']);
+        Http::fakeSequence()
+            ->push(['message' => 'temporary failure'], 500)
+            ->push([], 200);
+        $staff = User::factory()->create([
+            'notification_method' => 'line',
+            'line_user_id' => 'line-user-id',
+        ]);
+        $event = Event::factory()->create(['event_date' => '2026-11-12']);
+        $assignment = Assignment::factory()->create([
+            'event_id' => $event->id,
+            'user_id' => $staff->id,
+            'status' => 'confirmed',
+            'seven_day_confirmation' => 'not_sent',
+        ]);
+
+        $this->artisan('staff-management:send-due-notifications')->assertSuccessful();
+
+        $this->assertDatabaseHas('assignments', [
+            'id' => $assignment->id,
+            'seven_day_confirmation' => 'not_sent',
+        ]);
+        $this->assertDatabaseHas('notification_logs', [
+            'notifiable_context_id' => $assignment->id,
+            'type' => 'attendance_7_day',
+            'status' => 'failed',
+        ]);
+
+        $this->artisan('staff-management:send-due-notifications')->assertSuccessful();
+
+        $this->assertDatabaseHas('assignments', [
+            'id' => $assignment->id,
+            'seven_day_confirmation' => 'sent',
+        ]);
+        $this->assertDatabaseHas('notification_logs', [
+            'notifiable_context_id' => $assignment->id,
+            'type' => 'attendance_7_day',
+            'status' => 'sent',
+        ]);
+    }
+
     public function test_same_day_and_report_notifications_are_sent_when_their_times_arrive(): void
     {
         Carbon::setTestNow('2026-11-05 18:00:00 Asia/Tokyo');

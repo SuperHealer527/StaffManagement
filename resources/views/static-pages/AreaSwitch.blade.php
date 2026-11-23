@@ -15,7 +15,7 @@
       <div class="screen">
         <div class="layout-075">
           <header class="cell-030">
-            <div class="text-002">ハイクラス業務管理システム</div>
+            <div class="text-002">HIKARAS 業務管理システム</div>
             <div class="text-083"><span>事業(イベント運営)</span></div>
             <div class="layout-076"><a href="#" class="surface-036"><span>ホーム</span></a><a href="EventList.dc.html" class="surface-037"><span>イベント</span></a><a href="Assign.dc.html" class="surface-037"><span>アサイン</span></a><a href="StaffList.dc.html" class="surface-037"><span>スタッフ</span></a></div>
           </header>

@@ -16,8 +16,8 @@ class StaticWorkflowTest extends TestCase
     {
         $this->get('/login')
             ->assertOk()
-            ->assertSee('HIGHCLASS')
-            ->assertSee('ハイクラス業務管理システム')
+            ->assertSee('HIKARAS')
+            ->assertSee('images/hikaras-logo.jpeg', false)
             ->assertSee('ログイン');
     }
 

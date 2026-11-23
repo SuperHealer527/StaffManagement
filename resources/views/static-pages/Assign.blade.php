@@ -22,10 +22,10 @@
             </nav>
             <nav aria-label="メインメニュー" class="layout-008">
               <div class="space-001">
-                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">事業(イベント運営)</div>
               </div>
-              <a href="Main.dc.html" class="layout-010"><span>ホーム</span></a><a href="EventList.dc.html" class="layout-010"><span>イベント</span></a><a href="#" aria-current="page" class="layout-009"><span>アサイン</span></a><a href="Shortage.dc.html" class="layout-010"><span>人数不足一覧</span></a><a href="ReportView.dc.html" class="layout-010"><span>報告書</span></a><a href="StaffList.dc.html" class="layout-010"><span>スタッフ</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先</span><span class="surface-001">共通</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span><span>山田 太郎(社員)</span></span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="Main.dc.html" class="layout-010"><span>ホーム</span></a><a href="EventList.dc.html" class="layout-010"><span>イベント</span></a><a href="#" aria-current="page" class="layout-009"><span>アサイン</span></a><a href="Shortage.dc.html" class="layout-010"><span>人数不足一覧</span></a><a href="ReportView.dc.html" class="layout-010"><span>報告書</span></a><a href="StaffList.dc.html" class="layout-010"><span>スタッフ</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先</span><span class="surface-001">共通</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">
@@ -60,7 +60,7 @@
                 <form method="POST" action="{{ route('events.assignments.leaders', $event) }}" class="layout-085">@csrf @method('PATCH')
                   <label class="layout-044">当日責任者 <select name="day_leader_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_day_leader)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
                   <label class="layout-044">報告書の代表者 <select name="report_representative_assignment_id" class="surface-041"><option value="">選択なし</option>@foreach($confirmedManagers as $assignment)<option value="{{ $assignment->id }}" @selected($assignment->is_report_representative)>{{ $assignment->user->name }}(確定)</option>@endforeach</select></label>
-                  <label class="control-022"><input name="representative_same_as_leader" value="1" type="checkbox" class="space-006">当日責任者と同じ人にする</label><button type="submit" class="control-024">保存</button>
+                  <label class="control-022"><input name="representative_same_as_leader" value="1" type="checkbox" @checked($leader !== null && $representative?->is($leader)) class="space-006">当日責任者と同じ人にする</label><button type="submit" class="control-024">保存</button>
                 </form>
               </section>
               <section aria-label="アサインする人" class="surface-006">

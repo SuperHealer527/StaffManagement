@@ -15,7 +15,7 @@
       <div class="screen">
         <div class="layout-217">
           <header class="layout-030">
-            <div class="text-035">ハイクラス業務管理システム</div>
+            <div class="text-035">HIKARAS 業務管理システム</div>
             <div class="text-002">{{ isset($user) ? $user->name : '佐藤 花子' }}(スタッフ)</div>
           </header>
           <main class="layout-031">

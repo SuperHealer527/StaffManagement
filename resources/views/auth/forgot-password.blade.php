@@ -12,7 +12,7 @@
 </head>
 <body class="page page--login">
   <div class="app-root"><div class="screen"><div class="layout-072">
-    <div class="utility-006"><div class="text-075">HIGHCLASS</div><h1 class="text-155">パスワード再設定</h1></div>
+    <div class="utility-006"><div class="text-075">HIKARAS</div><h1 class="text-155">パスワード再設定</h1></div>
     <form method="POST" action="{{ route('password.email') }}" class="layout-158">
       @csrf
       <p class="text-157">登録済みのメールアドレスへ、1時間有効な再設定リンクを送信します。</p>

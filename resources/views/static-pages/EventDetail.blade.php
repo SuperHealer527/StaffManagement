@@ -22,7 +22,7 @@
             </nav>
             <nav aria-label="メインメニュー" class="layout-008">
               <div class="space-001">
-                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">事業(イベント運営)</div>
               </div>
               <a href="SubMain.dc.html" class="layout-010"><span>ホーム</span></a><a href="EventList.dc.html" aria-current="page" class="layout-009"><span>イベント</span></a><a href="Assign.dc.html" class="layout-010"><span>アサイン</span></a><a href="Shortage.dc.html" class="layout-010"><span>人数不足一覧</span></a><a href="ReportView.dc.html" class="layout-010"><span>報告書</span></a><a href="StaffList.dc.html" class="layout-010"><span>スタッフ</span></a><a href="Clients.dc.html" class="layout-010"><span>依頼先</span><span class="surface-001">共通</span></a><a href="Staff.dc.html" aria-label="鈴木 一郎(準社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>鈴木 一郎(準社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>

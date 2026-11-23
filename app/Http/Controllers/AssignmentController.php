@@ -165,8 +165,12 @@ class AssignmentController extends Controller
 
         DB::transaction(function () use ($event, $leader, $representative): void {
             $event->assignments()->update(['is_day_leader' => false, 'is_report_representative' => false]);
-            $leader?->update(['is_day_leader' => true]);
-            $representative?->update(['is_report_representative' => true]);
+            if ($leader !== null) {
+                $event->assignments()->whereKey($leader->getKey())->update(['is_day_leader' => true]);
+            }
+            if ($representative !== null) {
+                $event->assignments()->whereKey($representative->getKey())->update(['is_report_representative' => true]);
+            }
         });
 
         return back()->with('status', '当日責任者と報告書代表者を更新しました。');
@@ -179,11 +183,12 @@ class AssignmentController extends Controller
         $actionUrl = route('public-actions.show', $plainToken);
         $event = $assignment->event;
         $body = sprintf(
-            "%sのお仕事をご依頼します。\n日時：%s 集合%s／解散%s\n場所：%s\n謝金：%s円／交通費：%s円%s",
+            "%sのお仕事をご依頼します。\n日時：%s 集合%s／解散%s\n事業名：%s\n場所：%s\n謝金：%s円／交通費：%s円%s",
             $event->name ?: $event->business_name,
             $event->event_date->format('Y年n月j日'),
             substr($event->meeting_time, 0, 5),
             substr($event->dismissal_time, 0, 5),
+            $event->business_name,
             $event->venue ?: $event->meeting_place ?: '未定',
             number_format($assignment->fee),
             number_format($assignment->transportation),

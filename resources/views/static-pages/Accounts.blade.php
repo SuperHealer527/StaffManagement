@@ -22,10 +22,10 @@
             </nav>
             <nav aria-label="メインメニュー" class="layout-008">
               <div class="space-001">
-                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">設定</div>
               </div>
-              <a href="#" aria-current="page" class="layout-009"><span>アカウント管理</span></a><a href="SendLog.dc.html" class="layout-010"><span>送信履歴</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="#" aria-current="page" class="layout-009"><span>アカウント管理</span></a><a href="{{ route('notifications.index') }}" class="layout-010"><span>送信履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">

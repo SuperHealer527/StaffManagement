@@ -106,6 +106,8 @@ class AccountManagementTest extends TestCase
 
         $this->actingAs($employee)->get(route('screens.show', 'accounts'))
             ->assertOk()
+            ->assertSee('管理社員(社員)')
+            ->assertDontSee('山田 太郎(社員)')
             ->assertSee('画面確認スタッフ')
             ->assertSee('data-account-create-form', false)
             ->assertSee('data-account-role', false)

@@ -14,7 +14,8 @@ class AuthenticationTest extends TestCase
     {
         $this->get('/login')
             ->assertOk()
-            ->assertSee('ハイクラス業務管理システム')
+            ->assertSee('HIKARAS')
+            ->assertSee('images/hikaras-logo.jpeg', false)
             ->assertDontSee('ログアウト')
             ->assertSee('data-scroll-to-top', false);
     }

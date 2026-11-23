@@ -22,10 +22,10 @@
             </nav>
             <nav aria-label="メインメニュー" class="layout-008">
               <div class="space-001">
-                <div class="text-002">ハイクラス業務管理システム</div>
+                <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">営業</div>
               </div>
-              <a href="SalesHome.dc.html" class="layout-010"><span>営業ホーム</span></a><a href="#" aria-current="page" class="layout-009"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="SalesBoard.dc.html" class="layout-010"><span>提案状況</span></a><a href="Meetings.dc.html" class="layout-010"><span>打合せ履歴</span></a><a href="Staff.dc.html" aria-label="山田 太郎(社員)の自分のページ(自分への依頼・支払明細・マイプロフィール)" class="layout-011"><span>山田 太郎(社員)</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="SalesHome.dc.html" class="layout-010"><span>営業ホーム</span></a><a href="#" aria-current="page" class="layout-009"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="SalesBoard.dc.html" class="layout-010"><span>提案状況</span></a><a href="Meetings.dc.html" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">

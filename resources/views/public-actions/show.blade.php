@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ハイクラス業務管理システム</title>@vite(['resources/css/app.css'])</head>
-<body><main class="mobile-card min-h-screen"><header class="mobile-page-head"><p>ハイクラス業務管理システム</p><h1>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HIKARAS 業務管理システム</title>@vite(['resources/css/app.css'])</head>
+<body><main class="mobile-card min-h-screen"><header class="mobile-page-head"><p>HIKARAS 業務管理システム</p><h1>
     {{ match($actionToken->purpose) { 'assignment_response'=>'依頼への回答', 'attendance_confirmation', 'attendance_seven_day', 'attendance_same_day'=>'出勤確認', 'report_submission'=>'報告書の提出', 'interview_selection'=>'面談の日程を選ぶ', 'temporary_profile'=>'振込先と住所の入力', 'first_password'=>'パスワードの設定', 'line_connect'=>'LINE連携', default=>'ご案内' } }}
 </h1></header><div class="mobile-card-body">
     @if($errors->any())<div class="rounded-lg bg-[#fbe3df] p-3 text-sm text-[#8a1f11]">入力内容を確認してください。<ul class="mt-2 list-disc pl-5">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif

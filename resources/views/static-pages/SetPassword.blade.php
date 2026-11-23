@@ -15,7 +15,7 @@
       <div class="screen">
         <div class="layout-072">
           <div class="utility-006">
-            <div class="text-075">HIGHCLASS</div>
+            <div class="text-075">HIKARAS</div>
             <h1 class="text-221">パスワードの設定</h1>
             <p class="text-222">{{ $user?->name ?? '' }}{{ isset($actionToken) ? ' さん、ようこそ。' : '' }}<br>ログインに使うパスワードを設定してください。</p></div>
           <form method="POST" action="{{ isset($actionToken) ? route('public-actions.update', request()->route('token')) : route('password.update') }}" class="layout-212">

@@ -11,9 +11,9 @@ Artisan::command('inspire', function () {
 Schedule::command('staff-management:synchronize-statuses')
     ->hourly()
     ->timezone('Asia/Tokyo')
-    ->withoutOverlapping();
+    ->withoutOverlapping(10);
 
 Schedule::command('staff-management:send-due-notifications')
-    ->everyMinute()
+    ->hourly()
     ->timezone('Asia/Tokyo')
-    ->withoutOverlapping();
+    ->withoutOverlapping(10);

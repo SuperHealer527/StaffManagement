@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Assignment;
 use App\Models\Availability;
 use App\Models\Event;
+use App\Models\NotificationLog;
 use App\Models\User;
 use App\Notifications\ActionLinkNotification;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -66,6 +67,7 @@ class AssignmentManagementTest extends TestCase
         Notification::fake();
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
         $event = Event::factory()->create(['status' => 'recruiting']);
+        $event->update(['business_name' => '健康づくり支援事業']);
         $candidate = User::factory()->create(['role' => 'staff', 'account_status' => 'active', 'notification_method' => 'email']);
 
         $this->actingAs($employee)->post(route('events.assignments.store', $event), [
@@ -79,6 +81,8 @@ class AssignmentManagementTest extends TestCase
         $this->assertSame('requested', $assignment->status);
         $this->assertDatabaseHas('secure_action_tokens', ['actionable_id' => $assignment->id, 'purpose' => 'assignment_response']);
         $this->assertDatabaseHas('notification_logs', ['notifiable_context_id' => $assignment->id, 'type' => 'assignment_request', 'status' => 'sent']);
+        $body = NotificationLog::query()->where('notifiable_context_id', $assignment->id)->value('body');
+        $this->assertStringContainsString('事業名：健康づくり支援事業', (string) $body);
         Notification::assertSentTo($candidate, ActionLinkNotification::class);
     }
 
@@ -128,10 +132,11 @@ class AssignmentManagementTest extends TestCase
 
         $this->actingAs($employee)->patch(route('events.assignments.leaders', $event), [
             'day_leader_assignment_id' => $leader->id,
-            'representative_same_as_leader' => 1,
+            'report_representative_assignment_id' => $staff->id,
         ])->assertRedirect();
 
-        $this->assertDatabaseHas('assignments', ['id' => $leader->id, 'is_day_leader' => true, 'is_report_representative' => true]);
+        $this->assertDatabaseHas('assignments', ['id' => $leader->id, 'is_day_leader' => true, 'is_report_representative' => false]);
+        $this->assertDatabaseHas('assignments', ['id' => $staff->id, 'is_day_leader' => false, 'is_report_representative' => true]);
 
         $this->actingAs($employee)->patch(route('events.assignments.leaders', $event), [
             'day_leader_assignment_id' => $staff->id,

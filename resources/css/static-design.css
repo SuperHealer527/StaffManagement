@@ -36,6 +36,14 @@
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffDetail.css";
 @import "../../Document/StaffManagement_staticHTML/css/pages/StaffList.css";
 
+.hikaras-login-logo {
+  display: block;
+  width: min(100%, 280px);
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgb(26 69 108 / 14%);
+}
+
 .page,
 .page *,
 .page *::before,

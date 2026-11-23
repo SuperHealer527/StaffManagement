@@ -15,7 +15,7 @@
       <div class="screen">
         <div class="layout-073">
           <header class="cell-025">
-            <div class="text-002">ハイクラス業務管理システム</div>
+            <div class="text-002">HIKARAS 業務管理システム</div>
             <h1 class="text-079">面談の日程を選んでください</h1>
           </header>
           <main class="layout-074">

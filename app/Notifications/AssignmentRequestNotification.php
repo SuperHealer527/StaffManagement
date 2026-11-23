@@ -35,6 +35,7 @@ class AssignmentRequestNotification extends Notification
             ->greeting($notifiable->name.' 様')
             ->line($event->event_date->format('Y年n月j日').'のイベント勤務をご依頼します。')
             ->line('集合 '.substr($event->meeting_time, 0, 5).' / 解散 '.substr($event->dismissal_time, 0, 5))
+            ->line('事業名：'.$event->business_name)
             ->line('場所:'.($event->venue ?: $event->meeting_place ?: '未定'))
             ->line('謝金 '.number_format($this->assignment->fee).'円 / 交通費 '.number_format($this->assignment->transportation).'円')
             ->when(filled($this->assignment->special_notes), fn (MailMessage $message) => $message->line('備考:'.$this->assignment->special_notes))

@@ -3,14 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ログイン</title>
+    <title>HIKARAS | ログイン</title>
     @vite(['resources/css/app.css'])
 </head>
 <body class="m-0 bg-[#f5f6f8] text-[#1a1d23]">
 <main class="mx-auto flex min-h-screen w-full max-w-[390px] flex-col justify-center px-6 py-10">
     <div class="text-center">
-        <div class="text-[13px] font-bold tracking-[.08em] text-[#5b6270]">HIGHCLASS</div>
-        <h1 class="mt-1.5 mb-0 text-2xl font-bold">ハイクラス業務管理システム</h1>
+        <img src="{{ asset('images/hikaras-logo.jpeg') }}" alt="HIKARAS 業務管理システム" class="mx-auto block w-full max-w-[280px] rounded-2xl object-contain shadow-[0_16px_45px_rgba(30,65,110,.12)]">
+        <h1 class="mt-5 mb-0 text-2xl font-bold tracking-[.04em] text-[#132b4f]">HIKARAS</h1>
+        <p class="mt-1.5 mb-0 text-sm font-medium text-[#5b6270]">業務管理システム</p>
     </div>
 
     <form method="POST" action="{{ route('login.store') }}" class="mt-7 flex flex-col gap-4 rounded-[14px] border border-[#e3e6eb] bg-white px-5 py-6">
