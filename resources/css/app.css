@@ -37,7 +37,7 @@
 
     .app-shell { min-height: 100vh; display: flex; align-items: stretch; }
     .area-rail { position: sticky; top: 0; z-index: 30; display: flex; width: 76px; height: 100vh; flex: 0 0 76px; flex-direction: column; align-items: center; gap: 6px; background: #16213a; padding: 16px 0; }
-    .brand-mark { display: grid; width: 40px; height: 40px; overflow: hidden; margin-bottom: 14px; place-items: center; border-radius: 10px; background: #fff url('/images/hikaras-logo.jpeg') no-repeat 50% 4% / 350% auto; color: transparent; font-size: 0; font-weight: 700; text-decoration: none; }
+    .brand-mark { display: grid; width: 40px; height: 40px; overflow: hidden; margin-bottom: 14px; place-items: center; border-radius: 10px; background: #fff url('/images/hikaras-logo-top.jpeg') no-repeat 50% 4% / 185% auto; color: transparent; font-size: 0; font-weight: 700; text-decoration: none; }
     .area-nav { display: flex; width: 100%; flex: 1; flex-direction: column; align-items: center; gap: 6px; }
     .area-link { display: flex; width: 64px; min-height: 60px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 10px; color: #c3cbda; text-decoration: none; }
     .area-link:nth-last-child(1) { margin-top: auto; }

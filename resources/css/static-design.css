@@ -48,10 +48,10 @@
 .layout-004 {
   overflow: hidden;
   background-color: #fff;
-  background-image: url('/images/hikaras-logo.jpeg');
+  background-image: url('/images/hikaras-logo-top.jpeg');
   background-repeat: no-repeat;
   background-position: 50% 4%;
-  background-size: 350% auto;
+  background-size: 185% auto;
   color: transparent;
   text-indent: -9999px;
 }
