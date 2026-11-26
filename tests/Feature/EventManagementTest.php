@@ -104,7 +104,10 @@ class EventManagementTest extends TestCase
     public function test_event_create_page_selects_client_from_query_string(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        $selectedClient = Client::factory()->create(['name' => '選択済み依頼先']);
+        $selectedClient = Client::factory()->create([
+            'name' => '選択済み依頼先',
+            'proposal_status' => 'won',
+        ]);
         Client::factory()->create(['name' => '別の依頼先']);
 
         $this->actingAs($employee)->get(route('events.create', ['client_id' => $selectedClient->id]))

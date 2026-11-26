@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CancelEventRequest;
 use App\Http\Requests\DuplicateEventRequest;
 use App\Http\Requests\StoreEventRequest;
+use App\Models\Assignment;
 use App\Models\Client;
 use App\Models\Event;
 use App\Models\Expense;
@@ -34,7 +35,7 @@ class EventController extends Controller
             ->whereDate('event_date', '>=', today())
             ->orderBy('event_date')
             ->get()
-            ->filter(fn (Event $event): bool => $event->assignments->where('status', 'confirmed')->count() < $event->required_staff)
+            ->filter(fn (Event $event): bool => $event->assignments->whereIn('status', Assignment::STAFFING_STATUSES)->count() < $event->required_staff)
             ->values();
 
         return view('static-pages.Shortage', compact('shortageEvents'));
@@ -46,7 +47,7 @@ class EventController extends Controller
 
         $eventsQuery = Event::query()
             ->with('client')
-            ->withCount(['assignments as confirmed_count' => fn ($query) => $query->where('status', 'confirmed')]);
+            ->withCount(['assignments as confirmed_count' => fn ($query) => $query->whereIn('status', Assignment::STAFFING_STATUSES)]);
 
         $keyword = request()->string('q')->trim()->toString();
         if ($keyword !== '') {
@@ -68,12 +69,12 @@ class EventController extends Controller
         $this->applyDateFilter($eventsQuery, request()->string('period', 'upcoming')->toString());
         if (request()->boolean('shortage')) {
             $eventsQuery->whereNotIn('status', ['draft', 'cancelled'])
-                ->whereRaw("(select count(*) from assignments where assignments.event_id = events.id and assignments.status = 'confirmed') < events.required_staff");
+                ->whereRaw("(select count(*) from assignments where assignments.event_id = events.id and assignments.status in ('accepted', 'confirmed', 'completed')) < events.required_staff");
         }
 
         return view('static-pages.EventList', [
             'events' => $eventsQuery->orderBy('event_date')->paginate(30)->withQueryString(),
-            'clients' => Client::query()->orderBy('name')->get(),
+            'clients' => Client::query()->eventDestinations()->orderBy('name')->get(),
         ]);
     }
 
@@ -238,7 +239,7 @@ class EventController extends Controller
         return [
             'event' => $event,
             'events' => $event === null ? collect() : collect([$event]),
-            'clients' => Client::query()->orderBy('name')->get(),
+            'clients' => Client::query()->eventDestinations()->orderBy('name')->get(),
             'employees' => User::query()->where('role', 'employee')->where('account_status', 'active')->orderBy('name')->get(),
         ];
     }

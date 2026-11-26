@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\ClientFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,20 @@ class Client extends Model
     public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class);
+    }
+
+    public function scopeEventDestinations(Builder $query): Builder
+    {
+        return $query->where(function (Builder $destinationQuery): void {
+            $destinationQuery->where('proposal_status', 'won')
+                ->orWhereHas('events');
+        });
+    }
+
+    public function scopeSalesProspects(Builder $query): Builder
+    {
+        return $query->where('proposal_status', '!=', 'won')
+            ->whereDoesntHave('events');
     }
 
     protected function casts(): array

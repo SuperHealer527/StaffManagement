@@ -84,6 +84,12 @@ class AssignmentManagementTest extends TestCase
         $body = NotificationLog::query()->where('notifiable_context_id', $assignment->id)->value('body');
         $this->assertStringContainsString('事業名：健康づくり支援事業', (string) $body);
         Notification::assertSentTo($candidate, ActionLinkNotification::class);
+        $notification = Notification::sent($candidate, ActionLinkNotification::class)->first();
+        $this->assertInstanceOf(ActionLinkNotification::class, $notification);
+        $this->assertSame(
+            preg_split('/\R+/', trim($notification->body)),
+            $notification->toMail($candidate)->introLines,
+        );
     }
 
     public function test_semi_employee_cannot_send_request_or_add_direct_assignment(): void
@@ -165,5 +171,23 @@ class AssignmentManagementTest extends TestCase
             ->assertDontSee('充足イベント')
             ->assertDontSee('下書きイベント')
             ->assertSee('あと1人');
+    }
+
+    public function test_accepted_assignment_reduces_the_shortage_count(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $event = Event::factory()->create(['name' => '承諾反映イベント', 'required_staff' => 4]);
+        Assignment::factory()->create(['event_id' => $event->id, 'status' => 'accepted']);
+
+        $this->actingAs($employee)->get(route('shortages.index'))
+            ->assertOk()
+            ->assertSee('承諾反映イベント')
+            ->assertSee('1 / 4人')
+            ->assertSee('あと3人');
+
+        $this->actingAs($employee)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('1 / 4人')
+            ->assertSee('あと3人');
     }
 }

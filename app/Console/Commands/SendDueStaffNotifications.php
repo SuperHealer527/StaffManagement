@@ -73,6 +73,10 @@ class SendDueStaffNotifications extends Command
         SecureActionLinkService $links,
         NotificationDeliveryService $delivery,
     ): int {
+        if ($assignment->user->isEmployee()) {
+            return 0;
+        }
+
         $event = $assignment->event;
         $eventDate = Carbon::parse($event->event_date->toDateString(), 'Asia/Tokyo')->startOfDay();
         $daysUntilEvent = (int) round($now->copy()->startOfDay()->diffInDays($eventDate, false));

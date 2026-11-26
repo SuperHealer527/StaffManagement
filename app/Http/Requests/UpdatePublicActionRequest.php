@@ -23,7 +23,7 @@ class UpdatePublicActionRequest extends FormRequest
 
         return $actionToken->purpose !== 'assignment_response'
             || ($actionToken->actionable instanceof Assignment
-                && in_array($actionToken->actionable->status, ['requested', 'unknown', 'accepted'], true));
+                && in_array($actionToken->actionable->status, Assignment::AWAITING_RESPONSE_STATUSES, true));
     }
 
     /** @return array<string, ValidationRule|array<mixed>|string> */

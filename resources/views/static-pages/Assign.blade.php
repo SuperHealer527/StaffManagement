@@ -31,11 +31,12 @@
             <div class="layout-040">
               @if (isset($candidates))
               @php
+                $staffingAssignments = $event->assignments->whereIn('status', \App\Models\Assignment::STAFFING_STATUSES);
                 $confirmedAssignments = $event->assignments->where('status', 'confirmed');
                 $confirmedManagers = $confirmedAssignments;
                 $leader = $confirmedAssignments->firstWhere('is_day_leader', true);
                 $representative = $confirmedAssignments->firstWhere('is_report_representative', true);
-                $shortage = max(0, $event->required_staff - $confirmedAssignments->count());
+                $shortage = max(0, $event->required_staff - $staffingAssignments->count());
                 $statusLabels = ['requested' => '依頼中', 'unknown' => '未定', 'accepted' => '承諾', 'declined' => '辞退', 'confirmed' => '確定', 'rejected' => '見送り', 'cancelled' => '取消', 'absent' => '欠勤', 'completed' => '勤務完了'];
                 $statusClasses = ['requested' => 'surface-015', 'unknown' => 'surface-014', 'accepted' => 'surface-013', 'confirmed' => 'surface-012'];
                 $roleLabels = ['employee' => '社員', 'semi_employee' => '準社員', 'staff' => 'スタッフ', 'temporary' => '単発', 'trainer' => 'トレーナー'];
@@ -53,7 +54,7 @@
                   <div class="text-085">集合場所:{{ $event->meeting_place ?: '未定' }} ・ 実施場所:{{ $event->venue ?: '未定' }}</div>
                   <div class="layout-084"><span class="text-086">持ち物</span>@forelse($event->items ?? [] as $item)<span class="text-045">{{ $itemLabels[$item] ?? $item }}</span>@empty<span class="text-045">なし</span>@endforelse @if(auth()->user()->isEmployee())<a href="{{ route('events.edit', $event) }}" class="text-087">イベントの編集を開く</a>@endif</div>
                 </div>
-                <div class="space-012"><div class="layout-043"><span class="text-007">確定 / 必要人数</span><span class="text-088">{{ $confirmedAssignments->count() }}<span class="text-032"> / {{ $event->required_staff }}人</span></span></div><div role="img" aria-label="必要{{ $event->required_staff }}人のうち{{ $confirmedAssignments->count() }}人確定" class="surface-040"><div class="space-013" style="width: {{ min(100, $event->required_staff ? $confirmedAssignments->count() / $event->required_staff * 100 : 0) }}%"></div></div><div class="text-089">あと{{ $shortage }}人必要</div></div>
+                <div class="space-012"><div class="layout-043"><span class="text-007">承諾・確定 / 必要人数</span><span class="text-088">{{ $staffingAssignments->count() }}<span class="text-032"> / {{ $event->required_staff }}人</span></span></div><div role="img" aria-label="必要{{ $event->required_staff }}人のうち{{ $staffingAssignments->count() }}人が承諾または確定" class="surface-040"><div class="space-013" style="width: {{ min(100, $event->required_staff ? $staffingAssignments->count() / $event->required_staff * 100 : 0) }}%"></div></div><div class="text-089">あと{{ $shortage }}人必要</div></div>
               </section>
               <section aria-labelledby="h-lead" class="surface-006">
                 <h2 id="h-lead" class="text-020">当日責任者と報告書の代表者</h2><div class="text-033">どちらも「確定」の担当者から選びます。当日責任者はスタッフのホームと出勤確認の緊急連絡先に表示されます。</div>
@@ -64,7 +65,7 @@
                 </form>
               </section>
               <section aria-label="アサインする人" class="surface-006">
-                <div class="layout-045"><div class="space-003"><h2 class="text-090">アサインする人</h2><div class="text-046">イベントの時間:集合 {{ substr($event->meeting_time, 0, 5) }} ・ 開始 {{ substr($event->start_time, 0, 5) }} ・ 終了 {{ substr($event->end_time, 0, 5) }} ・ 解散 {{ substr($event->dismissal_time, 0, 5) }}。</div></div><div class="layout-086"><span class="text-007">確定</span><span class="text-091">{{ $confirmedAssignments->count() }}<span class="text-042"> / {{ $event->required_staff }}人</span></span><span class="surface-011">あと{{ $shortage }}人</span></div></div>
+                <div class="layout-045"><div class="space-003"><h2 class="text-090">アサインする人</h2><div class="text-046">イベントの時間:集合 {{ substr($event->meeting_time, 0, 5) }} ・ 開始 {{ substr($event->start_time, 0, 5) }} ・ 終了 {{ substr($event->end_time, 0, 5) }} ・ 解散 {{ substr($event->dismissal_time, 0, 5) }}。</div></div><div class="layout-086"><span class="text-007">承諾・確定</span><span class="text-091">{{ $staffingAssignments->count() }}<span class="text-042"> / {{ $event->required_staff }}人</span></span><span class="surface-011">あと{{ $shortage }}人</span></div></div>
                 <div class="utility-001"><table class="text-092"><thead><tr class="text-023"><th class="cell-009">スタッフ</th><th class="cell-010">備考(特記)</th><th class="cell-010">ステータス</th><th class="cell-010">謝金(円)</th><th class="cell-010">交通費(円)</th><th class="cell-010">7日前確認</th><th class="cell-010">当日確認</th><th class="cell-031">操作</th></tr></thead><tbody>
                 @forelse($event->assignments as $assignment)
                   @php $formId = 'assignment-'.$assignment->id; @endphp

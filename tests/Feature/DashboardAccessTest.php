@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Assignment;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -52,6 +53,21 @@ class DashboardAccessTest extends TestCase
             ->assertDontSee('下書き不足イベント')
             ->assertDontSee('中止不足イベント')
             ->assertDontSee('完了不足イベント');
+    }
+
+    public function test_dashboard_shows_pending_request_elapsed_time_in_hours(): void
+    {
+        $this->travelTo('2026-11-26 12:00:00');
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        Assignment::factory()->create([
+            'status' => 'requested',
+            'requested_at' => now()->subHours(5),
+        ]);
+
+        $this->actingAs($employee)->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('5時間')
+            ->assertSee('送信失敗・折り返し待ち・3日以上未回答');
     }
 
     public function test_unknown_screen_returns_not_found(): void

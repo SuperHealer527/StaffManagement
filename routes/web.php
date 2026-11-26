@@ -41,6 +41,7 @@ Route::middleware(['auth', EnsureAccountCanLogIn::class])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/screens/{screen}', [ScreenController::class, 'show'])->name('screens.show');
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/sales/clients', [ClientController::class, 'index'])->name('clients.prospects');
     Route::get('/sales', [ClientController::class, 'salesHome'])->name('sales.home');
     Route::get('/sales/proposals', [ClientController::class, 'proposalBoard'])->name('sales.proposals');
     Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');

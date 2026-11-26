@@ -28,7 +28,7 @@ class StaffPortalTest extends TestCase
             ->assertSee('data-scroll-to-top', false);
     }
 
-    public function test_staff_can_answer_and_change_open_assignment_response(): void
+    public function test_staff_final_response_cannot_be_changed(): void
     {
         $staff = User::factory()->create(['role' => 'staff', 'account_status' => 'active']);
         $assignment = Assignment::factory()->create(['user_id' => $staff->id, 'status' => 'requested']);
@@ -36,8 +36,13 @@ class StaffPortalTest extends TestCase
         $this->actingAs($staff)->patch(route('my.assignments.respond', $assignment), ['response' => 'accepted'])->assertRedirect();
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
 
-        $this->actingAs($staff)->patch(route('my.assignments.respond', $assignment), ['response' => 'unknown'])->assertRedirect();
-        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'unknown']);
+        $this->actingAs($staff)->patch(route('my.assignments.respond', $assignment), ['response' => 'unknown'])->assertForbidden();
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
+
+        $this->actingAs($staff)->get(route('my.home'))
+            ->assertOk()
+            ->assertSee('未回答の依頼')
+            ->assertSee('0件');
     }
 
     public function test_other_user_cannot_answer_or_confirm_assignment(): void

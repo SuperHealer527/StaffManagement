@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Assignment;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -16,7 +17,7 @@ class RespondOwnAssignmentRequest extends FormRequest
 
         return $assignment !== null
             && $this->user()?->id === $assignment->user_id
-            && in_array($assignment->status, ['requested', 'unknown', 'accepted'], true);
+            && in_array($assignment->status, Assignment::AWAITING_RESPONSE_STATUSES, true);
     }
 
     /**

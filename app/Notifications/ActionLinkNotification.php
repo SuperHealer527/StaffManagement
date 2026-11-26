@@ -34,14 +34,17 @@ class ActionLinkNotification extends Notification
     {
         $message = (new MailMessage)
             ->subject($this->subject)
-            ->greeting($notifiable->name.' 様')
-            ->line($this->body);
+            ->greeting($notifiable->name.' 様');
+
+        foreach (preg_split('/\R+/', trim($this->body)) ?: [] as $bodyLine) {
+            $message->line($bodyLine);
+        }
 
         if ($this->actionUrl !== null) {
             $message->action($this->actionLabel, $this->actionUrl);
         }
 
-        return $message->line('ハイクラス業務管理システム');
+        return $message->salutation('HIKARAS 業務管理システム');
     }
 
     /**

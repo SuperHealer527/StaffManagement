@@ -75,7 +75,15 @@ class ClientController extends Controller
     {
         abort_unless(request()->user()?->canManageAssignments(), 403);
 
+        $clientListType = request()->routeIs('clients.prospects') ? 'prospects' : 'destinations';
+        if ($clientListType === 'prospects') {
+            abort_unless(request()->user()?->isEmployee(), 403);
+        }
+
         $query = Client::query()->with(['contacts', 'salesOwner'])->withCount('events');
+        $clientListType === 'prospects'
+            ? $query->salesProspects()
+            : $query->eventDestinations();
         $keyword = request()->string('q')->trim()->toString();
         if ($keyword !== '') {
             $query->where(function ($builder) use ($keyword): void {
@@ -95,7 +103,10 @@ class ClientController extends Controller
             ? $query->orderBy('name')
             : $query->latest('updated_at');
 
-        return view('static-pages.Clients', ['clients' => $query->paginate(25)->withQueryString()]);
+        return view('static-pages.Clients', [
+            'clients' => $query->paginate(25)->withQueryString(),
+            'clientListType' => $clientListType,
+        ]);
     }
 
     public function create(): View

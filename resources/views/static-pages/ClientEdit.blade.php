@@ -25,7 +25,7 @@
                 <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">営業</div>
               </div>
-              <a href="SalesHome.dc.html" class="layout-010"><span>営業ホーム</span></a><a href="#" aria-current="page" class="layout-009"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="SalesBoard.dc.html" class="layout-010"><span>提案状況</span></a><a href="Meetings.dc.html" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="{{ route('sales.home') }}" class="layout-010"><span>営業ホーム</span></a><a href="{{ route('clients.prospects') }}" class="layout-010"><span>顧客リスト</span></a><a href="{{ route('clients.index') }}" aria-current="page" class="layout-009"><span>依頼先</span><span class="surface-001">共通</span></a><a href="{{ route('sales.proposals') }}" class="layout-010"><span>提案状況</span></a><a href="{{ route('meetings.index') }}" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">
@@ -37,7 +37,7 @@
                     @if($client)<span class="surface-029">{{ ['corporation' => '法人', 'government' => '行政', 'individual' => '個人', 'organization' => '団体', 'other' => 'その他'][$client->type] ?? $client->type }}</span><span class="surface-047">{{ ['uncontacted' => '未接触', 'approaching' => 'アプローチ中', 'proposing' => '提案中', 'won' => '受注', 'lost' => '失注', 'on_hold' => '保留'][$client->proposal_status] ?? $client->proposal_status }}</span>@endif</div>
                   <div class="text-060">{{ $client?->department ?: '部署未登録' }}@if($client) ・ 最終更新 {{ $client->updated_at->timezone('Asia/Tokyo')->format('Y/m/d') }}@endif ・ この詳細ページは社員のみ閲覧できます</div>
                 </div>
-                @if($client)<a href="{{ route('events.create', ['client_id' => $client->id]) }}" class="text-109">+ この依頼先でイベントを登録</a>@endif</div>
+                @if($client && ($client->proposal_status === 'won' || $client->events->isNotEmpty()))<a href="{{ route('events.create', ['client_id' => $client->id]) }}" class="text-109">+ この依頼先でイベントを登録</a>@elseif($client)<span class="text-033">受注に更新するとイベントを登録できます</span>@endif</div>
               <form method="POST" action="{{ $client ? route('clients.update', $client) : route('clients.store') }}">
                 @csrf
                 @if($client) @method('PATCH') @endif

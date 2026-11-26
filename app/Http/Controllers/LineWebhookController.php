@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use App\Models\SecureActionToken;
+use App\Services\AssignmentWorkflowService;
 use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,7 +12,10 @@ use Illuminate\Support\Facades\Http;
 
 class LineWebhookController extends Controller
 {
-    public function __construct(private AuditService $auditService) {}
+    public function __construct(
+        private AuditService $auditService,
+        private AssignmentWorkflowService $assignmentWorkflowService,
+    ) {}
 
     public function __invoke(Request $request): Response
     {
@@ -54,21 +58,23 @@ class LineWebhookController extends Controller
             return 'リンクの有効期限が切れています。担当者にご連絡ください。';
         }
 
-        if ($actionToken->opened_at === null) {
-            $actionToken->update(['opened_at' => now()]);
-        }
-
         $assignment = $actionToken->actionable;
         if ($actionToken->purpose === 'assignment_response') {
             $response = $data['response'] ?? null;
             if (! is_string($response)
                 || ! in_array($response, ['accepted', 'unknown', 'declined'], true)
-                || ! in_array($assignment->status, ['requested', 'unknown', 'accepted'], true)) {
+                || ! in_array($assignment->status, Assignment::AWAITING_RESPONSE_STATUSES, true)) {
                 return '確定済みまたは終了済みのため、回答は変更できません。';
             }
 
             $oldStatus = $assignment->status;
             $assignment->update(['status' => $response, 'responded_at' => now()]);
+            if (in_array($response, ['accepted', 'declined'], true)) {
+                $actionToken->update(['used_at' => now()]);
+            }
+            if ($response === 'accepted') {
+                $this->assignmentWorkflowService->synchronizeEventStatus($assignment->event, $assignment);
+            }
             $this->auditService->record($assignment, 'line_assignment_response', ['status' => $oldStatus], ['status' => $response]);
 
             return ['accepted' => '承諾で回答しました。', 'unknown' => '未定で回答しました。', 'declined' => '辞退で回答しました。'][$response];

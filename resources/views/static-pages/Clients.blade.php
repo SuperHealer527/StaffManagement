@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>依頼先一覧</title>
+  <title>{{ ($clientListType ?? 'destinations') === 'prospects' ? '顧客リスト' : '依頼先一覧' }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,22 +25,22 @@
                 <div class="text-002">HIKARAS 業務管理システム</div>
                 <div class="text-003">営業</div>
               </div>
-              <a href="{{ route('sales.home') }}" class="layout-010"><span>営業ホーム</span></a><a href="{{ route('clients.index') }}" aria-current="page" class="layout-009"><span>依頼先(顧客リスト)</span><span class="surface-001">共通</span></a><a href="{{ route('sales.proposals') }}" class="layout-010"><span>提案状況</span></a><a href="{{ route('meetings.index') }}" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
+              <a href="{{ route('sales.home') }}" class="layout-010"><span>営業ホーム</span></a>@if(auth()->user()->isEmployee())<a href="{{ route('clients.prospects') }}" @if(($clientListType ?? 'destinations') === 'prospects') aria-current="page" @endif class="{{ ($clientListType ?? 'destinations') === 'prospects' ? 'layout-009' : 'layout-010' }}"><span>顧客リスト</span></a>@endif<a href="{{ route('clients.index') }}" @if(($clientListType ?? 'destinations') === 'destinations') aria-current="page" @endif class="{{ ($clientListType ?? 'destinations') === 'destinations' ? 'layout-009' : 'layout-010' }}"><span>依頼先</span><span class="surface-001">共通</span></a><a href="{{ route('sales.proposals') }}" class="layout-010"><span>提案状況</span></a><a href="{{ route('meetings.index') }}" class="layout-010"><span>打合せ履歴</span></a><a href="{{ route('profile.edit') }}" aria-label="自分への依頼・支払明細・マイプロフィールを開く" class="layout-011"><span>{{ auth()->user()->name }}({{ auth()->user()->isEmployee() ? '社員' : '準社員' }})</span><span class="text-004">自分のページを開く ›</span></a></nav>
           </div>
           <main class="space-005">
             <div class="layout-040">
               <div class="layout-013 sales-page-header">
                 <div>
-                  <h1 class="text-044">依頼先</h1>
-                  <div class="text-060">派遣の依頼先・営業先の一覧です。詳細(提案状況・打合せ履歴など)は社員だけが開けます。</div>
+                  <h1 class="text-044">{{ ($clientListType ?? 'destinations') === 'prospects' ? '顧客リスト' : '依頼先' }}</h1>
+                  <div class="text-060">{{ ($clientListType ?? 'destinations') === 'prospects' ? '営業中の顧客を表示します。受注後は依頼先へ移り、イベント登録時に選べるようになります。' : '受注済み、またはイベント実績がある依頼先を表示します。イベント登録時の選択肢もこの一覧と同じです。' }}</div>
                 </div>
-                @if (auth()->user()->isEmployee())<a href="{{ route('clients.create') }}" class="surface-021">+ 依頼先を登録</a>@endif</div>
+                @if (auth()->user()->isEmployee())<a href="{{ route('clients.create') }}" class="surface-021">+ 顧客を登録</a>@endif</div>
               <section aria-labelledby="cl-list" class="surface-006 sales-data-panel">
-                <form method="GET" action="{{ route('clients.index') }}" class="sales-filter-form" data-auto-filter-form>
+                <form method="GET" action="{{ ($clientListType ?? 'destinations') === 'prospects' ? route('clients.prospects') : route('clients.index') }}" class="sales-filter-form" data-auto-filter-form>
                 @php $typeLabels = ['' => 'すべて', 'corporation' => '法人', 'government' => '行政', 'individual' => '個人', 'organization' => '団体', 'other' => 'その他']; @endphp
                 <div role="group" aria-label="種別で絞り込み" class="layout-069">@foreach ($typeLabels as $value => $label)<button type="submit" name="type" value="{{ $value }}" aria-pressed="{{ request('type', '') === $value ? 'true' : 'false' }}" class="{{ request('type', '') === $value ? 'control-006' : 'control-007' }}"><span>{{ $label }}</span></button>@endforeach</div>
                 <div class="layout-041">
-                  <h2 id="cl-list" class="text-020">依頼先一覧(<span>{{ method_exists($clients, 'total') ? $clients->total() : $clients->count() }}</span>件)</h2>
+                  <h2 id="cl-list" class="text-020">{{ ($clientListType ?? 'destinations') === 'prospects' ? '顧客' : '依頼先' }}一覧(<span>{{ method_exists($clients, 'total') ? $clients->total() : $clients->count() }}</span>件)</h2>
                   <div class="layout-070 sales-search-controls"><input type="search" name="q" value="{{ request('q') }}" aria-label="依頼先名・担当者名で探す" placeholder="依頼先名・担当者名で探す" class="text-119">@if (auth()->user()->isEmployee())<label class="layout-107">提案状況<span class="surface-056">社員のみ</span><select name="proposal_status" aria-label="提案状況で絞り込み" class="surface-017"><option value="">すべて</option>@foreach (['uncontacted' => '未接触', 'approaching' => 'アプローチ中', 'proposing' => '提案中', 'won' => '受注', 'lost' => '失注', 'on_hold' => '保留'] as $value => $label)<option value="{{ $value }}" @selected(request('proposal_status') === $value)>{{ $label }}</option>@endforeach</select></label>@endif<select name="sort" aria-label="並び順" class="surface-017"><option value="updated">最終更新日が新しい順</option><option value="name" @selected(request('sort') === 'name')>依頼先名順</option></select><button type="submit" class="control-024">検索</button></div>
                 </div>
                 </form>
@@ -60,7 +60,7 @@
                   </table>
                 </div>
                 @if (method_exists($clients, 'links'))<div class="sales-pagination">{{ $clients->links() }}</div>@endif
-                <div class="text-058">「詳細を見る」と提案状況の絞り込みは社員の画面にだけ表示されます。準社員は一覧の閲覧のみ、スタッフはこの画面を開けません。営業リストは、提案状況を「未接触」で絞り込んで使います。</div>
+                <div class="text-058">顧客リストは営業中、依頼先は受注済みまたはイベント実績ありで分けています。準社員は依頼先一覧の閲覧のみ、スタッフはこの画面を開けません。</div>
               </section>
             </div>
           </main>

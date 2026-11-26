@@ -19,7 +19,7 @@ class ClientManagementTest extends TestCase
         ClientContact::factory()->create(['client_id' => $matchingClient->id, 'name' => '検索担当者']);
         Client::factory()->create(['name' => '表示されない会社']);
 
-        $this->actingAs($employee)->get(route('clients.index', ['q' => '検索担当者']))
+        $this->actingAs($employee)->get(route('clients.prospects', ['q' => '検索担当者']))
             ->assertOk()
             ->assertSee('検索対象会社')
             ->assertDontSee('表示されない会社');
@@ -28,7 +28,7 @@ class ClientManagementTest extends TestCase
     public function test_client_list_displays_pagination_for_more_than_twenty_five_clients(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        Client::factory()->count(26)->create();
+        Client::factory()->count(26)->create(['proposal_status' => 'won']);
 
         $this->actingAs($employee)->get(route('clients.index'))
             ->assertOk()
@@ -72,7 +72,7 @@ class ClientManagementTest extends TestCase
     public function test_client_detail_links_to_event_creation_with_the_client_selected(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
-        $client = Client::factory()->create(['name' => 'イベント登録元の依頼先']);
+        $client = Client::factory()->create(['name' => 'イベント登録元の依頼先', 'proposal_status' => 'won']);
 
         $this->actingAs($employee)->get(route('clients.edit', $client))
             ->assertOk()
@@ -148,9 +148,31 @@ class ClientManagementTest extends TestCase
     public function test_semi_employee_can_search_but_cannot_open_client_edit_page(): void
     {
         $semiEmployee = User::factory()->create(['role' => 'semi_employee', 'account_status' => 'active']);
-        $client = Client::factory()->create();
+        $client = Client::factory()->create(['proposal_status' => 'won']);
 
         $this->actingAs($semiEmployee)->get(route('clients.index'))->assertOk();
         $this->actingAs($semiEmployee)->get(route('clients.edit', $client))->assertForbidden();
+    }
+
+    public function test_sales_prospects_and_event_destinations_are_separate(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $prospect = Client::factory()->create(['name' => '営業中の顧客', 'proposal_status' => 'proposing']);
+        $destination = Client::factory()->create(['name' => '受注済み依頼先', 'proposal_status' => 'won']);
+
+        $this->actingAs($employee)->get(route('clients.prospects'))
+            ->assertOk()
+            ->assertSee($prospect->name)
+            ->assertDontSee($destination->name);
+
+        $this->actingAs($employee)->get(route('clients.index'))
+            ->assertOk()
+            ->assertSee($destination->name)
+            ->assertDontSee($prospect->name);
+
+        $this->actingAs($employee)->get(route('events.create'))
+            ->assertOk()
+            ->assertSee($destination->name)
+            ->assertDontSee($prospect->name);
     }
 }

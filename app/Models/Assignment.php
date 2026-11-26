@@ -14,6 +14,12 @@ class Assignment extends Model
     /** @use HasFactory<AssignmentFactory> */
     use HasFactory;
 
+    /** @var list<string> */
+    public const AWAITING_RESPONSE_STATUSES = ['requested', 'unknown'];
+
+    /** @var list<string> */
+    public const STAFFING_STATUSES = ['accepted', 'confirmed', 'completed'];
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);

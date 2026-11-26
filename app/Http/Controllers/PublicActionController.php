@@ -8,6 +8,7 @@ use App\Models\Interview;
 use App\Models\ReportSubmission;
 use App\Models\SecureActionToken;
 use App\Models\User;
+use App\Services\AssignmentWorkflowService;
 use App\Services\AuditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
@@ -18,7 +19,10 @@ use Illuminate\View\View;
 
 class PublicActionController extends Controller
 {
-    public function __construct(private AuditService $auditService) {}
+    public function __construct(
+        private AuditService $auditService,
+        private AssignmentWorkflowService $assignmentWorkflowService,
+    ) {}
 
     public function show(string $token): View
     {
@@ -122,9 +126,15 @@ class PublicActionController extends Controller
     private function recordAssignmentResponse(SecureActionToken $actionToken, string $response): void
     {
         abort_unless($actionToken->actionable instanceof Assignment, 422);
-        abort_unless(in_array($actionToken->actionable->status, ['requested', 'unknown', 'accepted'], true), 422);
+        abort_unless(in_array($actionToken->actionable->status, Assignment::AWAITING_RESPONSE_STATUSES, true), 422);
         $oldStatus = $actionToken->actionable->status;
         $actionToken->actionable->update(['status' => $response, 'responded_at' => now()]);
+        if (in_array($response, ['accepted', 'declined'], true)) {
+            $actionToken->update(['used_at' => now()]);
+        }
+        if ($response === 'accepted') {
+            $this->assignmentWorkflowService->synchronizeEventStatus($actionToken->actionable->event, $actionToken->actionable);
+        }
         $this->auditService->record($actionToken->actionable, 'public_assignment_response', ['status' => $oldStatus], ['status' => $response]);
     }
 

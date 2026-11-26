@@ -7,6 +7,7 @@ use App\Http\Requests\RespondOwnAssignmentRequest;
 use App\Http\Requests\StoreOwnReportRequest;
 use App\Models\Assignment;
 use App\Models\ReportSubmission;
+use App\Services\AssignmentWorkflowService;
 use App\Services\AuditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,15 +15,20 @@ use Illuminate\View\View;
 
 class StaffPortalController extends Controller
 {
-    public function __construct(private AuditService $auditService) {}
+    public function __construct(
+        private AuditService $auditService,
+        private AssignmentWorkflowService $assignmentWorkflowService,
+    ) {}
 
     public function home(Request $request): View
     {
         $user = $request->user();
         $assignments = $user->assignments()->with(['event.client', 'event.reportQuestions', 'event.assignments.user'])->get();
-        $openRequests = $assignments->whereIn('status', ['requested', 'unknown', 'accepted'])->sortBy(fn ($item) => $item->event->event_date);
-        $upcomingAssignments = $assignments->where('status', 'confirmed')->filter(fn ($item) => $item->event->event_date->greaterThanOrEqualTo(today()))->sortBy(fn ($item) => $item->event->event_date);
-        $attendanceAssignment = $upcomingAssignments->first(fn ($item) => $item->event->event_date->lessThanOrEqualTo(today()->addDays(7)) && in_array($item->seven_day_confirmation, ['not_sent', 'sent'], true));
+        $openRequests = $assignments->whereIn('status', Assignment::AWAITING_RESPONSE_STATUSES)->sortBy(fn ($item) => $item->event->event_date);
+        $upcomingAssignments = $assignments->whereIn('status', Assignment::STAFFING_STATUSES)->filter(fn ($item) => $item->event->event_date->greaterThanOrEqualTo(today()))->sortBy(fn ($item) => $item->event->event_date);
+        $attendanceAssignment = $upcomingAssignments->first(fn ($item) => in_array($item->status, ['confirmed', 'completed'], true)
+            && $item->event->event_date->lessThanOrEqualTo(today()->addDays(7))
+            && in_array($item->seven_day_confirmation, ['not_sent', 'sent'], true));
         $reportAssignment = $assignments->first(fn ($item) => in_array($item->status, ['confirmed', 'completed'], true)
             && $item->is_report_representative
             && $item->event->report_required
@@ -38,9 +44,9 @@ class StaffPortalController extends Controller
         $tab = $request->input('tab', 'pending');
         $query = $request->user()->assignments()->with('event.client');
         match ($tab) {
-            'upcoming' => $query->where('status', 'confirmed')->whereHas('event', fn ($eventQuery) => $eventQuery->whereDate('event_date', '>=', today())),
+            'upcoming' => $query->whereIn('status', Assignment::STAFFING_STATUSES)->whereHas('event', fn ($eventQuery) => $eventQuery->whereDate('event_date', '>=', today())),
             'past' => $query->where(fn ($assignmentQuery) => $assignmentQuery->whereIn('status', ['declined', 'rejected', 'cancelled', 'absent', 'completed'])->orWhereHas('event', fn ($eventQuery) => $eventQuery->whereDate('event_date', '<', today()))),
-            default => $query->whereIn('status', ['requested', 'unknown', 'accepted']),
+            default => $query->whereIn('status', Assignment::AWAITING_RESPONSE_STATUSES),
         };
         $myAssignments = $query->get()->sortBy(fn ($item) => $item->event->event_date)->values();
 
@@ -51,9 +57,14 @@ class StaffPortalController extends Controller
     {
         $oldStatus = $assignment->status;
         $assignment->update(['status' => $request->validated('response'), 'responded_at' => now()]);
+        if ($assignment->status === 'accepted') {
+            $this->assignmentWorkflowService->synchronizeEventStatus($assignment->event, $assignment);
+        }
         $this->auditService->record($assignment, 'respond_to_assignment', ['status' => $oldStatus], ['status' => $assignment->status]);
 
-        return back()->with('status', '回答を保存しました。確定前であれば変更できます。');
+        return back()->with('status', $assignment->status === 'unknown'
+            ? '「未定」で保存しました。決まり次第、承諾または辞退を選んでください。'
+            : '回答を保存しました。承諾・辞退後は画面から変更できません。');
     }
 
     public function confirmAttendance(ConfirmOwnAttendanceRequest $request, Assignment $assignment, string $period): RedirectResponse

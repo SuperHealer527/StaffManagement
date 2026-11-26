@@ -35,11 +35,31 @@ class PublicActionTest extends TestCase
             ->assertRedirect(route('public-actions.complete', $plainToken));
 
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
-        $this->assertNull(SecureActionToken::query()->firstOrFail()->used_at);
+        $this->assertNotNull(SecureActionToken::query()->firstOrFail()->used_at);
+
+        $this->post(route('public-actions.update', $plainToken), ['response' => 'unknown'])
+            ->assertForbidden();
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
+    }
+
+    public function test_unknown_assignment_response_remains_open_until_a_final_response(): void
+    {
+        $assignment = Assignment::factory()->create(['status' => 'requested']);
+        $plainToken = 'unknown-response-token';
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'assignment_response',
+            'token_hash' => hash('sha256', $plainToken),
+            'expires_at' => now()->addDay(),
+        ]);
 
         $this->post(route('public-actions.update', $plainToken), ['response' => 'unknown'])
             ->assertRedirect(route('public-actions.complete', $plainToken));
+
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'unknown']);
+        $this->assertNull(SecureActionToken::query()->firstOrFail()->used_at);
     }
 
     public function test_assignment_request_does_not_show_sample_event_details_when_values_are_empty(): void

@@ -126,6 +126,54 @@ class ScheduledNotificationTest extends TestCase
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'same_day_confirmation' => 'sent']);
     }
 
+    public function test_employee_does_not_receive_attendance_reminders(): void
+    {
+        Carbon::setTestNow('2026-11-05 09:00:00 Asia/Tokyo');
+        Notification::fake();
+        $employee = User::factory()->create([
+            'role' => 'employee',
+            'account_status' => 'active',
+            'notification_method' => 'email',
+        ]);
+        $event = Event::factory()->create(['event_date' => '2026-11-12']);
+        $assignment = Assignment::factory()->create([
+            'event_id' => $event->id,
+            'user_id' => $employee->id,
+            'status' => 'confirmed',
+            'seven_day_confirmation' => 'not_sent',
+        ]);
+        $sameDayEvent = Event::factory()->create([
+            'event_date' => '2026-11-05',
+            'meeting_time' => '13:00',
+        ]);
+        $sameDayAssignment = Assignment::factory()->create([
+            'event_id' => $sameDayEvent->id,
+            'user_id' => $employee->id,
+            'status' => 'confirmed',
+            'same_day_confirmation' => 'not_sent',
+        ]);
+
+        $this->artisan('staff-management:send-due-notifications')->assertSuccessful();
+
+        Notification::assertNothingSent();
+        $this->assertDatabaseMissing('notification_logs', [
+            'notifiable_context_id' => $assignment->id,
+            'type' => 'attendance_7_day',
+        ]);
+        $this->assertDatabaseMissing('notification_logs', [
+            'notifiable_context_id' => $sameDayAssignment->id,
+            'type' => 'attendance_same_day',
+        ]);
+        $this->assertDatabaseHas('assignments', [
+            'id' => $assignment->id,
+            'seven_day_confirmation' => 'not_sent',
+        ]);
+        $this->assertDatabaseHas('assignments', [
+            'id' => $sameDayAssignment->id,
+            'same_day_confirmation' => 'not_sent',
+        ]);
+    }
+
     public function test_interview_reminder_is_sent_on_the_previous_day(): void
     {
         Carbon::setTestNow('2026-11-05 09:00:00 Asia/Tokyo');

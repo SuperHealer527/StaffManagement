@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
         $events = Event::query()
             ->with('client')
-            ->withCount(['assignments as confirmed_count' => fn ($query) => $query->whereIn('status', ['confirmed', 'completed'])])
+            ->withCount(['assignments as confirmed_count' => fn ($query) => $query->whereIn('status', Assignment::STAFFING_STATUSES)])
             ->whereBetween('event_date', [today(), today()->addDays(28)])
             ->orderBy('event_date')
             ->get();
@@ -39,6 +39,7 @@ class DashboardController extends Controller
         $todayAssignments = Assignment::query()
             ->with(['event', 'user'])
             ->whereIn('status', ['confirmed', 'completed'])
+            ->whereHas('user', fn ($query) => $query->where('role', '!=', 'employee'))
             ->where('same_day_confirmation', '!=', 'confirmed')
             ->whereHas('event', fn ($query) => $query->whereDate('event_date', today()))
             ->get()
@@ -50,13 +51,14 @@ class DashboardController extends Controller
         $sevenDayAssignments = Assignment::query()
             ->with(['event', 'user'])
             ->whereIn('status', ['confirmed', 'completed'])
+            ->whereHas('user', fn ($query) => $query->where('role', '!=', 'employee'))
             ->whereIn('seven_day_confirmation', ['not_sent', 'sent'])
             ->whereHas('event', fn ($query) => $query->whereBetween('event_date', [today(), today()->addDays(7)]))
             ->orderBy(Event::select('event_date')->whereColumn('events.id', 'assignments.event_id'))
             ->get();
         $pendingAssignments = Assignment::query()
             ->with(['event', 'user'])
-            ->whereIn('status', ['requested', 'unknown'])
+            ->whereIn('status', Assignment::AWAITING_RESPONSE_STATUSES)
             ->oldest('requested_at')
             ->get();
         $myAssignments = Assignment::query()
@@ -82,7 +84,7 @@ class DashboardController extends Controller
                 'todayAssignments' => $todayAssignments,
                 'sevenDayAssignments' => $sevenDayAssignments,
                 'pendingAssignments' => $pendingAssignments,
-                'myPendingCount' => Assignment::query()->where('user_id', $user->id)->whereIn('status', ['requested', 'unknown'])->count(),
+                'myPendingCount' => Assignment::query()->where('user_id', $user->id)->whereIn('status', Assignment::AWAITING_RESPONSE_STATUSES)->count(),
                 'myYearWorkCount' => Assignment::query()->where('user_id', $user->id)->whereIn('status', ['confirmed', 'completed'])->whereHas('event', fn ($query) => $query->whereYear('event_date', today()->year)->whereDate('event_date', '<=', today()))->count(),
                 'myAssignments' => $myAssignments,
                 'expiringQualifications' => Qualification::query()->with('user')->whereBetween('expires_at', [today(), today()->addDays(60)])->orderBy('expires_at')->get(),

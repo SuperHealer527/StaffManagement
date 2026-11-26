@@ -44,6 +44,18 @@
   box-shadow: 0 16px 42px rgb(26 69 108 / 14%);
 }
 
+/* Use the supplied HIKARAS symbol in the compact area switcher. */
+.layout-004 {
+  overflow: hidden;
+  background-color: #fff;
+  background-image: url('/images/hikaras-logo.jpeg');
+  background-repeat: no-repeat;
+  background-position: 50% 4%;
+  background-size: 350% auto;
+  color: transparent;
+  text-indent: -9999px;
+}
+
 .page,
 .page *,
 .page *::before,

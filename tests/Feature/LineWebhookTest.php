@@ -37,6 +37,36 @@ class LineWebhookTest extends TestCase
 
         $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
         $this->assertDatabaseHas('audit_logs', ['auditable_id' => $assignment->id, 'action' => 'line_assignment_response']);
+        $this->assertNotNull(SecureActionToken::query()->firstOrFail()->used_at);
+    }
+
+    public function test_line_unknown_response_can_be_changed_to_acceptance_later(): void
+    {
+        config(['services.line.channel_secret' => 'webhook-secret']);
+        $assignment = Assignment::factory()->create(['status' => 'requested']);
+        SecureActionToken::query()->create([
+            'user_id' => $assignment->user_id,
+            'actionable_type' => Assignment::class,
+            'actionable_id' => $assignment->id,
+            'purpose' => 'assignment_response',
+            'token_hash' => hash('sha256', 'reusable-line-token'),
+            'expires_at' => now()->addDay(),
+        ]);
+
+        foreach (['unknown', 'accepted'] as $response) {
+            $payload = json_encode(['events' => [[
+                'type' => 'postback',
+                'postback' => ['data' => 'token=reusable-line-token&response='.$response],
+            ]]], JSON_THROW_ON_ERROR);
+
+            $this->call('POST', '/api/webhooks/line', [], [], [], [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X_LINE_SIGNATURE' => $this->signature($payload),
+            ], $payload)->assertNoContent();
+        }
+
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'accepted']);
+        $this->assertNotNull(SecureActionToken::query()->firstOrFail()->used_at);
     }
 
     public function test_line_push_uses_postback_buttons_for_assignment_request(): void

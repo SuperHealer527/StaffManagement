@@ -31,7 +31,7 @@
             <div class="layout-040">
               <div>
                 <h1 class="text-044">人数不足一覧</h1>
-                <div class="text-060">「確定」の人数が必要人数に届いていないイベントを、開催が近い順に並べています(下書き・中止は除く)。</div>
+                <div class="text-060">「承諾・確定」の人数が必要人数に届いていないイベントを、開催が近い順に並べています(下書き・中止は除く)。</div>
               </div>
               <section aria-label="不足の合計" class="layout-216">
                 <div class="surface-031">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="surface-030">
                   <div class="text-007">不足している人数(合計)</div>
-                  <div class="text-063">{{ isset($shortageEvents) ? $shortageEvents->sum(fn($item) => max(0, $item->required_staff - $item->assignments->where('status', 'confirmed')->count())) : 11 }}<span class="text-010">人</span></div>
+                  <div class="text-063">{{ isset($shortageEvents) ? $shortageEvents->sum(fn($item) => max(0, $item->required_staff - $item->assignments->whereIn('status', \App\Models\Assignment::STAFFING_STATUSES)->count())) : 11 }}<span class="text-010">人</span></div>
                 </div>
                 <div class="surface-030">
                   <div class="text-007">承諾済みで確定待ち</div>
@@ -52,12 +52,12 @@
                 <div class="utility-001">
                   <table class="text-069">
                     <thead>
-                      <tr class="text-023"><th class="cell-009">開催まで</th><th class="cell-024">実施日</th><th class="cell-002">イベント</th><th class="cell-002">確定 / 必要</th><th class="cell-002">不足</th><th class="cell-002">回答の状況</th><th class="cell-020">操作</th></tr>
+                      <tr class="text-023"><th class="cell-009">開催まで</th><th class="cell-024">実施日</th><th class="cell-002">イベント</th><th class="cell-002">承諾・確定 / 必要</th><th class="cell-002">不足</th><th class="cell-002">回答の状況</th><th class="cell-020">操作</th></tr>
                     </thead>
                     <tbody>
                       @if(isset($shortageEvents))
                       @forelse($shortageEvents as $shortageEvent)
-                      @php $confirmedCount = $shortageEvent->assignments->where('status', 'confirmed')->count(); $days = today()->diffInDays($shortageEvent->event_date); @endphp
+                      @php $confirmedCount = $shortageEvent->assignments->whereIn('status', \App\Models\Assignment::STAFFING_STATUSES)->count(); $days = today()->diffInDays($shortageEvent->event_date); @endphp
                       <tr><td class="cell-085"><span class="{{ $days <= 3 ? 'surface-011' : ($days <= 7 ? 'surface-013' : 'surface-014') }}"><span>あと{{ $days }}日</span></span></td><td class="cell-086"><div class="text-067"><span>{{ $shortageEvent->event_date->isoFormat('M/D(ddd)') }}</span></div><div class="text-018">集合 <span>{{ substr($shortageEvent->meeting_time, 0, 5) }}</span></div></td><td class="cell-018"><a href="{{ auth()->user()->isEmployee() ? route('events.edit', $shortageEvent) : route('events.show', $shortageEvent) }}" class="text-072"><span>{{ $shortageEvent->name ?: $shortageEvent->business_name }}</span></a><div class="text-018"><span>{{ $shortageEvent->client->name }}</span> / <span>{{ $shortageEvent->business_name }}</span></div></td><td class="cell-087"><span>{{ $confirmedCount }} / {{ $shortageEvent->required_staff }}人</span></td><td class="cell-088"><div><span>あと{{ $shortageEvent->required_staff - $confirmedCount }}人</span></div></td><td class="cell-089"><span>承諾 {{ $shortageEvent->assignments->where('status', 'accepted')->count() }} ・ 未定 {{ $shortageEvent->assignments->where('status', 'unknown')->count() }} ・ 依頼中 {{ $shortageEvent->assignments->where('status', 'requested')->count() }}</span></td><td class="cell-019"><a href="{{ route('events.assignments.index', $shortageEvent) }}" class="surface-130">アサインする</a></td></tr>
                       @empty<tr><td colspan="7" class="cell-018">現在、人数不足のイベントはありません。</td></tr>@endforelse
                       @else
@@ -97,7 +97,7 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="text-058">「承諾」の人がいるイベントは、アサイン画面で「確定にする」を押すと不足が減ります。確定が必要人数に達すると、残った依頼中・未定・承諾の人は自動で「見送り」になり、イベントは自動で「確定」になってこの一覧から消えます。</div>
+                <div class="text-058">「承諾」の回答が届いた時点で不足人数から差し引きます。当日責任者・報告書代表者や出勤確認の対象にする場合は、アサイン画面で「確定」に更新してください。</div>
               </section>
             </div>
           </main>

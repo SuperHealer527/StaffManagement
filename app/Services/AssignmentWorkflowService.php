@@ -105,13 +105,13 @@ class AssignmentWorkflowService
             return;
         }
 
-        $confirmedCount = $event->assignments()->where('status', 'confirmed')->count();
+        $confirmedCount = $event->assignments()->whereIn('status', Assignment::STAFFING_STATUSES)->count();
 
         if ($confirmedCount >= $event->required_staff) {
             $event->update(['status' => 'confirmed']);
             $overflowAssignments = $event->assignments()
                 ->when($changedAssignment !== null, fn ($query) => $query->where('id', '!=', $changedAssignment->id))
-                ->whereIn('status', self::OPEN_RESPONSE_STATUSES)
+                ->whereIn('status', Assignment::AWAITING_RESPONSE_STATUSES)
                 ->get();
 
             foreach ($overflowAssignments as $overflowAssignment) {
