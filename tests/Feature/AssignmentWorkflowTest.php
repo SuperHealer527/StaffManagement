@@ -51,6 +51,32 @@ class AssignmentWorkflowTest extends TestCase
         $this->assertDatabaseHas('events', ['id' => $event->id, 'status' => 'recruiting']);
     }
 
+    public function test_employee_can_restore_rejected_assignment_to_confirmed(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);
+        $event = Event::factory()->create(['status' => 'recruiting', 'required_staff' => 2, 'event_date' => today()->addDay()]);
+        $assignment = Assignment::factory()->create(['event_id' => $event->id, 'status' => 'rejected']);
+
+        $this->actingAs($employee)->patch(route('assignments.update', $assignment), [
+            'status' => 'confirmed',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'confirmed']);
+    }
+
+    public function test_semi_employee_cannot_restore_rejected_assignment(): void
+    {
+        $semiEmployee = User::factory()->create(['role' => 'semi_employee', 'account_status' => 'active']);
+        $event = Event::factory()->create(['status' => 'recruiting', 'required_staff' => 2, 'event_date' => today()->addDay()]);
+        $assignment = Assignment::factory()->create(['event_id' => $event->id, 'status' => 'rejected']);
+
+        $this->actingAs($semiEmployee)->patch(route('assignments.update', $assignment), [
+            'status' => 'confirmed',
+        ])->assertSessionHasErrors('status');
+
+        $this->assertDatabaseHas('assignments', ['id' => $assignment->id, 'status' => 'rejected']);
+    }
+
     public function test_only_confirmed_assignment_can_be_completed(): void
     {
         $employee = User::factory()->create(['role' => 'employee', 'account_status' => 'active']);

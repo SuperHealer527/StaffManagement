@@ -22,17 +22,17 @@ class AssignmentWorkflowService
     /** @var list<string> */
     private const PAYMENT_ELIGIBLE_STATUSES = ['confirmed', 'completed'];
 
-    public function changeStatus(Assignment $assignment, string $newStatus): Assignment
+    public function changeStatus(Assignment $assignment, string $newStatus, bool $canRestoreRejected = false): Assignment
     {
         if ($assignment->status === $newStatus) {
             return $assignment->fresh(['event', 'user']);
         }
 
-        $updatedAssignment = DB::transaction(function () use ($assignment, $newStatus): Assignment {
+        $updatedAssignment = DB::transaction(function () use ($assignment, $newStatus, $canRestoreRejected): Assignment {
             $lockedAssignment = Assignment::query()->lockForUpdate()->findOrFail($assignment->id);
             $event = Event::query()->lockForUpdate()->findOrFail($lockedAssignment->event_id);
 
-            $this->ensureStatusChangeIsAllowed($event, $lockedAssignment, $newStatus);
+            $this->ensureStatusChangeIsAllowed($event, $lockedAssignment, $newStatus, $canRestoreRejected);
 
             $updates = ['status' => $newStatus, 'responded_at' => now()];
             if ($newStatus === 'confirmed' && $lockedAssignment->payment_status !== 'paid') {
@@ -127,17 +127,26 @@ class AssignmentWorkflowService
         }
     }
 
-    private function ensureStatusChangeIsAllowed(Event $event, Assignment $assignment, string $newStatus): void
+    private function ensureStatusChangeIsAllowed(Event $event, Assignment $assignment, string $newStatus, bool $canRestoreRejected): void
     {
         if ($event->status === 'cancelled') {
             throw ValidationException::withMessages(['status' => '中止済みイベントのアサイン状態は変更できません。']);
         }
 
-        if ($newStatus === 'confirmed' && in_array($assignment->status, ['declined', 'rejected', 'cancelled', 'absent', 'completed'], true)) {
+        $isRestorableRejection = $assignment->status === 'rejected'
+            && $canRestoreRejected
+            && $event->status !== 'completed'
+            && $event->event_date->greaterThanOrEqualTo(today());
+
+        if ($newStatus === 'confirmed'
+            && in_array($assignment->status, ['declined', 'rejected', 'cancelled', 'absent', 'completed'], true)
+            && ! $isRestorableRejection) {
             throw ValidationException::withMessages(['status' => '終了済みのアサインを確定には戻せません。']);
         }
 
-        if ($newStatus === 'confirmed' && ! in_array($assignment->status, self::OPEN_RESPONSE_STATUSES, true)) {
+        if ($newStatus === 'confirmed'
+            && ! in_array($assignment->status, self::OPEN_RESPONSE_STATUSES, true)
+            && ! $isRestorableRejection) {
             throw ValidationException::withMessages(['status' => '依頼中・未定・承諾のアサインだけを確定できます。']);
         }
 

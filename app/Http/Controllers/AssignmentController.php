@@ -149,7 +149,7 @@ class AssignmentController extends Controller
             unset($data['fee'], $data['transportation']);
         }
         $assignment->update(Arr::except($data, 'status'));
-        $this->assignmentWorkflowService->changeStatus($assignment, $data['status']);
+        $this->assignmentWorkflowService->changeStatus($assignment, $data['status'], $request->user()->isEmployee());
 
         return back()->with('status', 'アサインを更新しました。');
     }

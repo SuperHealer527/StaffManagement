@@ -76,6 +76,7 @@
                   <td class="cell-013">@php
                     $editableStatusKeys = [$assignment->status];
                     if (in_array($assignment->status, ['requested', 'unknown', 'accepted'], true)) { $editableStatusKeys = [...$editableStatusKeys, 'confirmed', 'rejected', 'cancelled']; }
+                    if ($assignment->status === 'rejected' && auth()->user()->isEmployee() && $event->status !== 'completed' && ! $event->event_date->isPast()) { $editableStatusKeys[] = 'confirmed'; }
                     if ($assignment->status === 'confirmed') { $editableStatusKeys[] = 'cancelled'; }
                     if (in_array($assignment->status, ['confirmed', 'completed'], true) && ! $event->event_date->isFuture()) { $editableStatusKeys[] = 'absent'; }
                   @endphp<form id="{{ $formId }}" method="POST" action="{{ route('assignments.update', $assignment) }}">@csrf @method('PATCH')<select name="status" class="surface-017">@foreach(array_unique($editableStatusKeys) as $status)<option value="{{ $status }}" @selected($assignment->status === $status)>{{ $statusLabels[$status] ?? $status }}</option>@endforeach</select><button type="submit" class="control-024">更新</button></form></td></tr>
